@@ -2,7 +2,7 @@ package com.rms.restaurant_management_system_backend.constant;
 
 import java.util.stream.Stream;
 
-public enum EmployeeAvailability {
+public enum EmployeeStatus {
 
 	ACTIVE("Active"), INACTIVE("Inactive");
 
@@ -16,11 +16,11 @@ public enum EmployeeAvailability {
 		this.name = name;
 	}
 
-	private EmployeeAvailability(String name) {
+	private EmployeeStatus(String name) {
 		this.name = name;
 	}
 
-	public static EmployeeAvailability getEnumConstant(String value) {
-		return Stream.of(EmployeeAvailability.values()).filter(e -> e.getName().equals(value)).findFirst().orElse(null);
+	public static EmployeeStatus getEnumConstant(String value) {
+		return Stream.of(EmployeeStatus.values()).filter(e -> e.getName().equals(value)).findFirst().orElse(null);
 	}
 }
