@@ -17,7 +17,6 @@ public class EmployeeDaoImpl {
 		return jdbcTemplate.update(SqlQueries.MEMBER_INSERT, employee.getName(), employee.getEmail(),
 				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
 				employee.getJoin_date(), employee.getLeaving_date());
-
 	}
 
 }
