@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
 import com.rms.restaurant_management_system_backend.domain.Orders;
+import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
 import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
@@ -28,7 +29,7 @@ public class OrdersServiceImpl implements OrdersService {
 		order.setStatus(OrderStatus.PENDING);
 		int rows = ordersDao.addOrder(order);
 		if (rows != 1) {
-			throw new DatabaseException("Failed to create new order");
+			throw new DatabaseOperationException("Failed to create new order");
 		}
 	}
 
@@ -43,7 +44,7 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		int rows = ordersDao.updateStatus(order);
 		if (rows != 1) {
-			throw new DatabaseException("Failed to update status with ID " + order.getOrderId());
+			throw new DatabaseOperationException("Failed to update status with ID " + order.getOrderId());
 		}
 	}
 
@@ -61,7 +62,7 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		int rows = ordersDao.updateAmount(order, amount);
 		if (rows != 1) {
-			throw new DatabaseException("Failed to update amount with ID " + order.getOrderId());
+			throw new DatabaseOperationException("Failed to update amount with ID " + order.getOrderId());
 		}
 	}
 
@@ -76,7 +77,7 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		int rows = ordersDao.deleteOrder(order);
 		if (rows != 1) {
-			throw new DatabaseException("Failed to cancel order with ID " + order.getOrderId());
+			throw new DatabaseOperationException("Failed to cancel order with ID " + order.getOrderId());
 		}
 	}
 

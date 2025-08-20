@@ -30,7 +30,7 @@ public class OrdersDaoImpl implements OrdersDao {
 		String sql = "UPDATE orders SET amount = ? WHERE ord_id = ?";
 		return jdbcTemplate.update(sql, amount, order.getOrderId());
 	}
-	
+
 	@Override
 	public int updateStatus(Orders order) {
 		String sql = "UPDATE orders SET status = ? WHERE ord_id = ?";
@@ -40,7 +40,7 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public int deleteOrder(Orders order) {
 		String sql = "UPDATE orders SET status = ? WHERE ord_id = ?";
-		return jdbcTemplate.update(sql, OrderStatus.CANCELLED.getStatus() , order.getOrderId());
+		return jdbcTemplate.update(sql, OrderStatus.CANCELLED.getStatus(), order.getOrderId());
 	}
 
 	@Override
