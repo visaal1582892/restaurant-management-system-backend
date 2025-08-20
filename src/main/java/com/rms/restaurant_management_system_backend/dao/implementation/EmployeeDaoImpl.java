@@ -1,4 +1,4 @@
-package com.rms.restaurant_management_system_backend.dao;
+package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -6,11 +6,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.constant.Designation;
-import com.rms.restaurant_management_system_backend.constant.EmployeeAvailability;
+import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.domain.Employees;
+import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
 @Repository
-public class EmployeeDao {
+public class EmployeeDaoImpl {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -22,7 +23,7 @@ public class EmployeeDao {
 		employee.setName(rs.getString("name"));
 		employee.setEmail(rs.getString("email"));
 		employee.setPhone(rs.getString("phone"));
-		employee.setAvailability(EmployeeAvailability.getEnumConstant(rs.getString("status")));
+		employee.setStatus(EmployeeStatus.getEnumConstant(rs.getString("status")));
 		employee.setDesignation(Designation.getEnumConstant(rs.getString("designation")));
 		employee.setJoin_date(rs.getDate("join_date"));
 		employee.setLeaving_date(rs.getDate("leaving_date"));
@@ -30,5 +31,12 @@ public class EmployeeDao {
 		return employee;
 
 	};
+
+	public int addEmployee(Employees employee) {
+		return jdbcTemplate.update(SqlQueries.MEMBER_INSERT, employee.getName(), employee.getEmail(),
+				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
+				employee.getJoin_date(), employee.getLeaving_date());
+
+	}
 
 }
