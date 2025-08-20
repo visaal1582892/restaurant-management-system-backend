@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
-
+//
     private final JdbcTemplate jdbcTemplate;
 
     public CustomUserDetailsServiceImpl(JdbcTemplate jdbcTemplate) {
