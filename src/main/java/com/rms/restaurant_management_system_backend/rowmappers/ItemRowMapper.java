@@ -1,5 +1,30 @@
 package com.rms.restaurant_management_system_backend.rowmappers;
 
-public class ItemRowMapper {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
+import com.rms.restaurant_management_system_backend.constant.ItemCategory;
+import com.rms.restaurant_management_system_backend.constant.ItemStatus;
+import com.rms.restaurant_management_system_backend.domain.Items;
+
+public class ItemRowMapper implements RowMapper<Items> {
+
+	@Override
+	public Items mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Items item = new Items();
+
+		item.setId(rs.getInt("item_id"));
+		item.setName(rs.getString("name"));
+		item.setImageUrl(rs.getString("image"));
+		item.setDescription(rs.getString("description"));
+		item.setCategory(ItemCategory.fromName(rs.getString("category")));
+		item.setAvailable(ItemAvailability.fromName(rs.getString("availability")));
+		item.setStatus(ItemStatus.fromName(rs.getString("status")));
+
+		return item;
+	}
 
 }
