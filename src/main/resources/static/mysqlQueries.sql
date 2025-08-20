@@ -38,7 +38,8 @@ name varchar(255) not null,
 image varchar(155),
 description varchar(255) not null,
 category varchar(55) not null,
-status varchar(20) check(status in ('Available','Unavailable')) not null);
+availability varchar(20) check(status in ('Available','Unavailable')) not null,
+status varchar(20) check(status in ('Active','Inactive')) not null);
 
 create table order_details(
 ord_details_id int primary key auto_increment,
