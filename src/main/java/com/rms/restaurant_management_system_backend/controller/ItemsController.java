@@ -91,9 +91,9 @@ public class ItemsController {
 
 		Items existingItem = itemsService.getItemById(id);
 
-		if (existingItem == null) {
-			return ResponseEntity.badRequest().body(new CustomResponse(false, "Item not found", null));
-		}
+//		if (existingItem == null) {
+//			return ResponseEntity.badRequest().body(new CustomResponse(false, "Item not found", null));
+//		}
 
 //		handleFileUpload(items, file);
 

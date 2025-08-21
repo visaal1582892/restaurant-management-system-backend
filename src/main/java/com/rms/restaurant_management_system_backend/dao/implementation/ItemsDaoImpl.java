@@ -6,12 +6,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.library.library_management_system.exception.BookNotFoundException;
 import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.constant.ItemCategory;
 import com.rms.restaurant_management_system_backend.constant.ItemStatus;
 import com.rms.restaurant_management_system_backend.dao.ItemsDao;
 import com.rms.restaurant_management_system_backend.domain.Items;
+import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 
 @Repository
 public class ItemsDaoImpl implements ItemsDao {
@@ -49,9 +49,9 @@ public class ItemsDaoImpl implements ItemsDao {
 	public Items getItemById(int id) {
 		List<Items> items = jdbcTemplate.query(ITEM_SELECT_BY_ID, new BeanPropertyRowMapper<>(Items.class), id);
 		if (items.isEmpty()) {
-			throw new BookNotFoundException("Book with id " + id + " not found");
+			throw new ResourceNotFoundException("Item with id " + id + " not found");
 		}
-		return books.get(0);
+		return items.get(0);
 	}
 
 	@Override
