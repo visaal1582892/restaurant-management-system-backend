@@ -27,10 +27,18 @@ ord_id int primary key auto_increment,
 cust_id int not null,
 stf_id int not null,
 ord_date date not null,
-amount decimal not null,
+amount decimal(10,2) not null check(amount>0),
 status varchar(20) check(status in ('Pending','Cancelled','Completed')) not null,
 constraint fk_customers_orders foreign key(cust_id) references customers(cust_id),
 constraint fk_staff_orders foreign key(stf_id) references staff(stf_id));
+
+create table orders_log(
+ord_id int,
+cust_id int,
+stf_id int,
+ord_date date,
+amount decimal(10,2),
+status varchar(20));
 
 create table items(
 item_id int primary key auto_increment,
@@ -38,7 +46,7 @@ name varchar(255) not null,
 image varchar(155),
 description varchar(255) not null,
 category varchar(55) not null,
-availability varchar(20) check(status in ('Available','Unavailable')) not null,
+availability varchar(20) check(availability in ('Available','Unavailable')) not null,
 status varchar(20) check(status in ('Active','Inactive')) not null);
 
 create table order_details(
@@ -46,7 +54,7 @@ ord_details_id int primary key auto_increment,
 ord_id int not null,
 item_id int not null,
 quantity int not null check(quantity>0),
-price decimal not null check(price>0),
+price decimal(10,2) not null check(price>0),
 constraint fk_orders_order_details foreign key(ord_id) references orders(ord_id),
 constraint fk_items_order_details foreign key(item_id) references items(item_id));
 
@@ -58,7 +66,18 @@ enabled BOOLEAN NOT NULL);
 
 alter table items modify image varchar(155);
 
+alter table items drop column status;
+
+alter table items add availability varchar(20) check(availability in ('Available','Unavailable')) not null;
+alter table items add status varchar(20) check(status in ('Active','Inactive')) not null;
+
 desc items;
+
+insert into credentials values('dummy','dummy','Admin',true);
+
+alter table order_details modify price decimal(10,2) not null check(price>0);
+
+alter table orders modify amount decimal(10,2) not null check(amount>0);
 
 
 
