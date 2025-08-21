@@ -28,7 +28,7 @@ public class Items {
 	private String description;
 
 	@NotNull(message = "Price is required")
-	private double price;
+	private Double price;
 
 	private ItemStatus status;
 
