@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
-import com.rms.restaurant_management_system_backend.service.implementation.EmployeeServiceImpl;
+import com.rms.restaurant_management_system_backend.service.EmployeeService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
 @RestController
@@ -24,7 +24,7 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 public class EmployeeController {
 
 	@Autowired
-	EmployeeServiceImpl employeeService;
+	EmployeeService employeeService;
 
 	@Autowired
 	EmployeeDao empDao;
