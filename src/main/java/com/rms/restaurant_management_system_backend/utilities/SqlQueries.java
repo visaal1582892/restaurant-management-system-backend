@@ -32,4 +32,6 @@ public class SqlQueries {
 	
 	public static final String COUNT_WAITER_ASSIGNED_ORDERS="select count(*) from orders where wtr_id=?";
 	
+	public static final String WAITER_SELECT_BY_ID="select * from waiters where wtr_id=?";
+	
 }

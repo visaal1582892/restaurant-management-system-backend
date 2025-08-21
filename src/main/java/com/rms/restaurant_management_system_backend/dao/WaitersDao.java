@@ -10,4 +10,6 @@ public interface WaitersDao {
 	int insertWaiterLog(Waiters oldWaiter);
 	
 	int selectAssignedOrdersCount(int waiterId);
+	
+	Waiters selectWaiterById(int waiterId);
 }
