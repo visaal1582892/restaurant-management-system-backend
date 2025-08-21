@@ -15,13 +15,13 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
-
+	
 	@Autowired
 	private CustomerServiceImpl customerService;
 
-	@PostMapping("/add")
+	@PostMapping()
 	public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer) {
 		customerService.addCustomer(customer);
 		return ResponseEntity.ok(Map.of("status", "success", "message", "customer added successfully"));

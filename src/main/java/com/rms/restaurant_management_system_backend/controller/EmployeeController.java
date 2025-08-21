@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.service.implementation.EmployeeServiceImpl;
 
@@ -23,6 +24,9 @@ public class EmployeeController {
 
 	@Autowired
 	EmployeeServiceImpl employeeService;
+
+	@Autowired
+	EmployeeDao empDao;
 
 	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@RequestBody Employees employee) {
@@ -48,6 +52,11 @@ public class EmployeeController {
 	public List<Employees> viewActiveEmployees() {
 		return employeeService.getActiveEmployees();
 
+	}
+
+	@GetMapping("/{id}")
+	public Employees getEmployeeById(@PathVariable int id) {
+		return empDao.getEmpById(id);
 	}
 
 	@PutMapping("/update/{id}")

@@ -3,8 +3,10 @@ package com.rms.restaurant_management_system_backend.utilities;
 public class SqlQueries {
 
 	public SqlQueries() {
-
+		
 	}
+
+	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active' ";
 
 	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
@@ -23,8 +25,6 @@ public class SqlQueries {
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
 
 	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
-	
-	public static final String WAITER_INSERT="insert into waiters(emp_id,availability) values(?,'Available')";
 
 	public static final String WAITER_UPDATE_AVAILABILITY="update waiters set availability=? where wtr_id=?";
 	
@@ -34,4 +34,6 @@ public class SqlQueries {
 	
 	public static final String WAITER_SELECT_BY_ID="select * from waiters where wtr_id=?";
 	
+	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
+
 }
