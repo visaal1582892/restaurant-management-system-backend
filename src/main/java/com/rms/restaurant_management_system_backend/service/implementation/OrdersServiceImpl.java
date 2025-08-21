@@ -2,8 +2,9 @@ package com.rms.restaurant_management_system_backend.service.implementation;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
@@ -13,10 +14,14 @@ import com.rms.restaurant_management_system_backend.exception.InvalidDataExcepti
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 
+@Service
 public class OrdersServiceImpl implements OrdersService {
 
-	@Autowired
-	private OrdersDao ordersDao;
+	private final OrdersDao ordersDao;
+
+	public OrdersServiceImpl(OrdersDao ordersDao) {
+		this.ordersDao = ordersDao;
+	}
 
 	@Override
 	public void addOrder(Orders order) {
@@ -35,7 +40,15 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public void updateStatus(Orders order) {
-		if (order == null || ordersDao.getOrderById(order.getOrderId()) == null) {
+		if (order == null) {
+			throw new InvalidDataException("Invalid inputs");
+		}
+		int id = ordersDao.getOrderId(order);
+		if (id == 0) {
+			throw new InvalidDataException("Order does not exist");
+		}
+		order.setOrderId(id);
+		if (ordersDao.getOrderById(order.getOrderId()) == null) {
 			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
 		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
@@ -49,8 +62,16 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void updateAmount(Orders order, int amount) {
-		if (order == null || ordersDao.getOrderById(order.getOrderId()) == null) {
+	public void updateAmount(Orders order, double amount) {
+		if (order == null) {
+			throw new InvalidDataException("Invalid inputs");
+		}
+		int id = ordersDao.getOrderId(order);
+		if (id == 0) {
+			throw new InvalidDataException("Order does not exist");
+		}
+		order.setOrderId(id);
+		if (ordersDao.getOrderById(order.getOrderId()) == null) {
 			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
 		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
@@ -68,7 +89,15 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public void deleteOrder(Orders order) {
-		if (order == null || ordersDao.getOrderById(order.getOrderId()) == null) {
+		if (order == null) {
+			throw new InvalidDataException("Invalid inputs");
+		}
+		int id = ordersDao.getOrderId(order);
+		if (id == 0) {
+			throw new InvalidDataException("Order does not exist");
+		}
+		order.setOrderId(id);
+		if (ordersDao.getOrderById(order.getOrderId()) == null) {
 			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
 		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
@@ -97,6 +126,15 @@ public class OrdersServiceImpl implements OrdersService {
 			throw new ResourceNotFoundException("No orders found");
 		}
 		return orders;
+	}
+
+	@Override
+	public List<Orders> getOrdersByCategory(String category) {
+		List<Orders> orders = ordersDao.getOrdersByCategory(category);
+	    if (orders.isEmpty()) {
+	        throw new ResourceNotFoundException("No orders found for category: " + category);
+	    }
+	    return orders;
 	}
 
 }

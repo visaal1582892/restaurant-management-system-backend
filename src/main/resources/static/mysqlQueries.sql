@@ -16,8 +16,8 @@ cust_id int primary key auto_increment,
 name varchar(255) not null,
 phone varchar(10) check(length(phone)=10) unique not null);
 
-create table staff(
-stf_id int primary key auto_increment,
+create table waiters(
+wtr_id int primary key auto_increment,
 emp_id int not null,
 availability varchar(20) check(availability in ('Available','Busy')) not null,
 constraint fk_employees_staff foreign key(emp_id) references employees(emp_id));
@@ -25,26 +25,19 @@ constraint fk_employees_staff foreign key(emp_id) references employees(emp_id));
 create table orders(
 ord_id int primary key auto_increment,
 cust_id int not null,
-stf_id int not null,
+wtr_id int not null,
 ord_date date not null,
 amount decimal(10,2) not null check(amount>0),
 status varchar(20) check(status in ('Pending','Cancelled','Completed')) not null,
 constraint fk_customers_orders foreign key(cust_id) references customers(cust_id),
-constraint fk_staff_orders foreign key(stf_id) references staff(stf_id));
-
-create table orders_log(
-ord_id int,
-cust_id int,
-stf_id int,
-ord_date date,
-amount decimal(10,2),
-status varchar(20));
+constraint fk_staff_orders foreign key(wtr_id) references waiters(wtr_id));
 
 create table items(
 item_id int primary key auto_increment,
 name varchar(255) not null,
 image varchar(155),
 description varchar(255) not null,
+price decimal(10,2) not null,
 category varchar(55) not null,
 availability varchar(20) check(availability in ('Available','Unavailable')) not null,
 status varchar(20) check(status in ('Active','Inactive')) not null);
@@ -64,6 +57,13 @@ password VARCHAR(100) NOT NULL,
 authority VARCHAR(50) check(authority in ('Admin','Staff')) NOT NULL,
 enabled BOOLEAN NOT NULL);
 
+create table waiters_log(
+wtr_id int,
+emp_id int,
+availability varchar(20));
+
+
+
 alter table items modify image varchar(155);
 
 alter table items drop column status;
@@ -79,8 +79,11 @@ alter table order_details modify price decimal(10,2) not null check(price>0);
 
 alter table orders modify amount decimal(10,2) not null check(amount>0);
 
-
-
-
-
+drop table employees;
+drop table customers;
+drop table waiters;
+drop table orders;
+drop table items;
+drop table order_details;
+drop table credentials;
 
