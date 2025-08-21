@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
@@ -34,22 +36,16 @@ public class OrdersController {
 		return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", order));
 	}
 
-	@PutMapping("/updateOrderAmount")
+	@PutMapping("/updateAmount")
 	public ResponseEntity<CustomResponse> updateAmount(@Valid @RequestBody Orders order) {
-		ordersService.updateAmount(order, order.getAmount());
+		ordersService.updateAmount(order);
 		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", order));
 	}
 
-	@PutMapping("/updateOrderStatus")
-	public ResponseEntity<CustomResponse> updateStatus(@Valid @RequestBody Orders order) {
-		ordersService.updateStatus(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order completed successfully", order));
-	}
-
-	@DeleteMapping("/deleteOrder")
-	public ResponseEntity<CustomResponse> deleteOrder(@Valid @RequestBody Orders order) {
-		ordersService.deleteOrder(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order Cancelled successfully", order));
+	@PutMapping("/updateStatus")
+	public ResponseEntity<CustomResponse> updateStatus(@RequestParam int orderId, @RequestParam OrderStatus status) {
+		ordersService.updateStatus(orderId, status);
+		return ResponseEntity.ok(new CustomResponse(true, "Order status updated successfully", status));
 	}
 
 	@GetMapping("/allOrders")
@@ -69,4 +65,5 @@ public class OrdersController {
 		List<Orders> pending = ordersService.getOrdersByCategory(category);
 		return ResponseEntity.ok(new CustomResponse(true, category + " orders fetched successfully", pending));
 	}
+	
 }

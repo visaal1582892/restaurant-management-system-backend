@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.domain;
 
+import java.util.Objects;
+
 import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.constant.ItemCategory;
 import com.rms.restaurant_management_system_backend.constant.ItemStatus;
@@ -17,7 +19,7 @@ public class Items {
 
 	@NotBlank(message = "Name cannot be Empty")
 	@Size(min = 3, max = 50, message = "Name must be between 3 and 50 length")
-	@Pattern(regexp = "[a-zA-Z -.()]{0,50}", message = "Name only contain aplhabates -.()")
+	@Pattern(regexp = "[a-zA-Z -.()0-9]{0,50}", message = "Name only contain aplhabates,numbers -.()")
 	private String name;
 
 	private String imageUrl;
@@ -36,5 +38,26 @@ public class Items {
 
 	@NotNull(message = "Category is required")
 	private ItemCategory category;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Items other = (Items) obj;
+		return category == other.category && Objects.equals(description, other.description)
+				&& Objects.equals(name, other.name) && Objects.equals(price, other.price);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(category, description, name, price);
+	}
 
 }

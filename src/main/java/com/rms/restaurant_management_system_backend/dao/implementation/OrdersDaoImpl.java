@@ -1,13 +1,17 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.rowmappers.OrdersRowMapper;
@@ -20,9 +24,18 @@ public class OrdersDaoImpl implements OrdersDao {
 
 	@Override
 	public int addOrder(Orders order) {
-		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
-		return jdbcTemplate.update(sql, order.getCustomerId(), order.getWaiterId(), order.getOrderDate(),
-				order.getAmount(), order.getStatus().getStatus());
+		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, status) VALUES (?, ?, ?, ?)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(connection -> {
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, order.getCustomerId());
+			ps.setInt(2, order.getWaiterId());
+			ps.setDate(3, Date.valueOf(order.getOrderDate()));
+			ps.setString(4, order.getStatus().getStatus());
+			return ps;
+		}, keyHolder);
+
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -32,15 +45,9 @@ public class OrdersDaoImpl implements OrdersDao {
 	}
 
 	@Override
-	public int updateStatus(Orders order) {
+	public int updateStatus(Orders order, String status) {
 		String sql = "UPDATE orders SET status = ? WHERE ord_id = ?";
-		return jdbcTemplate.update(sql, OrderStatus.COMPLETED.getStatus(), order.getOrderId());
-	}
-
-	@Override
-	public int deleteOrder(Orders order) {
-		String sql = "UPDATE orders SET status = ? WHERE ord_id = ?";
-		return jdbcTemplate.update(sql, OrderStatus.CANCELLED.getStatus(), order.getOrderId());
+		return jdbcTemplate.update(sql, status, order.getOrderId());
 	}
 
 	@Override
@@ -63,8 +70,8 @@ public class OrdersDaoImpl implements OrdersDao {
 	public int getOrderId(Orders order) {
 		try {
 			String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ?";
-			return jdbcTemplate.queryForObject(sql, new Object[] { order.getCustomerId(), order.getWaiterId() },
-					Integer.class);
+			return jdbcTemplate.queryForObject(sql, Integer.class,
+					new Object[] { order.getCustomerId(), order.getWaiterId() });
 		} catch (EmptyResultDataAccessException ex) {
 			return 0;
 		}

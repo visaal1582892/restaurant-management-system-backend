@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
+import com.rms.restaurant_management_system_backend.dao.implementation.OrderDetailsDaoImpl;
+import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
 import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
@@ -25,11 +27,9 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public void addOrder(Orders order) {
-		// order - customer id, staff id, amount
-		// check customer id, staff id
-		if (order.getAmount() <= 0) {
-			throw new InvalidDataException("Amount must be greater than zero");
-		}
+		// order - customer id, waiter id
+		// check customer id, waiter id
+
 		order.setOrderDate(LocalDate.now());
 		order.setStatus(OrderStatus.PENDING);
 		int rows = ordersDao.addOrder(order);
@@ -39,30 +39,24 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void updateStatus(Orders order) {
-		if (order == null) {
-			throw new InvalidDataException("Invalid inputs");
-		}
-		int id = ordersDao.getOrderId(order);
-		if (id == 0) {
-			throw new InvalidDataException("Order does not exist");
-		}
-		order.setOrderId(id);
-		if (ordersDao.getOrderById(order.getOrderId()) == null) {
-			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
+	public void updateStatus(int id, OrderStatus status) {
+		Orders order = ordersDao.getOrderById(id);
+		if(order == null) {
+			throw new InvalidDataException(
+					"Order with ID " + order.getOrderId() + " does not exist");
 		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
 			throw new InvalidDataException(
 					"Cannot update status. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
 		}
-		int rows = ordersDao.updateStatus(order);
+		int rows = ordersDao.updateStatus(order, status.getStatus());
 		if (rows != 1) {
 			throw new DatabaseOperationException("Failed to update status with ID " + order.getOrderId());
 		}
 	}
 
 	@Override
-	public void updateAmount(Orders order, double amount) {
+	public void updateAmount(Orders order) {
 		if (order == null) {
 			throw new InvalidDataException("Invalid inputs");
 		}
@@ -71,42 +65,17 @@ public class OrdersServiceImpl implements OrdersService {
 			throw new InvalidDataException("Order does not exist");
 		}
 		order.setOrderId(id);
-		if (ordersDao.getOrderById(order.getOrderId()) == null) {
-			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
-		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
 			throw new InvalidDataException(
 					"Cannot update amount. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
 		}
+		double amount = calculateTotalAmount(id);
 		if (amount <= 0) {
 			throw new InvalidDataException("Amount must be greater than zero");
 		}
 		int rows = ordersDao.updateAmount(order, amount);
 		if (rows != 1) {
 			throw new DatabaseOperationException("Failed to update amount with ID " + order.getOrderId());
-		}
-	}
-
-	@Override
-	public void deleteOrder(Orders order) {
-		if (order == null) {
-			throw new InvalidDataException("Invalid inputs");
-		}
-		int id = ordersDao.getOrderId(order);
-		if (id == 0) {
-			throw new InvalidDataException("Order does not exist");
-		}
-		order.setOrderId(id);
-		if (ordersDao.getOrderById(order.getOrderId()) == null) {
-			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
-		}
-		if (!order.getStatus().equals(OrderStatus.PENDING)) {
-			throw new InvalidDataException(
-					"Cannot cancel order. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
-		}
-		int rows = ordersDao.deleteOrder(order);
-		if (rows != 1) {
-			throw new DatabaseOperationException("Failed to cancel order with ID " + order.getOrderId());
 		}
 	}
 
@@ -131,10 +100,21 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public List<Orders> getOrdersByCategory(String category) {
 		List<Orders> orders = ordersDao.getOrdersByCategory(category);
-	    if (orders.isEmpty()) {
-	        throw new ResourceNotFoundException("No orders found for category: " + category);
-	    }
-	    return orders;
+		if (orders.isEmpty()) {
+			throw new ResourceNotFoundException("No orders found for category: " + category);
+		}
+		return orders;
+	}
+
+	
+	public double calculateTotalAmount(int id) {
+		double amount = 0;
+		List<OrderDetails> details = new OrderDetailsDaoImpl().getAllOrderDetails().stream()
+				.filter(d -> d.getOrderId() == id).collect(Collectors.toList());
+		for (OrderDetails detail : details) {
+			amount += detail.getQuantity()*detail.getPrice();
+		}
+		return amount;
 	}
 
 }
