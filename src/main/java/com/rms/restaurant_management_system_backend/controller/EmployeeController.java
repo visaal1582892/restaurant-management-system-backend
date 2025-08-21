@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.service.implementation.EmployeeServiceImpl;
+import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -31,7 +33,9 @@ public class EmployeeController {
 	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@RequestBody Employees employee) {
 		employeeService.addEmployee(employee);
-		return ResponseEntity.ok(Map.of("status", "success", "message", "member added successfully"));
+//		return ResponseEntity.ok(Map.of("status", "success", "message", "member added successfully"));
+		CustomResponse body = new CustomResponse(true, "member added successfully", null);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
@@ -43,14 +47,18 @@ public class EmployeeController {
 //	}
 
 	@GetMapping
-	public List<Employees> viewAllEmployees() {
-		return employeeService.getAllEmployees();
+	public ResponseEntity<?> viewAllEmployees() {
+		List<Employees> emp = employeeService.getAllEmployees();
+		CustomResponse body = new CustomResponse(true, "members fetched successfully", emp);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/active")
-	public List<Employees> viewActiveEmployees() {
-		return employeeService.getActiveEmployees();
+	public ResponseEntity<?> viewActiveEmployees() {
+		List<Employees> emp = employeeService.getActiveEmployees();
+		CustomResponse body = new CustomResponse(true, "members fetched successfully", emp);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
