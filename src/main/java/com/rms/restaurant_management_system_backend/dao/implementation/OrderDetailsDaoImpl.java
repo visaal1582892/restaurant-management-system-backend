@@ -19,7 +19,7 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 		
 	@Override
 	public List<OrderDetails> getAllOrderDetails() {
-	    return jdbcTemplate.query(SqlQueries.GET_ALL_ORDERDETAILS,
+		return jdbcTemplate.query(SqlQueries.GET_ALL_ORDERDETAILS,
 	        (rs, rowNum) -> {
 	            OrderDetails od = new OrderDetails();
 	            od.setOrderDetailsId(rs.getInt("ord_details_id"));

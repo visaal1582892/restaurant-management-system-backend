@@ -18,7 +18,7 @@ public class Customer {
 	private String name;
 	
 	@NotBlank(message = "please enter your mobile number")
-	@Size(min = 10, max = 10, message = "mmobile number must be 10 digits")
+	@Size(min = 10, max = 10, message = "mobile number must be 10 digits")
 	@Pattern(regexp = "^\\d+$", message = "Mobile Number not conatins alphabeticals")
 	private String phone;
 }

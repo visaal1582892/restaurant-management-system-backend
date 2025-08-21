@@ -9,4 +9,6 @@ public interface EmployeeDao {
 
 	public List<Employees> getAllEmployees();
 
+	public Employees getEmpById(int id);
+
 }

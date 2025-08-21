@@ -13,7 +13,7 @@ import com.rms.restaurant_management_system_backend.domain.Items;
 
 @Component
 public class ItemRowMapper implements RowMapper<Items> {
-
+	
 	@Override
 	public Items mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Items item = new Items();
