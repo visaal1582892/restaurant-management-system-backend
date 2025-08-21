@@ -1,7 +1,6 @@
 package com.rms.restaurant_management_system_backend.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,18 +32,10 @@ public class EmployeeController {
 	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@RequestBody Employees employee) {
 		employeeService.addEmployee(employee);
-//		return ResponseEntity.ok(Map.of("status", "success", "message", "member added successfully"));
 		CustomResponse body = new CustomResponse(true, "member added successfully", null);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
-
-//	@GetMapping
-//	public ResponseEntity<?> viewAllEmployees(@RequestBody Employees employee) {
-//		employeeService.getAllEmployees(employee);
-//		return ResponseEntity.ok(Map.of("status", "success", "message", "member fetched successfully"));
-//
-//	}
 
 	@GetMapping
 	public ResponseEntity<?> viewAllEmployees() {
@@ -63,29 +54,34 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/{id}")
-	public Employees getEmployeeById(@PathVariable int id) {
-		return empDao.getEmpById(id);
+	public ResponseEntity<?> getEmployeeById(@PathVariable int id) {
+		Employees emp = empDao.getEmpById(id);
+		CustomResponse body = new CustomResponse(true, "member fetched successfully", emp);
+		return new ResponseEntity<>(body, HttpStatus.OK);
+
 	}
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateEmployee(@RequestBody Employees employee, @PathVariable int id) {
 		employeeService.updateEmployee(employee, id);
-		return ResponseEntity.ok(Map.of("status", "success", "message", "member updated  successfully"));
+		CustomResponse body = new CustomResponse(true, "member Updated successfully", null);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
 	@PutMapping("/update-status/{id}")
 	public ResponseEntity<?> updateEmployeeStatus(@RequestBody Employees employee, @PathVariable int id) {
 		employeeService.updateEmpStatus(employee, id);
-		return ResponseEntity.ok(Map.of("status", "success", "message", "member status updated successfully"));
+		CustomResponse body = new CustomResponse(true, "member Status Updated successfully", null);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteEmployee(@PathVariable int id) {
 		employeeService.deleteEmployee(id);
-		return ResponseEntity.ok(Map.of("status", "success", "message", "member deleted successfully"));
-
+		CustomResponse body = new CustomResponse(true, "member deleted successfully", null);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
 }
