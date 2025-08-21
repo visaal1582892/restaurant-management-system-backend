@@ -14,22 +14,29 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Orders {
-	
+
 	private int orderId;
-	
+
 	@NotBlank(message = "Customer id is required")
 	private int customerId;
-	
+
 	@NotBlank(message = "Staff id is required")
-	private int staffId;
-	
+	private int waiterId;
+
 	@NotBlank(message = "Order Date is required")
 	private LocalDate orderDate;
-	
+
 	@NotBlank(message = "Amount is required")
 	@Positive(message = "Amount must be a positive number")
 	private double amount;
-	
+
 	@NotBlank(message = "Status is required")
 	private OrderStatus status;
+
+	public Orders(int customerId, int waiterId, double amount) {
+		this.customerId = customerId;
+		this.waiterId = waiterId;
+		this.amount = amount;
+	}
+
 }

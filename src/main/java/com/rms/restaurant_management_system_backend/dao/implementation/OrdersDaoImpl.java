@@ -20,13 +20,13 @@ public class OrdersDaoImpl implements OrdersDao {
 
 	@Override
 	public int addOrder(Orders order) {
-		String sql = "INSERT INTO orders (cust_id, stf_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
-		return jdbcTemplate.update(sql, order.getCustomerId(), order.getStaffId(), order.getOrderDate(),
-				order.getAmount(), order.getStatus());
+		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
+		return jdbcTemplate.update(sql, order.getCustomerId(), order.getWaiterId(), order.getOrderDate(),
+				order.getAmount(), order.getStatus().getStatus());
 	}
 
 	@Override
-	public int updateAmount(Orders order, int amount) {
+	public int updateAmount(Orders order, double amount) {
 		String sql = "UPDATE orders SET amount = ? WHERE ord_id = ?";
 		return jdbcTemplate.update(sql, amount, order.getOrderId());
 	}
@@ -57,6 +57,16 @@ public class OrdersDaoImpl implements OrdersDao {
 	public List<Orders> getAllOrders() {
 		String sql = "SELECT * FROM orders";
 		return jdbcTemplate.query(sql, new OrdersRowMapper());
+	}
+
+	@Override
+	public int getOrderId(Orders order) {
+		try {
+		String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { order.getCustomerId(),order.getWaiterId() }, Integer.class);
+		} catch (EmptyResultDataAccessException ex) {
+			return 0;
+		}
 	}
 
 }

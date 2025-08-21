@@ -10,12 +10,14 @@ public interface OrdersDao {
 
 	int updateStatus(Orders order);
 
-	int updateAmount(Orders order, int amount);
+	int updateAmount(Orders order, double amount);
 
 	int deleteOrder(Orders order);
 
 	Orders getOrderById(int id);
 
 	List<Orders> getAllOrders();
+
+	int getOrderId(Orders order);
 
 }
