@@ -19,6 +19,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Autowired
 	private EmployeeRowMapper employeeRowMapper;
 
+	private final String EMPLOYEE_SELECT_BY_EMAIL = "SELECT COUNT(*) FROM employees WHERE  email = ? AND status = 'Active' ";
+
+	private final String EMPLOYEE_SELECT_BY_MOBILE = "SELECT COUNT(*) FROM employees WHERE  mobile = ? AND status = 'Active' ";
+
 	@Override
 	public int addEmployee(Employees employee) {
 		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
@@ -48,5 +52,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	public int deleteEmployee(int id) {
 		return jdbcTemplate.update(SqlQueries.DELETE_EMPLOYEE, id);
+	}
+
+	public boolean selectByEmail(String email) {
+		Integer count = jdbcTemplate.queryForObject(EMPLOYEE_SELECT_BY_EMAIL, Integer.class, email);
+		return count != null && count > 0;
+	}
+
+	public boolean selectByMobile(String mobile) {
+		Integer count = jdbcTemplate.queryForObject(EMPLOYEE_SELECT_BY_EMAIL, Integer.class, mobile);
+		return count != null && count > 0;
 	}
 }
