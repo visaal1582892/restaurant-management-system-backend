@@ -48,6 +48,7 @@ public class ItemsDaoImpl implements ItemsDao {
 	@Override
 	public Items getItemById(int id) {
 		List<Items> items = jdbcTemplate.query(ITEM_SELECT_BY_ID, new BeanPropertyRowMapper<>(Items.class), id);
+
 		if (items.isEmpty()) {
 			throw new ResourceNotFoundException("Item with id " + id + " not found");
 		}

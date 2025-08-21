@@ -35,6 +35,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return jdbcTemplate.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
 	}
 
+	public Employees getEmpById(int id) {
+		return jdbcTemplate.queryForObject(SqlQueries.EMPLOYEE_BY_ID, employeeRowMapper, id);
+	}
+
 	public List<Employees> getActiveEmployees() {
 		return jdbcTemplate.query(SqlQueries.GET_ACTIVE_EMPLOYEES, employeeRowMapper);
 	}
