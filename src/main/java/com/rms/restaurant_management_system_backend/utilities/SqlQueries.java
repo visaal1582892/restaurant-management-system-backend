@@ -12,4 +12,10 @@ public class SqlQueries {
 
 	public static final String GET_ACTIVE_EMPLOYEES = "select (emp_id,name,email,phone,status,designation,join_date,leaving_date) from employees where status=Active";
 
+	public static final String MEMBER_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
+
+	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
+
+	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
+
 }
