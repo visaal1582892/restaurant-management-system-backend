@@ -36,7 +36,6 @@ public class Employees {
 
 	private EmployeeStatus status;
 
-	@NotBlank(message = "Please select the designation")
 	private Designation designation;
 
 	private Date join_date;

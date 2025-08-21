@@ -19,6 +19,8 @@ import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.service.EmployeeService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -30,7 +32,7 @@ public class EmployeeController {
 	EmployeeDao empDao;
 
 	@PostMapping("/add")
-	public ResponseEntity<?> addEmployee(@RequestBody Employees employee) {
+	public ResponseEntity<?> addEmployee(@Valid @RequestBody Employees employee) {
 		employeeService.addEmployee(employee);
 		CustomResponse body = new CustomResponse(true, "member added successfully", null);
 		return new ResponseEntity<>(body, HttpStatus.OK);
@@ -62,7 +64,7 @@ public class EmployeeController {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateEmployee(@RequestBody Employees employee, @PathVariable int id) {
+	public ResponseEntity<?> updateEmployee(@Valid @RequestBody Employees employee, @PathVariable int id) {
 		employeeService.updateEmployee(employee, id);
 		CustomResponse body = new CustomResponse(true, "member Updated successfully", null);
 		return new ResponseEntity<>(body, HttpStatus.OK);

@@ -24,4 +24,6 @@ public interface EmployeeDao {
 	public boolean selectByMobile(String mobile);
 
 	public int getEmployeeIdByEmail(String email);
+
+	int employeeLog(int memberId);
 }
