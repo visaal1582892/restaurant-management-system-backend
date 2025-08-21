@@ -41,21 +41,10 @@ public class ItemsController {
 		this.itemsService = itemsService;
 	}
 
-<<<<<<< HEAD
-	@PostMapping("/addItem")
-	public ResponseEntity<CustomResponse> addItem() {
-		return null;
-	}
-	public ResponseEntity<CustomResponse> addItem(@Valid @RequestBody Items items,
-			@RequestParam("file") MultipartFile file) {
-
-		if (file != null) {
-=======
 	@PostMapping("/itemImage")
 	public ResponseEntity<CustomResponse> handleFileUpload(@RequestPart(value = "file") MultipartFile file) {
 		String fileUrl;
 		if (file != null && !file.isEmpty()) {
->>>>>>> 828f7f5d26d5983ac6fbbb01ce268534bdc9ab61
 			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 			Path filePath = Paths.get(UPLOAD_DIR, fileName);
 

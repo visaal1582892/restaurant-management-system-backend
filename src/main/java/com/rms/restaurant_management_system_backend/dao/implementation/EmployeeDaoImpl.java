@@ -35,8 +35,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return jdbcTemplate.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
 	}
 
+	@Override
 	public Employees getEmpById(int id) {
-		return jdbcTemplate.queryForObject(SqlQueries.EMPLOYEE_BY_ID, employeeRowMapper, id);
+		return jdbcTemplate.query(SqlQueries.EMPLOYEE_BY_ID, employeeRowMapper, id).stream().findFirst().orElse(null);
 	}
 
 	public List<Employees> getActiveEmployees() {
