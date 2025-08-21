@@ -33,10 +33,9 @@ public class ItemsController {
 	}
 
 	@PostMapping("/addItem")
-<<<<<<< HEAD
 	public ResponseEntity<CustomResponse> addItem() {
 		return null;
-=======
+	}
 	public ResponseEntity<CustomResponse> addItem(@Valid @RequestBody Items items,
 			@RequestParam("file") MultipartFile file) {
 
@@ -57,7 +56,6 @@ public class ItemsController {
 		itemsService.saveItem(items);
 		CustomResponse response = new CustomResponse(true, "Item Saved Succussfully", items);
 		return ResponseEntity.ok(response);
->>>>>>> 98dcd7fef9659b8eead91735a1c99c4d267dc456
 
 	}
 
