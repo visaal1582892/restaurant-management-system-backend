@@ -1,14 +1,20 @@
 package com.rms.restaurant_management_system_backend.rowmappers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Controller;
 
 import com.rms.restaurant_management_system_backend.constant.Designation;
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 
-public class EmployeeRowMapper {
+@Controller
+public class EmployeeRowMapper implements RowMapper<Employees> {
 
-	private final RowMapper<Employees> employeeRowMapper = (rs, rowNum) -> {
+	@Override
+	public Employees mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		Employees employee = new Employees();
 		employee.setEmpId(rs.getInt("emp_id"));
@@ -21,7 +27,6 @@ public class EmployeeRowMapper {
 		employee.setLeaving_date(rs.getDate("leaving_date"));
 
 		return employee;
-
-	};
+	}
 
 }
