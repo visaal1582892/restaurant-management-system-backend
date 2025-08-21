@@ -25,4 +25,21 @@ public class EmployeeServiceImpl {
 
 	}
 
+	public List<Employees> getActiveEmployees() {
+		List<Employees> employee = employeeDao.getActiveEmployees();
+		return employee;
+	}
+
+	public int updateEmployee(Employees employee, int id) {
+		return employeeDao.updateEmployee(employee, id);
+	}
+
+	public int updateEmpStatus(Employees employee, int id) {
+		return employeeDao.updateStatus(employee, id);
+	}
+
+	public int deleteEmployee(int id) {
+		return employeeDao.deleteEmployee(id);
+	}
+
 }

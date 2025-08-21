@@ -15,7 +15,7 @@ public class OrdersRowMapper implements RowMapper<Orders> {
 		Orders order = new Orders();
 		order.setOrderId(rs.getInt("ord_id"));
 		order.setCustomerId(rs.getInt("cust_id"));
-		order.setStaffId(rs.getInt("stf_id"));
+		order.setWaiterId(rs.getInt("wtr_id"));
 		order.setOrderDate(rs.getDate("ord_date").toLocalDate());
 		order.setAmount(rs.getDouble("amount"));
 		order.setStatus(OrderStatus.getEnumConstant(rs.getString("status")));

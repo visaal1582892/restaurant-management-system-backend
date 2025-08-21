@@ -10,12 +10,14 @@ public interface OrdersService {
 
 	void updateStatus(Orders order);
 
-	void updateAmount(Orders order, int amount);
+	void updateAmount(Orders order, double d);
 
 	void deleteOrder(Orders order);
 
 	Orders getOrderById(int id);
 
 	List<Orders> getAllOrders();
+
+	List<Orders> getOrdersByCategory(String category);
 	
 }
