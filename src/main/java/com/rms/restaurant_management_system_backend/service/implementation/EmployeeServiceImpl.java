@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.service.implementation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,12 @@ public class EmployeeServiceImpl {
 
 	public int addEmployee(Employees employee) {
 		return employeeDao.addEmployee(employee);
+
+	}
+
+	public List<Employees> getAllEmployees() {
+		List<Employees> employee = employeeDao.getAllEmployees();
+		return employee;
 
 	}
 
