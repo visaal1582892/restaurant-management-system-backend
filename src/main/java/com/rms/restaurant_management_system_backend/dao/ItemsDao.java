@@ -14,9 +14,10 @@ public interface ItemsDao {
 
 	int updateItem(Items item);
 
+	int changeAvailability(int id, ItemAvailability availability);
+
 	int deleteItem(int id);
 
 	List<Items> getAllItems();
 
-	Items changeAvailability(int id, ItemAvailability availability);
 }
