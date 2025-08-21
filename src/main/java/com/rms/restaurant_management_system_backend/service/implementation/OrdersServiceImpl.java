@@ -130,9 +130,11 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public List<Orders> getOrdersByCategory(String category) {
-		List<Orders> orders = ordersDao.getAllOrders().stream().filter(o -> o.getStatus().getStatus().equals(category))
-				.collect(Collectors.toList());
-		return orders;
+		List<Orders> orders = ordersDao.getOrdersByCategory(category);
+	    if (orders.isEmpty()) {
+	        throw new ResourceNotFoundException("No orders found for category: " + category);
+	    }
+	    return orders;
 	}
 
 }

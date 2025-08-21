@@ -64,9 +64,9 @@ public class OrdersController {
 		return ResponseEntity.ok(new CustomResponse(true, "Order fetched successfully", order));
 	}
 
-	@GetMapping("/{category}")
-	public ResponseEntity<CustomResponse> getOrdersByCategory(@PathVariable String catgeory) {
-		List<Orders> pending = ordersService.getOrdersByCategory(catgeory);
-		return ResponseEntity.ok(new CustomResponse(true, "Pending orders fetched successfully", pending));
+	@GetMapping("/category/{category}")
+	public ResponseEntity<CustomResponse> getOrdersByCategory(@PathVariable String category) {
+		List<Orders> pending = ordersService.getOrdersByCategory(category);
+		return ResponseEntity.ok(new CustomResponse(true, category + " orders fetched successfully", pending));
 	}
 }

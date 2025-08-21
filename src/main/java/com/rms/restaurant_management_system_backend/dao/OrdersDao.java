@@ -20,4 +20,6 @@ public interface OrdersDao {
 
 	int getOrderId(Orders order);
 
+	List<Orders> getOrdersByCategory(String category);
+
 }

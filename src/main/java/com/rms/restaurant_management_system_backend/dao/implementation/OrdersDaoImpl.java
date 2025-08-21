@@ -62,11 +62,18 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public int getOrderId(Orders order) {
 		try {
-		String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { order.getCustomerId(),order.getWaiterId() }, Integer.class);
+			String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ?";
+			return jdbcTemplate.queryForObject(sql, new Object[] { order.getCustomerId(), order.getWaiterId() },
+					Integer.class);
 		} catch (EmptyResultDataAccessException ex) {
 			return 0;
 		}
+	}
+
+	@Override
+	public List<Orders> getOrdersByCategory(String category) {
+		String sql = "SELECT * FROM orders WHERE status = ?";
+		return jdbcTemplate.query(sql, new OrdersRowMapper(), category);
 	}
 
 }
