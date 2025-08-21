@@ -28,7 +28,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/login", "/signup").permitAll().anyRequest().authenticated().and().formLogin()
+				.requestMatchers("/login", "/signup").permitAll().anyRequest().permitAll().and().formLogin()
 				.loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
 				.successHandler((req, res, auth) -> {
 					System.out.println("good...................");
