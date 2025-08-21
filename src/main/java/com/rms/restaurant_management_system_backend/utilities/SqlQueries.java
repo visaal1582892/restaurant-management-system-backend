@@ -3,7 +3,7 @@ package com.rms.restaurant_management_system_backend.utilities;
 public class SqlQueries {
 
 	public SqlQueries() {
-
+		
 	}
 
 	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active' ";

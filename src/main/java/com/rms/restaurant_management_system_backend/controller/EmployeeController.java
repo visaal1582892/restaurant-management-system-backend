@@ -32,7 +32,7 @@ public class EmployeeController {
 	public ResponseEntity<?> addEmployee(@RequestBody Employees employee) {
 		employeeService.addEmployee(employee);
 		return ResponseEntity.ok(Map.of("status", "success", "message", "member added successfully"));
-
+		
 	}
 
 //	@GetMapping
