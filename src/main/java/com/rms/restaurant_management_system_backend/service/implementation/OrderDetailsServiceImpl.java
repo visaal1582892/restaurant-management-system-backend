@@ -11,7 +11,7 @@ import com.rms.restaurant_management_system_backend.service.OrderDetailsService;
 
 @Service
 public class OrderDetailsServiceImpl implements OrderDetailsService {
-	
+
 	@Autowired
 	private OrderDetailsDaoImpl orderDetailsDaoImpl;
 

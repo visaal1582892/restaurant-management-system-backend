@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
 
 public enum ItemCategory {
+	STARTER("Starter"), MAIN_COURSE("Main Course"), DESSERT("Dessert"), BEVERAGE("Beverage"), SNACK("Snack"),
+	SALAD("Salad"), SOUP("Soup");
 
-	;
 	private String name;
 
 	ItemCategory(String name) {
@@ -15,6 +16,7 @@ public enum ItemCategory {
 
 	@JsonValue
 	public String getName() {
+
 		return name;
 	}
 
@@ -22,7 +24,7 @@ public enum ItemCategory {
 	public static ItemCategory fromName(String name) {
 
 		for (ItemCategory category : ItemCategory.values()) {
-			if (category.name.equalsIgnoreCase(name)) {
+			if (category.getName().equalsIgnoreCase(name)) {
 				return category;
 			}
 		}

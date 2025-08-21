@@ -16,9 +16,8 @@ public class CustomerDaoImpl implements CustomerDao {
 	private JdbcTemplate jdbcTemplate;
 	@Override
 	public int addCustomer(Customer customer) {
-		return jdbcTemplate.update(SqlQueries.CUSTOMER_INSERT, customer.getCustId(), customer.getName(),
+		return jdbcTemplate.update(SqlQueries.CUSTOMER_INSERT, customer.getName(),
 				customer.getPhone());
-
 	}
 		
 }
