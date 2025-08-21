@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.rms.restaurant_management_system_backend.dao.WaitersDao;
 import com.rms.restaurant_management_system_backend.domain.Waiters;
+import com.rms.restaurant_management_system_backend.rowmappers.WaiterRowMapper;
 import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
 public class WaitersDaoImpl implements WaitersDao {
@@ -17,7 +18,8 @@ public class WaitersDaoImpl implements WaitersDao {
 	@Override
 	public int insertWaiter(int employeeId) {
 		String insertQuery=SqlQueries.WAITER_INSERT;
-		return jdbcTemplate.update(insertQuery,employeeId);
+		int count=jdbcTemplate.update(insertQuery,employeeId);
+		return count;
 	}
 
 	@Override
@@ -40,5 +42,15 @@ public class WaitersDaoImpl implements WaitersDao {
 		int count=jdbcTemplate.queryForObject(selectQuery, Integer.class, waiterId);
 		return count;
 	}
+
+	@Override
+	public Waiters selectWaiterById(int waiterId) {
+		String selectQuery=SqlQueries.WAITER_SELECT_BY_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId)
+                .stream()
+                .findFirst()
+                .orElse(null);
+	}
+	
 
 }

@@ -21,7 +21,7 @@ public enum WaiterAvailability {
 	}
 	
 	@JsonCreator
-	public WaiterAvailability fromDbName(String dbName) {
+	public static WaiterAvailability fromDbName(String dbName) {
 		return Stream.of(WaiterAvailability.values())
 			.filter(e -> e.dbName==dbName)
 			.findFirst()

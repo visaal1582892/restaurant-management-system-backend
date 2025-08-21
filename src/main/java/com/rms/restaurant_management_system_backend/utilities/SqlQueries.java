@@ -26,12 +26,14 @@ public class SqlQueries {
 
 	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
 
+	public static final String WAITER_UPDATE_AVAILABILITY="update waiters set availability=? where wtr_id=?";
+	
+	public static final String WAITER_LOG_INSERT="insert into waiters_log values(?,?,?)";
+	
+	public static final String COUNT_WAITER_ASSIGNED_ORDERS="select count(*) from orders where wtr_id=?";
+	
+	public static final String WAITER_SELECT_BY_ID="select * from waiters where wtr_id=?";
+	
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
-
-	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
-
-	public static final String WAITER_LOG_INSERT = "insert into waiters_log values(?,?,?)";
-
-	public static final String COUNT_WAITER_ASSIGNED_ORDERS = "select count(*) from orders where wtr_id=?";
 
 }
