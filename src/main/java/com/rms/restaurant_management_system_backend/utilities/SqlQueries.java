@@ -14,7 +14,7 @@ public class SqlQueries {
 
 	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active' ";
 
-	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,designation) values (?,?,?,?)";
+	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
 	public static final String GET_ALL_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees";
 
@@ -43,10 +43,10 @@ public class SqlQueries {
 	public static final String WAITER_SELECT_BY_ID = "select * from waiters where wtr_id=?";
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
-	
-	public static final String WAITER_SELECT_AVAILABLE="select * from waiters where availability='Available'";
-	
-	public static final String WAITER_DELETE_BY_EMP_ID="delete from waiters where emp_id=?";
+
+	public static final String WAITER_SELECT_AVAILABLE = "select * from waiters where availability='Available'";
+
+	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
 	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
 

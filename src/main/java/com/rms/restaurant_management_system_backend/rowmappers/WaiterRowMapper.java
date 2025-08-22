@@ -11,9 +11,10 @@ import com.rms.restaurant_management_system_backend.domain.Waiters;
 public class WaiterRowMapper implements RowMapper<Waiters> {
 	@Override
 	public Waiters mapRow(ResultSet rs, int rowNum) throws SQLException {
-		int waiterId=rs.getInt("wtr_id");
-		int employeeId=rs.getInt("emp_id");
-		WaiterAvailability availability=WaiterAvailability.fromDbName(rs.getString("availability"));
-		return new Waiters(waiterId,employeeId,availability);
+		int waiterId = rs.getInt("wtr_id");
+		int employeeId = rs.getInt("emp_id");
+		WaiterAvailability availability = WaiterAvailability.fromDbName(rs.getString("availability"));
+		System.out.println(availability);
+		return new Waiters(waiterId, employeeId, availability);
 	}
 }

@@ -6,25 +6,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum WaiterAvailability {
-	AVAILABLE("Available"),
-	BUSY("Busy");
-	
+	AVAILABLE("Available"), BUSY("Busy");
+
 	private String dbName;
-	
+
 	WaiterAvailability(String dbName) {
-		this.dbName=dbName;
+		this.dbName = dbName;
 	}
-	
+
 	@JsonValue
 	public String getDbName() {
 		return this.dbName;
 	}
-	
+
 	@JsonCreator
 	public static WaiterAvailability fromDbName(String dbName) {
-		return Stream.of(WaiterAvailability.values())
-			.filter(e -> e.dbName==dbName)
-			.findFirst()
-			.orElse(null);
+		return Stream.of(WaiterAvailability.values()).filter(e -> e.dbName.equals(dbName)).findFirst().orElse(null);
 	}
 }
