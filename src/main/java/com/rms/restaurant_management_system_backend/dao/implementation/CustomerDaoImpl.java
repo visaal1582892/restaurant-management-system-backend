@@ -10,14 +10,17 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
 @Repository
 public class CustomerDaoImpl implements CustomerDao {
-	
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
 	@Override
 	public int addCustomer(Customer customer) {
-		return jdbcTemplate.update(SqlQueries.CUSTOMER_INSERT, customer.getName(),
-				customer.getPhone());
+		return jdbcTemplate.update(SqlQueries.CUSTOMER_INSERT, customer.getName(), customer.getPhone());
 	}
-		
+
+	public Integer getCustomerIdByNumber(String phone) {
+		return jdbcTemplate.queryForObject(SqlQueries.GET_ID_BY_PHONE, Integer.class, phone);
+	}
+
 }
