@@ -3,7 +3,6 @@ package com.rms.restaurant_management_system_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,7 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/staff/orders")
 public class OrdersController {
 
 	private final OrdersService ordersService;
@@ -65,5 +64,5 @@ public class OrdersController {
 		List<Orders> pending = ordersService.getOrdersByCategory(category);
 		return ResponseEntity.ok(new CustomResponse(true, category + " orders fetched successfully", pending));
 	}
-	
+
 }

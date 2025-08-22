@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
+import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
-import com.rms.restaurant_management_system_backend.dao.implementation.OrderDetailsDaoImpl;
 import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
@@ -20,9 +20,11 @@ import com.rms.restaurant_management_system_backend.service.OrdersService;
 public class OrdersServiceImpl implements OrdersService {
 
 	private final OrdersDao ordersDao;
+	private final OrderDetailsDao orderDetailsDao;
 
-	public OrdersServiceImpl(OrdersDao ordersDao) {
+	public OrdersServiceImpl(OrdersDao ordersDao, OrderDetailsDao orderDetailsDao) {
 		this.ordersDao = ordersDao;
+		this.orderDetailsDao=orderDetailsDao;
 	}
 
 	@Override
@@ -109,7 +111,7 @@ public class OrdersServiceImpl implements OrdersService {
 	
 	public double calculateTotalAmount(int id) {
 		double amount = 0;
-		List<OrderDetails> details = new OrderDetailsDaoImpl().getAllOrderDetails().stream()
+		List<OrderDetails> details = orderDetailsDao.selectAllOrderDetails().stream()
 				.filter(d -> d.getOrderId() == id).collect(Collectors.toList());
 		for (OrderDetails detail : details) {
 			amount += detail.getQuantity()*detail.getPrice();

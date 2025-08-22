@@ -41,5 +41,9 @@ public class SqlQueries {
 	public static final String WAITER_SELECT_BY_ID = "select * from waiters where wtr_id=?";
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
+	
+	public static final String ORDER_DETAILS_INSERT="insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
+	
+	public static final String ORDER_DETAILS_SELECT="select * from order_details";
 
 }
