@@ -31,6 +31,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
 		return http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
 						.requestMatchers("/api/admin/**").hasRole("ADMIN") // 👈 only ADMIN
@@ -38,6 +39,7 @@ public class SecurityConfig {
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
+
 	}
 
 	@Bean
