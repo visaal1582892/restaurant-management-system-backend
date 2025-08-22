@@ -56,7 +56,7 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public List<Waiters> selectAvailableWaiters() {
-		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
+		String selectQuery = SqlQueries.WAITER_SELECT_AVAILABLE;
 		List<Waiters> availableWaiters = jdbcTemplate.query(selectQuery, new WaiterRowMapper());
 		return availableWaiters;
 	}
