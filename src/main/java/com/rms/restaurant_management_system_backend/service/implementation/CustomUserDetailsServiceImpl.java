@@ -21,8 +21,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 		String sql = "SELECT * FROM credentials WHERE username=?";
 		try {
 			return jdbcTemplate.queryForObject(sql, new Object[] { username },
-					(rs, rowNum) -> User.withUsername(rs.getString("username")).password(rs.getString("password"))
-							.roles(rs.getString("authority")).build());
+					(rs, rowNum) -> User.withUsername(rs.getString("username")).password(rs.getString("password")).roles(rs.getString("authority")).build());
 		} catch (Exception e) {
 			throw new UsernameNotFoundException("User not found");
 		}
