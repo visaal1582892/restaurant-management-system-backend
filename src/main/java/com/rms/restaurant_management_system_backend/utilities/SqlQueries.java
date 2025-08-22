@@ -38,13 +38,13 @@ public class SqlQueries {
 
 	public static final String WAITER_LOG_INSERT = "insert into waiters_log values(?,?,?)";
 
-	public static final String COUNT_WAITER_ASSIGNED_ORDERS = "select count(*) from orders where wtr_id=?";
+	public static final String COUNT_WAITER_ASSIGNED_ORDERS = "select count(*) from orders where wtr_id=? and status='Pending'";
 
 	public static final String WAITER_SELECT_BY_ID = "select * from waiters where wtr_id=?";
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 	
-	public static final String WAITER_SELECT_AVAILABLE="select * from waiters where availability='Available'";
+	public static final String WAITER_SELECT_AVAILABLE="select e.name,w.* from waiters w join employees e  where availability='Available'";
 	
 	public static final String WAITER_DELETE_BY_EMP_ID="delete from waiters where emp_id=?";
 
