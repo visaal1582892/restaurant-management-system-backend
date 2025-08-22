@@ -22,7 +22,7 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api/admin/employees")
 public class EmployeeController {
 
 	@Autowired

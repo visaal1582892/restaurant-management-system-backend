@@ -1,44 +1,69 @@
 package com.rms.restaurant_management_system_backend.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.rms.restaurant_management_system_backend.service.implementation.CustomUserDetailsServiceImpl;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Autowired
-	CustomUserDetailsServiceImpl userDetailsService;
+	private final CustomUserDetailsServiceImpl customUserDetailsService;
+
+	private final JwtRequestFilter jwtRequestFilter;
+
+	public SecurityConfig(JwtRequestFilter jwtRequestFilter, CustomUserDetailsServiceImpl customUserDetailsService) {
+		this.jwtRequestFilter = jwtRequestFilter;
+		this.customUserDetailsService = customUserDetailsService;
+	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/login", "/signup").permitAll().anyRequest().permitAll().and().formLogin()
-				.loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
-				.successHandler((req, res, auth) -> {
-					System.out.println("good...................");
-					res.setStatus(HttpServletResponse.SC_OK);
-				}).failureHandler((req, res, exp) -> {
-					System.out.println("bad...................");
-					res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials");
-				}).and().sessionManagement().maximumSessions(1);
 
-		return http.build();
+		return http.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+						.requestMatchers("/api/admin/**").hasRole("ADMIN") // 👈 only ADMIN
+						.requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN") // 👈 USER or ADMIN
+						.anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
+
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-		return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder();
 	}
+
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return NoOpPasswordEncoder.getInstance();
+//	}
+//
+	@SuppressWarnings("deprecation")
+	@Bean
+	public AuthenticationProvider authProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(customUserDetailsService);
+		provider.setPasswordEncoder(passwordEncoder());
+		return provider;
+	}
+
+	@Bean
+	public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
+
 }
