@@ -15,9 +15,9 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("api/staff/customers")
 public class CustomerController {
-	
+
 	@Autowired
 	private CustomerServiceImpl customerService;
 
