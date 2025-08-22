@@ -28,6 +28,8 @@ public class SqlQueries {
 
 	public static final String MEMBER_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
+	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
+
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
 
 	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
@@ -41,9 +43,9 @@ public class SqlQueries {
 	public static final String WAITER_SELECT_BY_ID = "select * from waiters where wtr_id=?";
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
-	
-	public static final String ORDER_DETAILS_INSERT="insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
-	
-	public static final String ORDER_DETAILS_SELECT="select * from order_details";
+
+	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
+
+	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
 
 }
