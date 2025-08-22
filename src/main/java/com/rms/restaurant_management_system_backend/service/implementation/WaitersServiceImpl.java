@@ -64,18 +64,19 @@ public class WaitersServiceImpl implements WaitersService {
 
 	@Override
 	public List<WaiterDetailsSelector> selectAvailableWaiters() {
-		List<WaiterDetailsSelector> availableWaiters=waitersDao.selectAvailableWaiters();
+		List<WaiterDetailsSelector> availableWaiters = waitersDao.selectAvailableWaiters();
 		return availableWaiters;
 	}
 
 	@Override
 	public boolean deleteWaiterByEmpId(int employeeId) {
-		Employees employee=employeeDao.getEmpById(employeeId);
-		if(employee==null) {
+		Employees employee = employeeDao.getEmpById(employeeId);
+		System.out.println(employee);
+		if (employee == null) {
 			throw new ResourceNotFoundException("Employee not found");
 		}
-		int count=waitersDao.deleteWaiterByEmpId(employeeId);
-		if (count!=1) {
+		int count = waitersDao.deleteWaiterByEmpId(employeeId);
+		if (count != 1) {
 			throw new DatabaseOperationException("Failed to delete waiter by employee id");
 		}
 		return true;

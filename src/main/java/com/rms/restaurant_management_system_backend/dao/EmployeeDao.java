@@ -17,8 +17,6 @@ public interface EmployeeDao {
 
 	public int updateStatus(Employees employee, int id);
 
-	public int deleteEmployee(int id);
-
 	public boolean selectByEmail(String email);
 
 	public boolean selectByMobile(String mobile);
@@ -26,4 +24,6 @@ public interface EmployeeDao {
 	public int getEmployeeIdByEmail(String email);
 
 	int employeeLog(int memberId);
+
+	int deleteEmployee(int id);
 }
