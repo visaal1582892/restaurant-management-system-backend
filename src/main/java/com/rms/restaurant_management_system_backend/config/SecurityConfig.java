@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -34,24 +34,24 @@ public class SecurityConfig {
 
 		return http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/api/admin/**").hasRole("ADMIN") // 👈 only ADMIN
-						.requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN") // 👈 USER or ADMIN
-						.anyRequest().authenticated())
+//						.requestMatchers("/api/admin/**").hasRole("ADMIN")
+//						.requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN") 
+						.anyRequest().permitAll())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
 
 	}
+//
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder();
+//	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return NoOpPasswordEncoder.getInstance();
 	}
 
-//	@Bean
-//	public PasswordEncoder passwordEncoder() {
-//		return NoOpPasswordEncoder.getInstance();
-//	}
-//
 	@SuppressWarnings("deprecation")
 	@Bean
 	public AuthenticationProvider authProvider() {
@@ -64,6 +64,7 @@ public class SecurityConfig {
 	@Bean
 	public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
+
 	}
 
 }

@@ -20,13 +20,15 @@ public class SqlQueries {
 
 	public static final String GET_ACTIVE_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where status='Active' ";
 
-	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,designation=?,join_date=?,leaving_date=? where emp_id=? and status='Active' ";
+	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,status=?,designation=?,join_date=?,leaving_date=? where emp_id=?";
 
 	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive' where emp_id=?";
 
 	public static final String UPDATE_EMP_STATUS = "update employees set status=? where emp_id=?";
 
 	public static final String MEMBER_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
+
+	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
 
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
 
@@ -42,12 +44,12 @@ public class SqlQueries {
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 	
-	public static final String ORDER_DETAILS_INSERT="insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
-	
-	public static final String ORDER_DETAILS_SELECT="select * from order_details";
-	
 	public static final String WAITER_SELECT_AVAILABLE="select * from waiters where availablility='Available'";
 	
 	public static final String WAITER_DELETE_BY_EMP_ID="delete from waiters where emp_id=?";
+
+	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
+
+	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
 
 }
