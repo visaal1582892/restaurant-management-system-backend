@@ -34,7 +34,7 @@ public class Employees {
 	@Pattern(regexp = "^\\d+$", message = "Mobile Number not conatins alphabeticals")
 	private String phone;
 
-	private EmployeeStatus status;
+	private EmployeeStatus status = EmployeeStatus.ACTIVE;
 
 	private Designation designation;
 
