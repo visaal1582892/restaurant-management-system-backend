@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.service.implementation;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.WaiterAvailability;
@@ -55,6 +57,25 @@ public class WaitersServiceImpl implements WaitersService {
 			waitersDao.updateWaiterAvailability(waiterId, WaiterAvailability.BUSY.getDbName());
 		} else if (ordersCount < 3) {
 			waitersDao.updateWaiterAvailability(waiterId, WaiterAvailability.AVAILABLE.getDbName());
+		}
+		return true;
+	}
+
+	@Override
+	public List<Waiters> selectAvailableWaiters() {
+		List<Waiters> availableWaiters=waitersDao.selectAvailableWaiters();
+		return availableWaiters;
+	}
+
+	@Override
+	public boolean deleteWaiterByEmpId(int employeeId) {
+		Employees employee=employeeDao.getEmpById(employeeId);
+		if(employee==null) {
+			throw new ResourceNotFoundException("Employee not found");
+		}
+		int count=waitersDao.deleteWaiterByEmpId(employeeId);
+		if (count!=1) {
+			throw new DatabaseOperationException("Failed to delete waiter by employee id");
 		}
 		return true;
 	}

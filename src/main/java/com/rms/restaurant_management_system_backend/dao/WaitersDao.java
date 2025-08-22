@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.dao;
 
+import java.util.List;
+
 import com.rms.restaurant_management_system_backend.domain.Waiters;
 
 public interface WaitersDao {
@@ -12,4 +14,8 @@ public interface WaitersDao {
 	int selectAssignedOrdersCount(int waiterId);
 	
 	Waiters selectWaiterById(int waiterId);
+	
+	List<Waiters> selectAvailableWaiters();
+	
+	int deleteWaiterByEmpId(int employeeId);
 }

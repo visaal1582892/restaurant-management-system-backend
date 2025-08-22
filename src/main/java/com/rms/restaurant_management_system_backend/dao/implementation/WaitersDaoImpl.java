@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -52,4 +54,18 @@ public class WaitersDaoImpl implements WaitersDao {
 		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
 	}
 
+	@Override
+	public List<Waiters> selectAvailableWaiters() {
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
+		List<Waiters> availableWaiters = jdbcTemplate.query(selectQuery, new WaiterRowMapper());
+		return availableWaiters;
+	}
+
+	@Override
+	public int deleteWaiterByEmpId(int employeeId) {
+		String deleteQuery = SqlQueries.WAITER_DELETE_BY_EMP_ID;
+		int count = jdbcTemplate.update(deleteQuery, employeeId);
+		return count;
+	}
+	
 }
