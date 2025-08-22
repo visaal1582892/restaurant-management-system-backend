@@ -20,7 +20,7 @@ public class SqlQueries {
 
 	public static final String GET_ACTIVE_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where status='Active' ";
 
-	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,designation=?,join_date=?,leaving_date=? where emp_id=? and status='Active' ";
+	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,status=?,designation=?,join_date=?,leaving_date=? where emp_id=?";
 
 	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive' where emp_id=?";
 

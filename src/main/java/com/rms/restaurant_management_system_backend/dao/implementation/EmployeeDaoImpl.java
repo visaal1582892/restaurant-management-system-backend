@@ -45,8 +45,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public int updateEmployee(Employees employee, int id) {
 		employeeLog(id);
 		return jdbcTemplate.update(SqlQueries.UPDATE_EMPLOYEE, employee.getName(), employee.getEmail(),
-				employee.getPhone(), employee.getDesignation().getName(), employee.getJoin_date(),
-				employee.getLeaving_date(), id);
+				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
+				employee.getJoin_date(), employee.getLeaving_date(), id);
 	}
 
 	@Override
