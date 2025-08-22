@@ -44,7 +44,7 @@ public class SqlQueries {
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 	
-	public static final String WAITER_SELECT_AVAILABLE="select * from waiters where availablility='Available'";
+	public static final String WAITER_SELECT_AVAILABLE="select * from waiters where availability='Available'";
 	
 	public static final String WAITER_DELETE_BY_EMP_ID="delete from waiters where emp_id=?";
 
