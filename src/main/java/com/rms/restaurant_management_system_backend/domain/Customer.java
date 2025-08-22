@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
-	
+
 	private int custId;
 
 	@NotBlank(message = "please enter your name")
@@ -21,4 +21,9 @@ public class Customer {
 	@Size(min = 10, max = 10, message = "mobile number must be 10 digits")
 	@Pattern(regexp = "^\\d+$", message = "Mobile Number not conatins alphabeticals")
 	private String phone;
+	
+	public Customer(String name, String phone) {
+		this.name = name;
+		this.phone = phone;
+	}
 }

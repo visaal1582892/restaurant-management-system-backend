@@ -1,15 +1,11 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
@@ -25,17 +21,8 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public int addOrder(Orders order) {
 		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, status) VALUES (?, ?, ?, ?)";
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(connection -> {
-			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, order.getCustomerId());
-			ps.setInt(2, order.getWaiterId());
-			ps.setDate(3, Date.valueOf(order.getOrderDate()));
-			ps.setString(4, order.getStatus().getStatus());
-			return ps;
-		}, keyHolder);
-
-		return keyHolder.getKey().intValue();
+		return jdbcTemplate.update(sql, order.getCustomerId(), order.getWaiterId(), Date.valueOf(order.getOrderDate()),
+				order.getStatus());
 	}
 
 	@Override
