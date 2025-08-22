@@ -15,7 +15,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public int addCustomer(Customer customer) {
-		return customerDaoImpl.addCustomer(customer);
+		int rows = customerDaoImpl.addCustomer(customer);
+		if (rows > 0) {
+			int id = customerDaoImpl.getCustomerIdByNumber(customer.getPhone());
+			return id;
+		}
+		return rows;
 	}
 
 }
