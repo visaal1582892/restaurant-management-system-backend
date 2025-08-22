@@ -15,24 +15,24 @@ import com.rms.restaurant_management_system_backend.service.WaitersService;
 public class WaitersServiceImpl implements WaitersService {
 
 	private final WaitersDao waitersDao;
-	
+
 	private final EmployeeDao employeeDao;
-	
+
 	public WaitersServiceImpl(WaitersDao waitersDao, EmployeeDao employeeDao) {
-		this.waitersDao=waitersDao;
-		this.employeeDao=employeeDao;
+		this.waitersDao = waitersDao;
+		this.employeeDao = employeeDao;
 	}
-	
+
 	@Override
 	public boolean insertWaiter(int employeeId) {
-		Employees employee=employeeDao.getEmpById(employeeId);
-		if(employee==null) {
+		Employees employee = employeeDao.getEmpById(employeeId);
+		if (employee == null) {
 			throw new ResourceNotFoundException("Employee not found");
 		}
-		
-		int count=waitersDao.insertWaiter(employeeId);
-		
-		if(count!=1) {
+
+		int count = waitersDao.insertWaiter(employeeId);
+
+		if (count != 1) {
 			throw new DatabaseOperationException("Waiter not inserted correctly");
 		}
 		return true;
@@ -40,21 +40,20 @@ public class WaitersServiceImpl implements WaitersService {
 
 	@Override
 	public boolean updateWaiterAvailability(int waiterId) {
-		Waiters oldWaiter=waitersDao.selectWaiterById(waiterId);
-		if(oldWaiter==null) {
+		Waiters oldWaiter = waitersDao.selectWaiterById(waiterId);
+		if (oldWaiter == null) {
 			throw new ResourceNotFoundException("Waiter with given id not found");
 		}
-		
-		int logCount=waitersDao.insertWaiterLog(oldWaiter);
-		if(logCount!=1) {
+
+		int logCount = waitersDao.insertWaiterLog(oldWaiter);
+		if (logCount != 1) {
 			throw new DatabaseOperationException("Waiter log not inserted correctly");
 		}
-		
-		int ordersCount=waitersDao.selectAssignedOrdersCount(oldWaiter.getWaiterId());
-		if(ordersCount>=3) {
+
+		int ordersCount = waitersDao.selectAssignedOrdersCount(oldWaiter.getWaiterId());
+		if (ordersCount >= 3) {
 			waitersDao.updateWaiterAvailability(waiterId, WaiterAvailability.BUSY.getDbName());
-		}
-		else if(ordersCount<3) {
+		} else if (ordersCount < 3) {
 			waitersDao.updateWaiterAvailability(waiterId, WaiterAvailability.AVAILABLE.getDbName());
 		}
 		return true;

@@ -19,10 +19,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Autowired
 	private EmployeeRowMapper employeeRowMapper;
 
-	private final String EMPLOYEE_SELECT_BY_EMAIL = "SELECT COUNT(*) FROM employees WHERE  email = ? AND status = 'Active' ";
-
-	private final String EMPLOYEE_SELECT_BY_MOBILE = "SELECT COUNT(*) FROM employees WHERE  mobile = ? AND status = 'Active' ";
-
 	@Override
 	public int addEmployee(Employees employee) {
 		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
@@ -40,32 +36,53 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return jdbcTemplate.query(SqlQueries.EMPLOYEE_BY_ID, employeeRowMapper, id).stream().findFirst().orElse(null);
 	}
 
+	@Override
 	public List<Employees> getActiveEmployees() {
 		return jdbcTemplate.query(SqlQueries.GET_ACTIVE_EMPLOYEES, employeeRowMapper);
 	}
 
+	@Override
 	public int updateEmployee(Employees employee, int id) {
+		employeeLog(id);
 		return jdbcTemplate.update(SqlQueries.UPDATE_EMPLOYEE, employee.getName(), employee.getEmail(),
 				employee.getPhone(), employee.getDesignation().getName(), employee.getJoin_date(),
 				employee.getLeaving_date(), id);
 	}
 
+	@Override
 	public int updateStatus(Employees employee, int id) {
+		employeeLog(id);
 		return jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, employee.getStatus().getName(), id);
 
 	}
 
+	@Override
 	public int deleteEmployee(int id) {
+		employeeLog(id);
 		return jdbcTemplate.update(SqlQueries.DELETE_EMPLOYEE, id);
 	}
 
+	@Override
 	public boolean selectByEmail(String email) {
-		Integer count = jdbcTemplate.queryForObject(EMPLOYEE_SELECT_BY_EMAIL, Integer.class, email);
+		Integer count = jdbcTemplate.queryForObject(SqlQueries.EMPLOYEE_SELECT_BY_EMAIL, Integer.class, email);
 		return count != null && count > 0;
 	}
 
+	@Override
 	public boolean selectByMobile(String mobile) {
-		Integer count = jdbcTemplate.queryForObject(EMPLOYEE_SELECT_BY_EMAIL, Integer.class, mobile);
+		Integer count = jdbcTemplate.queryForObject(SqlQueries.EMPLOYEE_SELECT_BY_MOBILE, Integer.class, mobile);
 		return count != null && count > 0;
+	}
+
+	@Override
+	public int getEmployeeIdByEmail(String email) {
+		return jdbcTemplate.queryForObject(SqlQueries.GET_EMPID_BY_EMAIL, Integer.class, email);
+	}
+
+	@Override
+	public int employeeLog(int empId) {
+		String sql = "INSERT INTO employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) "
+				+ "SELECT emp_id,name,email,phone,status,designation,join_date,leaving_date FROM employees WHERE emp_id=?";
+		return jdbcTemplate.update(sql, empId);
 	}
 }

@@ -8,11 +8,9 @@ public interface OrdersDao {
 
 	int addOrder(Orders order);
 
-	int updateStatus(Orders order);
+	int updateStatus(Orders order, String status);
 
 	int updateAmount(Orders order, double amount);
-
-	int deleteOrder(Orders order);
 
 	Orders getOrderById(int id);
 

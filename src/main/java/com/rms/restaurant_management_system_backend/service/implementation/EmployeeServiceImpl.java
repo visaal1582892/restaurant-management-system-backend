@@ -5,17 +5,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rms.restaurant_management_system_backend.dao.implementation.EmployeeDaoImpl;
+import com.rms.restaurant_management_system_backend.constant.Designation;
+import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.exception.DuplicateException;
 import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
+import com.rms.restaurant_management_system_backend.service.EmployeeService;
 
 @Service
-public class EmployeeServiceImpl {
+public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
-	EmployeeDaoImpl employeeDao;
+	EmployeeDao employeeDao;
+
+	@Autowired
+	WaitersServiceImpl waiterService;
 
 	public int addEmployee(Employees employee) {
 
@@ -31,6 +36,13 @@ public class EmployeeServiceImpl {
 			throw new DuplicateException("Employee Already exists with this mobile Number");
 		}
 		int rows = employeeDao.addEmployee(employee);
+		if (rows > 0) {
+			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
+			if (employee.getDesignation() == Designation.WAITER) {
+				waiterService.insertWaiter(empId);
+			}
+
+		}
 		return rows;
 
 	}
