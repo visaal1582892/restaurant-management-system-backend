@@ -36,7 +36,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
 						.requestMatchers("/api/admin/**").hasRole("ADMIN") // 👈 only ADMIN
 						.requestMatchers("/api/staff/**").hasAnyRole("STAFF", "ADMIN") // 👈 USER or ADMIN
-						.anyRequest().authenticated())
+						.anyRequest().permitAll())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
 
@@ -61,6 +61,7 @@ public class SecurityConfig {
 		return provider;
 	}
 
+	@Bean
 	public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 
