@@ -1,5 +1,7 @@
 package com.rms.restaurant_management_system_backend.service.implementation;
 
+import org.springframework.stereotype.Service;
+
 import com.rms.restaurant_management_system_backend.constant.WaiterAvailability;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.dao.WaitersDao;
@@ -9,6 +11,7 @@ import com.rms.restaurant_management_system_backend.exception.DatabaseOperationE
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 import com.rms.restaurant_management_system_backend.service.WaitersService;
 
+@Service
 public class WaitersServiceImpl implements WaitersService {
 
 	private final WaitersDao waitersDao;

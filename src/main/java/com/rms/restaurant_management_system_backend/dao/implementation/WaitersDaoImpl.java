@@ -1,12 +1,14 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.WaitersDao;
 import com.rms.restaurant_management_system_backend.domain.Waiters;
 import com.rms.restaurant_management_system_backend.rowmappers.WaiterRowMapper;
 import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
+@Repository
 public class WaitersDaoImpl implements WaitersDao {
 
 	private final JdbcTemplate jdbcTemplate;
