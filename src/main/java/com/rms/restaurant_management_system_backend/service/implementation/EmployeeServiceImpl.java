@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.Designation;
+import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.exception.DuplicateException;
@@ -22,6 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	WaitersServiceImpl waiterService;
 
+	@Override
 	public int addEmployee(Employees employee) {
 
 		if (employee == null) {
@@ -35,18 +37,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (employeeDao.selectByMobile(employee.getPhone())) {
 			throw new DuplicateException("Employee Already exists with this mobile Number");
 		}
+		if (employee.getStatus() == null) {
+			employee.setStatus(EmployeeStatus.ACTIVE);
+		}
+		if (employee.getJoin_date() == null) {
+			employee.setJoin_date(new java.sql.Date(System.currentTimeMillis()));
+		}
+		if (employee.getLeaving_date() == null) {
+			employee.setLeaving_date(null);
+		}
+
 		int rows = employeeDao.addEmployee(employee);
 		if (rows > 0) {
 			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
 			if (employee.getDesignation() == Designation.WAITER) {
 				waiterService.insertWaiter(empId);
 			}
-
 		}
 		return rows;
-
 	}
 
+	@Override
 	public List<Employees> getAllEmployees() {
 		List<Employees> employees = employeeDao.getAllEmployees();
 		if (employees == null || employees.isEmpty()) {
@@ -55,6 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employees;
 	}
 
+	@Override
 	public List<Employees> getActiveEmployees() {
 		List<Employees> employees = employeeDao.getActiveEmployees();
 		if (employees == null || employees.isEmpty()) {
@@ -64,6 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	}
 
+	@Override
 	public int updateEmployee(Employees employee, int id) {
 
 		int rows = employeeDao.updateEmployee(employee, id);
@@ -73,6 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return rows;
 	}
 
+	@Override
 	public int updateEmpStatus(Employees employee, int id) {
 
 		int rows = employeeDao.updateStatus(employee, id);
@@ -83,6 +97,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	}
 
+	@Override
 	public int deleteEmployee(int id) {
 
 		int rows = employeeDao.deleteEmployee(id);

@@ -14,13 +14,13 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 @RestController
 @RequestMapping("/api/staff/waiters")
 public class WaitersController {
-	
+
 	private WaitersService waitersService;
-	
+
 	public WaitersController(WaitersService waitersService) {
-		this.waitersService=waitersService;
+		this.waitersService = waitersService;
 	}
-	
+
 	@GetMapping("/available")
 	public ResponseEntity<CustomResponse> getAllAvailableWaiters(){
 		List<WaiterDetailsSelector> availableWaiters=waitersService.selectAvailableWaiters();
