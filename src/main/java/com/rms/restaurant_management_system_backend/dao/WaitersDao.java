@@ -2,6 +2,7 @@ package com.rms.restaurant_management_system_backend.dao;
 
 import java.util.List;
 
+import com.rms.restaurant_management_system_backend.custom_classes.WaiterDetailsSelector;
 import com.rms.restaurant_management_system_backend.domain.Waiters;
 
 public interface WaitersDao {
@@ -15,7 +16,7 @@ public interface WaitersDao {
 	
 	Waiters selectWaiterById(int waiterId);
 	
-	List<Waiters> selectAvailableWaiters();
+	List<WaiterDetailsSelector> selectAvailableWaiters();
 	
 	int deleteWaiterByEmpId(int employeeId);
 }

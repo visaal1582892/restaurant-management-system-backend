@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.WaiterAvailability;
+import com.rms.restaurant_management_system_backend.custom_classes.WaiterDetailsSelector;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.dao.WaitersDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
@@ -62,8 +63,8 @@ public class WaitersServiceImpl implements WaitersService {
 	}
 
 	@Override
-	public List<Waiters> selectAvailableWaiters() {
-		List<Waiters> availableWaiters=waitersDao.selectAvailableWaiters();
+	public List<WaiterDetailsSelector> selectAvailableWaiters() {
+		List<WaiterDetailsSelector> availableWaiters=waitersDao.selectAvailableWaiters();
 		return availableWaiters;
 	}
 
