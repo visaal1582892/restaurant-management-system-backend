@@ -1,6 +1,7 @@
 package com.rms.restaurant_management_system_backend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,6 @@ import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("api/staff/orders")
 public class OrdersController {
@@ -30,13 +29,20 @@ public class OrdersController {
 	}
 
 	@PostMapping("/addOrder")
-	public ResponseEntity<CustomResponse> addOrder(@Valid @RequestBody Orders order) {
-		ordersService.addOrder(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", order));
+	public ResponseEntity<CustomResponse> addOrder(@RequestBody Map<String, Object> payload) {
+		try {
+			String name = (String) payload.get("name");
+			String phone = (String) payload.get("phone");
+			int waiterId = Integer.valueOf(payload.get("waiterId").toString());
+			int id = ordersService.addOrder(name, phone, waiterId);
+			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", id));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new CustomResponse(false, e.getMessage(), null));
+		}
 	}
 
 	@PutMapping("/updateAmount")
-	public ResponseEntity<CustomResponse> updateAmount(@Valid @RequestBody Orders order) {
+	public ResponseEntity<CustomResponse> updateAmount(@RequestBody Orders order) {
 		ordersService.updateAmount(order);
 		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", order));
 	}

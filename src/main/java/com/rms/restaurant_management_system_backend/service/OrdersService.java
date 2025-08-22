@@ -7,7 +7,7 @@ import com.rms.restaurant_management_system_backend.domain.Orders;
 
 public interface OrdersService {
 
-	void addOrder(Orders order);
+	int addOrder(String name, String phone, int waiterId);
 
 	void updateAmount(Orders order);
 
