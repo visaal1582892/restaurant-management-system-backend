@@ -9,7 +9,7 @@ public interface OrdersService {
 
 	int addOrder(String name, String phone, int waiterId);
 
-	void updateAmount(Orders order);
+	void updateAmount(int OrderId);
 
 	Orders getOrderById(int id);
 
