@@ -1,10 +1,14 @@
 package com.rms.restaurant_management_system_backend.service.implementation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.dao.implementation.CustomerDaoImpl;
 import com.rms.restaurant_management_system_backend.domain.Customer;
+import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
+import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 import com.rms.restaurant_management_system_backend.service.CustomerService;
 
 @Service
@@ -15,7 +19,24 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public int addCustomer(Customer customer) {
+
+		if (customer == null) {
+			throw new InvalidDataException("Please enter all customer details");
+		}
 		return customerDaoImpl.addCustomer(customer);
+	}
+
+	@Override
+	public List<Customer> getAllCustomers() {
+		List<Customer> customers = customerDaoImpl.getAllCustomers();
+		if (customers == null || customers.isEmpty()) {
+			throw new ResourceNotFoundException("No customers found");
+		}
+		return customers;
+	}
+	@Override
+	public Customer getCustomerById(int id) {
+		return customerDaoImpl.getCustomerById(id);
 	}
 
 }

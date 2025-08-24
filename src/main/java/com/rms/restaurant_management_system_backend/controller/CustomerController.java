@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +16,21 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class CustomerController {
-	
+
 	@Autowired
 	private CustomerServiceImpl customerService;
 
-	@PostMapping()
+	@PostMapping("/add")
 	public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer) {
-		customerService.addCustomer(customer);
+	
 		return ResponseEntity.ok(Map.of("status", "success", "message", "customer added successfully"));
+	}
+
+	@GetMapping("/view")
+	public ResponseEntity<?> getAllCustomers() {
+		customerService.getAllCustomers();
+		return ResponseEntity.ok(Map.of("status", "success", "message", "customer fetched successfully"));
 	}
 }

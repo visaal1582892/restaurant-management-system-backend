@@ -21,6 +21,11 @@ public class SqlQueries {
 	public static final String MEMBER_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
+	
+	public static final String GET_ALL_CUSTOMERS = "SELECT * FROM customers";
+	
+	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
+	
 
 	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
 	
