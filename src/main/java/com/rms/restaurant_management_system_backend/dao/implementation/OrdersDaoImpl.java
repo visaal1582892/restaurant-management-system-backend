@@ -1,11 +1,15 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
@@ -15,14 +19,27 @@ import com.rms.restaurant_management_system_backend.rowmappers.OrdersRowMapper;
 @Repository
 public class OrdersDaoImpl implements OrdersDao {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
+
+	public OrdersDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	@Override
 	public int addOrder(Orders order) {
-		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, status) VALUES (?, ?, ?, ?)";
-		return jdbcTemplate.update(sql, order.getCustomerId(), order.getWaiterId(), Date.valueOf(order.getOrderDate()),
-				order.getStatus());
+		String sql = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(connection -> {
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, order.getCustomerId());
+			ps.setInt(2, order.getWaiterId());
+			ps.setDate(3, Date.valueOf(order.getOrderDate()));
+			ps.setDouble(4, 0);
+			ps.setString(5, order.getStatus().getStatus());
+			return ps;
+		}, keyHolder);
+
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -56,7 +73,7 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public int getOrderId(Orders order) {
 		try {
-			String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ?";
+			String sql = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ? and status='Pending'";
 			return jdbcTemplate.queryForObject(sql, Integer.class,
 					new Object[] { order.getCustomerId(), order.getWaiterId() });
 		} catch (EmptyResultDataAccessException ex) {

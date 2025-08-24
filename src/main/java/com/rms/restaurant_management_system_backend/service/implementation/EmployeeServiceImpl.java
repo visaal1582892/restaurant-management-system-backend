@@ -80,8 +80,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateEmployee(Employees employee, int id) {
 
 		int rows = employeeDao.updateEmployee(employee, id);
-		if (rows == 0) {
-			throw new ResourceNotFoundException("No Employee found with this id");
+		if (rows > 0) {
+			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
+			if (employee.getDesignation() == Designation.WAITER) {
+				waiterService.insertWaiter(empId);
+			}
+			if (employee.getDesignation() != Designation.WAITER) {
+				waiterService.deleteWaiterByEmpId(empId);
+			}
 		}
 		return rows;
 	}
@@ -99,6 +105,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int deleteEmployee(int id) {
+
+		Employees employee = employeeDao.getEmpById(id);
+
+		if (employee.getDesignation() == Designation.WAITER) {
+			waiterService.deleteWaiterByEmpId(id);
+		}
 
 		int rows = employeeDao.deleteEmployee(id);
 		if (rows == 0) {

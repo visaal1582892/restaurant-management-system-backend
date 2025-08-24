@@ -6,13 +6,13 @@ public class SqlQueries {
 
 	}
 
-	public static final String EMPLOYEE_SELECT_BY_EMAIL = "SELECT COUNT(*) FROM employees WHERE  email = ? AND status = 'Active' ";
+	public static final String EMPLOYEE_SELECT_BY_EMAIL = "select count(*) from employees where  email = ? and status = 'Active' ";
 
-	public static final String EMPLOYEE_SELECT_BY_MOBILE = "SELECT COUNT(*) FROM employees WHERE  phone = ? AND status = 'Active' ";
+	public static final String EMPLOYEE_SELECT_BY_MOBILE = "select count(*) from employees where  phone = ? and status = 'Active' ";
 
 	public static final String GET_EMPID_BY_EMAIL = "select emp_id from employees where email = ?";
 
-	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active' ";
+	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active'";
 
 	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
@@ -22,11 +22,11 @@ public class SqlQueries {
 
 	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,status=?,designation=?,join_date=?,leaving_date=? where emp_id=?";
 
-	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive' where emp_id=?";
+	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive',leaving_date=CURRENT_DATE where emp_id=?";
 
 	public static final String UPDATE_EMP_STATUS = "update employees set status=? where emp_id=?";
 
-	public static final String MEMBER_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
+	public static final String EMPLOYEE_LOG = "insert into employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=?";
 
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
 
@@ -44,7 +44,7 @@ public class SqlQueries {
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 
-	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where availability='Available'";
+	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available'";
 
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 

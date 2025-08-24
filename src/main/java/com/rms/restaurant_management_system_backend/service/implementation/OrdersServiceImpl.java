@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
+import com.rms.restaurant_management_system_backend.dao.CustomerDao;
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
 import com.rms.restaurant_management_system_backend.dao.implementation.CustomerDaoImpl;
@@ -28,20 +29,22 @@ public class OrdersServiceImpl implements OrdersService {
 	private final CustomerService customerService;
 	private final OrderDetailsDao orderDetailsDao;
 	private final WaitersService waitersService;
+	private final CustomerDaoImpl customerDao;
 
 	public OrdersServiceImpl(OrdersDao ordersDao, OrderDetailsDao orderDetailsDao, WaitersService waitersService,
-			CustomerService customerService) {
+			CustomerService customerService, CustomerDaoImpl customerDao) {
 		this.ordersDao = ordersDao;
 		this.customerService = customerService;
 		this.orderDetailsDao = orderDetailsDao;
 		this.waitersService = waitersService;
+		this.customerDao = customerDao;
 	}
 
 	@Override
 	public int addOrder(String name, String phone, int waiterId) {
 		int customerId = 0;
 		try {
-			customerId = new CustomerDaoImpl().getCustomerIdByNumber(phone);
+			customerId = customerDao.getCustomerIdByNumber(phone);
 		} catch (EmptyResultDataAccessException ex) {
 			customerId = customerService.addCustomer(new Customer(name, phone));
 		}
@@ -49,15 +52,7 @@ public class OrdersServiceImpl implements OrdersService {
 		Orders order = new Orders(customerId, waiterId);
 		order.setOrderDate(LocalDate.now());
 		order.setStatus(OrderStatus.PENDING);
-		int rows = ordersDao.addOrder(order);
-		if (rows != 1) {
-			throw new DatabaseOperationException("Failed to create new order");
-		}
-		int id = ordersDao.getOrderId(order);
-		if (id == 0) {
-			throw new DatabaseOperationException("Failed to get Order Id");
-		}
-		return id;
+		return ordersDao.addOrder(order);
 	}
 
 	@Override
@@ -78,20 +73,16 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void updateAmount(Orders order) {
-		if (order == null) {
+	public void updateAmount(int orderId) {
+		if (orderId <= 0) {
 			throw new InvalidDataException("Invalid inputs");
 		}
-		int id = ordersDao.getOrderId(order);
-		if (id == 0) {
-			throw new InvalidDataException("Order does not exist");
-		}
-		order.setOrderId(id);
+		Orders order = ordersDao.getOrderById(orderId);
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
 			throw new InvalidDataException(
 					"Cannot update amount. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
 		}
-		double amount = calculateTotalAmount(id);
+		double amount = calculateTotalAmount(orderId);
 		if (amount <= 0) {
 			throw new InvalidDataException("Amount must be greater than zero");
 		}

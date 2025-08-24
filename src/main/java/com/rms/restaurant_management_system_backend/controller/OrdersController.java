@@ -41,10 +41,10 @@ public class OrdersController {
 		}
 	}
 
-	@PutMapping("/updateAmount")
-	public ResponseEntity<CustomResponse> updateAmount(@RequestBody Orders order) {
-		ordersService.updateAmount(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", order));
+	@PutMapping("/updateAmount/{OrderId}")
+	public ResponseEntity<CustomResponse> updateAmount(@PathVariable int OrderId) {
+		ordersService.updateAmount(OrderId);
+		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", OrderId));
 	}
 
 	@PutMapping("/updateStatus")

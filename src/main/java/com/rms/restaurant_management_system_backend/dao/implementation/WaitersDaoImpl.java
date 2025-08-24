@@ -39,7 +39,7 @@ public class WaitersDaoImpl implements WaitersDao {
 	public int insertWaiterLog(Waiters oldWaiter) {
 		String insertQuery = SqlQueries.WAITER_LOG_INSERT;
 		int count = jdbcTemplate.update(insertQuery, oldWaiter.getWaiterId(), oldWaiter.getEmployeeId(),
-				oldWaiter.getAvailability());
+				oldWaiter.getAvailability().getDbName());
 		return count;
 	}
 

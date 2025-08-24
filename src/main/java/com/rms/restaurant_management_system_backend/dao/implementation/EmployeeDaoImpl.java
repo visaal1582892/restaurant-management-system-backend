@@ -81,8 +81,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public int employeeLog(int empId) {
-		String sql = "INSERT INTO employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) "
-				+ "SELECT emp_id,name,email,phone,status,designation,join_date,leaving_date FROM employees WHERE emp_id=?";
-		return jdbcTemplate.update(sql, empId);
+
+		return jdbcTemplate.update(SqlQueries.EMPLOYEE_LOG, empId);
 	}
 }
