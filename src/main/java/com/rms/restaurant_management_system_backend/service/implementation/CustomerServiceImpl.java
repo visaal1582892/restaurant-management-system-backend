@@ -19,20 +19,16 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public int addCustomer(Customer customer) {
-<<<<<<< HEAD
 
 		if (customer == null) {
 			throw new InvalidDataException("Please enter all customer details");
 		}
-		return customerDaoImpl.addCustomer(customer);
-=======
 		int rows = customerDaoImpl.addCustomer(customer);
 		if (rows > 0) {
 			int id = customerDaoImpl.getCustomerIdByNumber(customer.getPhone());
 			return id;
 		}
 		return rows;
->>>>>>> 246583a6e4415d9a9f084eb8ed51290f6e3933ef
 	}
 
 	@Override

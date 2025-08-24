@@ -19,18 +19,14 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-<<<<<<< HEAD
 	@Autowired
 	private CustomerRowMapper customerRowMapper;
 
-=======
->>>>>>> 246583a6e4415d9a9f084eb8ed51290f6e3933ef
 	@Override
 	public int addCustomer(Customer customer) {
 		return jdbcTemplate.update(SqlQueries.CUSTOMER_INSERT, customer.getName(), customer.getPhone());
 	}
 
-<<<<<<< HEAD
 	@Override		
 	public List<Customer> getAllCustomers() {
 		return jdbcTemplate.query(SqlQueries.GET_ALL_CUSTOMERS, customerRowMapper);
@@ -45,11 +41,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		return customer.get(0);
 	}
 	
-	
-=======
 	public Integer getCustomerIdByNumber(String phone) {
 		return jdbcTemplate.queryForObject(SqlQueries.GET_ID_BY_PHONE, Integer.class, phone);
 	}
-
->>>>>>> 246583a6e4415d9a9f084eb8ed51290f6e3933ef
 }
