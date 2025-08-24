@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -85,6 +84,13 @@ public class OrdersDaoImpl implements OrdersDao {
 	public List<Orders> getOrdersByCategory(String category) {
 		String sql = "SELECT * FROM orders WHERE status = ?";
 		return jdbcTemplate.query(sql, new OrdersRowMapper(), category);
+	}
+
+	@Override
+	public void insertLog(Orders order) {
+		String sql = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
+		jdbcTemplate.update(sql, order.getOrderId(), order.getCustomerId(), order.getWaiterId(),
+				Date.valueOf(order.getOrderDate()), order.getAmount(), order.getStatus().getStatus());
 	}
 
 }

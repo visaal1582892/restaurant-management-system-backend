@@ -48,7 +48,7 @@ public class OrdersController {
 	}
 
 	@PutMapping("/updateStatus")
-	public ResponseEntity<CustomResponse> updateStatus(@RequestParam int orderId, @RequestParam OrderStatus status) {
+	public ResponseEntity<CustomResponse> updateStatus(@RequestParam int orderId, @RequestParam String status) {
 		ordersService.updateStatus(orderId, status);
 		return ResponseEntity.ok(new CustomResponse(true, "Order status updated successfully", status));
 	}

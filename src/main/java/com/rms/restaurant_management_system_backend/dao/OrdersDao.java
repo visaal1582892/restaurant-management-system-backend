@@ -20,4 +20,6 @@ public interface OrdersDao {
 
 	List<Orders> getOrdersByCategory(String category);
 
+	void insertLog(Orders order);
+
 }
