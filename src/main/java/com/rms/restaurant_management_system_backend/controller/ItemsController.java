@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/staff/items")
 public class ItemsController {
 
-	private static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+	private static final String UPLOAD_DIR = "uploads/";
 	private final ItemsService itemsService;
 
 	public ItemsController(ItemsService itemsService) {
@@ -49,7 +49,7 @@ public class ItemsController {
 
 			try {
 				Files.write(filePath, file.getBytes());
-				fileUrl = "/uploads/" + fileName;
+				fileUrl = "http://localhost:8080/uploads/" + fileName;
 			} catch (IOException e) {
 				throw new InvalidDataException("image storing error");
 			}
@@ -57,8 +57,9 @@ public class ItemsController {
 		} else {
 			fileUrl = "";
 		}
-
+		System.out.println(fileUrl);
 		CustomResponse response = new CustomResponse(true, "Item Saved Succussfully", fileUrl);
+		System.out.println(response);
 		return ResponseEntity.ok(response);
 
 	}
@@ -67,11 +68,11 @@ public class ItemsController {
 	public ResponseEntity<CustomResponse> addItem(@Valid @RequestBody Items items) {
 
 		if (items.getImageUrl() == null || items.getImageUrl().isBlank()) {
-			items.setImageUrl("/uploads/defult/profile123.png");
+			items.setImageUrl("http://localhost:8080/uploads/default/profile123.png");
 		}
 
-		itemsService.saveItem(items);
-		CustomResponse response = new CustomResponse(true, "Item Saved Succussfully", items);
+		Items item = itemsService.saveItem(items);
+		CustomResponse response = new CustomResponse(true, "Item Saved Succussfully", item);
 		return ResponseEntity.ok(response);
 
 	}
@@ -89,7 +90,7 @@ public class ItemsController {
 	public ResponseEntity<CustomResponse> updateItem(@PathVariable int id, @Valid @RequestBody Items items) {
 
 		if (items.getImageUrl() == null || items.getImageUrl().isBlank()) {
-			items.setImageUrl("/uploads/defult/profile123.png");
+			items.setImageUrl("http://localhost:8080/uploads/default/profile123.png");
 		}
 
 		Items item = itemsService.updateItem(id, items);

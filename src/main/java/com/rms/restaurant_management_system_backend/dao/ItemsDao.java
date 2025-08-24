@@ -18,6 +18,8 @@ public interface ItemsDao {
 
 	int deleteItem(int id);
 
+	Items getItemByName(String name);
+
 	List<Items> getAllItems();
 
 }
