@@ -11,8 +11,6 @@ designation varchar(20) check(designation in ('Admin','Staff')) not null,
 join_date date not null,
 leaving_date date);
 
-alter table employees modify designation varchar(20) check(designation in ('Admin','Staff','Waiter')) not null;
-
 create table customers(
 cust_id int primary key auto_increment,
 name varchar(255) not null,
@@ -53,13 +51,6 @@ price decimal(10,2) not null check(price>0),
 constraint fk_orders_order_details foreign key(ord_id) references orders(ord_id),
 constraint fk_items_order_details foreign key(item_id) references items(item_id));
 
-alter table order_details drop constraint fk_orders_order_details;
-alter table order_details drop constraint fk_items_order_details;
-
-alter table order_details add constraint fk_orders_order_details foreign key(ord_id) references orders(ord_id);
-alter table order_details add constraint fk_items_order_details foreign key(item_id) references items(item_id);
-
-
 create table credentials(
 username VARCHAR(50) NOT NULL PRIMARY KEY,
 password VARCHAR(100) NOT NULL,
@@ -96,4 +87,20 @@ drop table items;
 drop table order_details;
 drop table credentials;
 
-insert into orders values();
+alter table order_details drop constraint fk_orders_order_details;
+alter table order_details drop constraint fk_items_order_details;
+
+alter table order_details add constraint fk_orders_order_details foreign key(ord_id) references orders(ord_id);
+alter table order_details add constraint fk_items_order_details foreign key(item_id) references items(item_id);
+
+alter table employees modify designation varchar(20) check(designation in ('Admin','Staff','Waiter')) not null;
+
+select * from order_details;
+
+select * from credentials;
+
+insert into credentials values('admin','admin','Admin',true);
+insert into credentials values('staff','staff','Staff',true);
+
+select * from employees;
+delete from credentials;
