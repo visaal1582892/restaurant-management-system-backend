@@ -1,25 +1,25 @@
 package com.rms.restaurant_management_system_backend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
-import jakarta.validation.Valid;
-
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/staff/orders")
 public class OrdersController {
 
 	private final OrdersService ordersService;
@@ -29,27 +29,28 @@ public class OrdersController {
 	}
 
 	@PostMapping("/addOrder")
-	public ResponseEntity<CustomResponse> addOrder(@Valid @RequestBody Orders order) {
-		ordersService.addOrder(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", order));
+	public ResponseEntity<CustomResponse> addOrder(@RequestBody Map<String, Object> payload) {
+		try {
+			String name = (String) payload.get("name");
+			String phone = (String) payload.get("phone");
+			int waiterId = Integer.valueOf(payload.get("waiterId").toString());
+			int id = ordersService.addOrder(name, phone, waiterId);
+			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", id));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new CustomResponse(false, e.getMessage(), null));
+		}
 	}
 
-	@PutMapping("/updateOrderAmount")
-	public ResponseEntity<CustomResponse> updateAmount(@Valid @RequestBody Orders order) {
-		ordersService.updateAmount(order, order.getAmount());
-		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", order));
+	@PutMapping("/updateAmount/{OrderId}")
+	public ResponseEntity<CustomResponse> updateAmount(@PathVariable int OrderId) {
+		ordersService.updateAmount(OrderId);
+		return ResponseEntity.ok(new CustomResponse(true, "Amount updated successfully", OrderId));
 	}
 
-	@PutMapping("/updateOrderStatus")
-	public ResponseEntity<CustomResponse> updateStatus(@Valid @RequestBody Orders order) {
-		ordersService.updateStatus(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order completed successfully", order));
-	}
-
-	@DeleteMapping("/deleteOrder")
-	public ResponseEntity<CustomResponse> deleteOrder(@Valid @RequestBody Orders order) {
-		ordersService.deleteOrder(order);
-		return ResponseEntity.ok(new CustomResponse(true, "Order Cancelled successfully", order));
+	@PutMapping("/updateStatus")
+	public ResponseEntity<CustomResponse> updateStatus(@RequestParam int orderId, @RequestParam OrderStatus status) {
+		ordersService.updateStatus(orderId, status);
+		return ResponseEntity.ok(new CustomResponse(true, "Order status updated successfully", status));
 	}
 
 	@GetMapping("/allOrders")
@@ -69,4 +70,5 @@ public class OrdersController {
 		List<Orders> pending = ordersService.getOrdersByCategory(category);
 		return ResponseEntity.ok(new CustomResponse(true, category + " orders fetched successfully", pending));
 	}
+
 }

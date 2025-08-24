@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 public enum Designation {
 
-	ADMIN("Admin"), STAFF("Staff");
+	ADMIN("Admin"), STAFF("Staff"), WAITER("Waiter");
 
 	private String name;
 

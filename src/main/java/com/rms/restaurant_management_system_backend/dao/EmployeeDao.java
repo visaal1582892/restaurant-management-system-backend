@@ -9,4 +9,21 @@ public interface EmployeeDao {
 
 	public List<Employees> getAllEmployees();
 
+	public Employees getEmpById(int id);
+
+	public List<Employees> getActiveEmployees();
+
+	public int updateEmployee(Employees employee, int id);
+
+	public int updateStatus(Employees employee, int id);
+
+	public boolean selectByEmail(String email);
+
+	public boolean selectByMobile(String mobile);
+
+	public int getEmployeeIdByEmail(String email);
+
+	int employeeLog(int memberId);
+
+	int deleteEmployee(int id);
 }

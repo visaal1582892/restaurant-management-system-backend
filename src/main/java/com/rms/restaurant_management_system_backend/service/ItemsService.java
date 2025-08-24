@@ -2,7 +2,6 @@ package com.rms.restaurant_management_system_backend.service;
 
 import java.util.List;
 
-import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.domain.Items;
 
 public interface ItemsService {
@@ -13,9 +12,9 @@ public interface ItemsService {
 
 	Items updateItem(int id, Items item);
 
-	void deleteItem(int id);
+	Items changeAvailability(int id);
 
-	Items changeAvailability(int id, ItemAvailability availability);
+	Items deleteItem(int id);
 
 	List<Items> getAllItems();
 

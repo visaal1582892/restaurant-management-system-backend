@@ -6,5 +6,7 @@ import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 
 public interface OrderDetailsDao {
 	
-	List<OrderDetails> getAllOrderDetails();
+	int[] insertOrderDetails(List<OrderDetails> orderDetails);
+
+	List<OrderDetails> selectAllOrderDetails();
 }
