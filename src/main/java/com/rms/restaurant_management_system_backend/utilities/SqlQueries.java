@@ -31,6 +31,11 @@ public class SqlQueries {
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
 
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
+	
+	public static final String GET_ALL_CUSTOMERS = "SELECT * FROM customers";
+	
+	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
+	
 
 	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
 
