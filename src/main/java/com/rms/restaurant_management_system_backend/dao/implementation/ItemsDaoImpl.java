@@ -26,7 +26,8 @@ public class ItemsDaoImpl implements ItemsDao {
 	}
 
 	private final String ITEM_INSERT = "INSERT INTO items (name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?)";
-	private final String ITEM_SELECT_BY_NAME = "SELECT COUNT(*) FROM items WHERE  name = ? AND status = 'Active' ";
+	private final String ITEM_COUNT_SELECT_BY_NAME = "SELECT COUNT(*) FROM items WHERE  name = ? AND status = 'Active' ";
+	private final String ITEM_SELECT_BY_NAME = "SELECT * FROM items WHERE  name = ? AND status = 'Active' ";
 
 	private final String ITEM_SELECT_BY_ID = "SELECT * FROM items WHERE item_id = ? AND status = 'Active'";
 	private final String ITEM_UPDATE = "UPDATE items SET name = ?, image = ?, description = ?, category = ?,price = ?  WHERE item_id = ? AND status = 'Active'";
@@ -47,7 +48,7 @@ public class ItemsDaoImpl implements ItemsDao {
 	@Override
 	public boolean existsByName(String name) {
 
-		Integer count = jdbcTemplate.queryForObject(ITEM_SELECT_BY_NAME, Integer.class, name);
+		Integer count = jdbcTemplate.queryForObject(ITEM_COUNT_SELECT_BY_NAME, Integer.class, name);
 		return count != null && count > 0;
 	}
 
@@ -57,6 +58,16 @@ public class ItemsDaoImpl implements ItemsDao {
 
 		if (items.isEmpty()) {
 			throw new ResourceNotFoundException("Item with id " + id + " not found");
+		}
+		return items.get(0);
+	}
+
+	@Override
+	public Items getItemByName(String name) {
+		List<Items> items = jdbcTemplate.query(ITEM_SELECT_BY_NAME, itemRowMapper, name);
+
+		if (items.isEmpty()) {
+			throw new ResourceNotFoundException("Item with name " + name + " not found");
 		}
 		return items.get(0);
 	}

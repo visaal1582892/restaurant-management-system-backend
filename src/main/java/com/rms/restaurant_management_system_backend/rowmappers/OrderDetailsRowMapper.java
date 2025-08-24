@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 
-public class OrderDetailsRowMapper implements RowMapper {
+public class OrderDetailsRowMapper implements RowMapper<OrderDetails> {
 	
 	@Override
-	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public OrderDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 		OrderDetails orderDetails = new OrderDetails();
 		orderDetails.setOrderDetailsId(rs.getInt("ord_details_id"));
 		orderDetails.setOrderId(rs.getInt("ord_id"));

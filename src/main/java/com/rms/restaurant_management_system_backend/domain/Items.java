@@ -52,7 +52,8 @@ public class Items {
 		}
 		Items other = (Items) obj;
 		return category == other.category && Objects.equals(description, other.description)
-				&& Objects.equals(name, other.name) && Objects.equals(price, other.price);
+				&& Objects.equals(name, other.name) && Objects.equals(price, other.price)
+				&& Objects.equals(imageUrl, other.imageUrl);
 	}
 
 	@Override

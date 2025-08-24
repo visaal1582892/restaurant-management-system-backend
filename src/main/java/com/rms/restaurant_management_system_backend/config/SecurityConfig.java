@@ -19,43 +19,35 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
+
 	private final CustomUserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(CustomUserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+	public SecurityConfig(CustomUserDetailsServiceImpl userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-        	.cors()
-        	.and()
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/staff/**").hasRole("STAFF")
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors().and().csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers("/admin/**")
+						.hasRole("ADMIN").requestMatchers("/staff/**").hasRole("STAFF").anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		return http.build();
+	}
 
-        return http.build();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+	@Bean
+	public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
-    	return NoOpPasswordEncoder.getInstance();
-    }
+		return NoOpPasswordEncoder.getInstance();
+	}
 }
