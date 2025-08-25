@@ -11,13 +11,10 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     private final JdbcTemplate jdbcTemplate;
-<<<<<<< HEAD
-=======
 
     public CustomUserDetailsServiceImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
->>>>>>> 246583a6e4415d9a9f084eb8ed51290f6e3933ef
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
