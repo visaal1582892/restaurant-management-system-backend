@@ -138,10 +138,11 @@ public class ItemsController {
 				availabilities);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@GetMapping("/availableItems")
 	public ResponseEntity<CustomResponse> getAvailableItems() {
-		List<Items> items = itemsService.getAllItems().stream().filter(item -> item.getAvailable().equals(ItemAvailability.AVAILABLE)).toList();
+		List<Items> items = itemsService.getAllItems().stream()
+				.filter(item -> item.getAvailable().equals(ItemAvailability.AVAILABLE)).toList();
 		CustomResponse response = new CustomResponse(true, "Items Retrived Successufully", items);
 		return ResponseEntity.ok(response);
 	}

@@ -10,6 +10,7 @@ import com.rms.restaurant_management_system_backend.constant.Designation;
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
+import com.rms.restaurant_management_system_backend.domain.Waiters;
 import com.rms.restaurant_management_system_backend.exception.DuplicateException;
 import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
@@ -61,7 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employees> getAllEmployees() {
 		List<Employees> employees = employeeDao.getAllEmployees();
-		if (employees == null || employees.isEmpty()) {
+		if (employees == null) {
 			throw new ResourceNotFoundException("No employees found");
 		}
 		return employees;
@@ -70,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employees> getActiveEmployees() {
 		List<Employees> employees = employeeDao.getActiveEmployees();
-		if (employees == null || employees.isEmpty()) {
+		if (employees == null) {
 			throw new ResourceNotFoundException("No employees found");
 		}
 		return employees;
@@ -84,11 +85,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		int rows = employeeDao.updateEmployee(employee, id);
 		if (rows > 0) {
 			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
-			if (employee.getDesignation() == Designation.WAITER) {
+			Waiters existingWaiter=waiterService.selectWaiterByEmpId(empId);
+			if(employee.getDesignation() == Designation.WAITER && existingWaiter==null) {
 				waiterService.insertWaiter(empId);
-			}
-			if (employee.getDesignation() != Designation.WAITER) {
-				waiterService.deleteWaiterByEmpId(empId);
 			}
 		}
 		return rows;
@@ -109,10 +108,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int deleteEmployee(int id) {
 
 		Employees employee = employeeDao.getEmpById(id);
-
-		if (employee.getDesignation() == Designation.WAITER) {
-			waiterService.deleteWaiterByEmpId(id);
-		}
 
 		int rows = employeeDao.deleteEmployee(id);
 		if (rows == 0) {
