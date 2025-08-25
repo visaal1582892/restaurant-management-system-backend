@@ -72,8 +72,8 @@ public class WaitersDaoImpl implements WaitersDao {
 	
 	@Override
 	public Waiters selectWaiterByEmpId(int employeeId) {
-		String deleteQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
-		return jdbcTemplate.query(deleteQuery, new WaiterRowMapper(), employeeId).stream()
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream()
 				.findFirst()
 				.orElse(null);
 	}
