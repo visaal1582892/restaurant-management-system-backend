@@ -26,9 +26,9 @@ public class OrderDetailsController {
 	public ResponseEntity<List<OrderDetails>> getAllOrderDetails() {
 		return ResponseEntity.ok(orderDetailsServiceImpl.selectAllOrderDetails());
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<String> insertAllOrderDetails(@Valid @RequestBody List<OrderDetails> orderDetailsList){
+	public ResponseEntity<String> insertAllOrderDetails(@Valid @RequestBody List<OrderDetails> orderDetailsList) {
 		orderDetailsServiceImpl.insertOrderDetails(orderDetailsList);
 		return ResponseEntity.ok("Inserted Succesfully");
 	}
