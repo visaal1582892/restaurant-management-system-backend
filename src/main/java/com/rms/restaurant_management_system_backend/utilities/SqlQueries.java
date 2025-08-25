@@ -56,5 +56,7 @@ public class SqlQueries {
 	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
 
 	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
+	
+	public static final String WAITER_SELECT_BY_EMP_ID="select * from waiters where emp_id=?";
 
 }

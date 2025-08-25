@@ -13,6 +13,7 @@ import com.rms.restaurant_management_system_backend.domain.Waiters;
 import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
 import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
 import com.rms.restaurant_management_system_backend.service.WaitersService;
+import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
 @Service
 public class WaitersServiceImpl implements WaitersService {
@@ -75,11 +76,19 @@ public class WaitersServiceImpl implements WaitersService {
 		if (employee == null) {
 			throw new ResourceNotFoundException("Employee not found");
 		}
+		Waiters oldWaiter=selectWaiterByEmpId(employeeId);
+		waitersDao.insertWaiterLog(oldWaiter);
 		int count = waitersDao.deleteWaiterByEmpId(employeeId);
 		if (count != 1) {
 			throw new DatabaseOperationException("Failed to delete waiter by employee id");
 		}
 		return true;
+	}
+	
+	@Override
+	public Waiters selectWaiterByEmpId(int employeeId) {
+		String deleteQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+		return waitersDao.selectWaiterByEmpId(employeeId);
 	}
 
 }

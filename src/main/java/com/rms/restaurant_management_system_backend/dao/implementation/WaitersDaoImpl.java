@@ -70,4 +70,12 @@ public class WaitersDaoImpl implements WaitersDao {
 		return count;
 	}
 	
+	@Override
+	public Waiters selectWaiterByEmpId(int employeeId) {
+		String deleteQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+		return jdbcTemplate.query(deleteQuery, new WaiterRowMapper(), employeeId).stream()
+				.findFirst()
+				.orElse(null);
+	}
+	
 }
