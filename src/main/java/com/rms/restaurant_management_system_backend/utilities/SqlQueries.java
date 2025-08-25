@@ -49,7 +49,7 @@ public class SqlQueries {
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 
-	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available'";
+	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available' and e.status='Active' and e.designation='Waiter'";
 
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
