@@ -71,15 +71,21 @@ public class WaitersServiceImpl implements WaitersService {
 	@Override
 	public boolean deleteWaiterByEmpId(int employeeId) {
 		Employees employee = employeeDao.getEmpById(employeeId);
-		System.out.println(employee);
 		if (employee == null) {
 			throw new ResourceNotFoundException("Employee not found");
 		}
+		Waiters oldWaiter=selectWaiterByEmpId(employeeId);
+		waitersDao.insertWaiterLog(oldWaiter);
 		int count = waitersDao.deleteWaiterByEmpId(employeeId);
 		if (count != 1) {
 			throw new DatabaseOperationException("Failed to delete waiter by employee id");
 		}
 		return true;
+	}
+	
+	@Override
+	public Waiters selectWaiterByEmpId(int employeeId) {
+		return waitersDao.selectWaiterByEmpId(employeeId);
 	}
 
 }

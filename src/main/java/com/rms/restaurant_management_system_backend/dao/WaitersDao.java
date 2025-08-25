@@ -19,4 +19,6 @@ public interface WaitersDao {
 	List<WaiterDetailsSelector> selectAvailableWaiters();
 	
 	int deleteWaiterByEmpId(int employeeId);
+
+	Waiters selectWaiterByEmpId(int employeeId);
 }
