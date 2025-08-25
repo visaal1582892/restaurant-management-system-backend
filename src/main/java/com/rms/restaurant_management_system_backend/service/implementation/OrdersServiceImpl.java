@@ -104,9 +104,9 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public List<Orders> getAllOrders() {
 		List<Orders> orders = ordersDao.getAllOrders();
-		if (orders.isEmpty()) {
-			throw new ResourceNotFoundException("No orders found");
-		}
+//		if (orders.isEmpty()) {
+//			throw new ResourceNotFoundException("No orders found");
+//		}
 		return orders;
 	}
 

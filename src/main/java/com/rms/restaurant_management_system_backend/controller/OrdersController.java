@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
@@ -56,6 +55,9 @@ public class OrdersController {
 	@GetMapping("/allOrders")
 	public ResponseEntity<CustomResponse> getAllOrders() {
 		List<Orders> orders = ordersService.getAllOrders();
+		if(orders.size()==0) {
+			return ResponseEntity.ok(new CustomResponse(true, "No orders found", orders));
+		}
 		return ResponseEntity.ok(new CustomResponse(true, "Orders fetched successfully", orders));
 	}
 
