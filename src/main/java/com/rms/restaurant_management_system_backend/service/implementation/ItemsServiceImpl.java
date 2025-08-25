@@ -23,7 +23,7 @@ public class ItemsServiceImpl implements ItemsService {
 	}
 
 	@Override
-	public int saveItem(Items item) {
+	public Items saveItem(Items item) {
 
 		if (item == null) {
 			throw new ResourceNotFoundException("Items details are wrong");
@@ -38,7 +38,7 @@ public class ItemsServiceImpl implements ItemsService {
 		if (itemSaved <= 0) {
 			throw new DatabaseOperationException("Item Not Added Please try again");
 		}
-		return itemSaved;
+		return itemsDao.getItemByName(item.getName());
 	}
 
 	@Override

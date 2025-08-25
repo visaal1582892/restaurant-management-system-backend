@@ -1,7 +1,7 @@
 package com.rms.restaurant_management_system_backend.domain;
 
-import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +14,11 @@ public class OrderDetails {
 	
 	private int orderDetailsId;
 	
+	@NotNull(message="Order id cannot be null")
 	@NotBlank(message = "Order id is required")
 	private int orderId;
+	
 	@NotBlank(message = "Item id is required")
-	
-	@NotNull(message="Order id cannot be null")
-	private int orderId;
-	
 	@NotNull(message="Item id cannot be null")
 	private int itemId;
 	

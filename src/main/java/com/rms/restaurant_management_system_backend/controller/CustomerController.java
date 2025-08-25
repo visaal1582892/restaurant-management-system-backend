@@ -18,19 +18,12 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 import jakarta.validation.Valid;
 
 @RestController
-<<<<<<< HEAD
-@RequestMapping("/api/customers")
-=======
 @RequestMapping("api/staff/customers")
->>>>>>> 246583a6e4415d9a9f084eb8ed51290f6e3933ef
 public class CustomerController {
 
 	@Autowired
 	private CustomerServiceImpl customerService;
 
-<<<<<<< HEAD
-	@PostMapping("/add")
-=======
 	@Autowired
 	private CustomerDaoImpl customerDao;
 
@@ -39,11 +32,6 @@ public class CustomerController {
 	
 		return ResponseEntity.ok(Map.of("status", "success", "message", "customer added successfully"));
 	}
-
-	@GetMapping("/view")
-	public ResponseEntity<?> getAllCustomers() {
-		customerService.getAllCustomers();
-		return ResponseEntity.ok(Map.of("status", "success", "message", "customer fetched successfully"));
 
 	@GetMapping("/{phone}")
 	public Integer getId(@PathVariable String phone) {

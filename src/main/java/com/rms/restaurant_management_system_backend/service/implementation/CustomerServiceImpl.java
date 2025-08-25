@@ -23,7 +23,6 @@ public class CustomerServiceImpl implements CustomerService {
 		if (customer == null) {
 			throw new InvalidDataException("Please enter all customer details");
 		}
-
 		int rows = customerDaoImpl.addCustomer(customer);
 		if (rows > 0) {
 			int id = customerDaoImpl.getCustomerIdByNumber(customer.getPhone());
