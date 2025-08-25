@@ -15,10 +15,8 @@ public class OrderDetails {
 	private int orderDetailsId;
 	
 	@NotNull(message="Order id cannot be null")
-	@NotBlank(message = "Order id is required")
 	private int orderId;
 	
-	@NotBlank(message = "Item id is required")
 	@NotNull(message="Item id cannot be null")
 	private int itemId;
 	
