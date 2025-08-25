@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rms.restaurant_management_system_backend.constant.Designation;
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
@@ -77,6 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public int updateEmployee(Employees employee, int id) {
 
 		int rows = employeeDao.updateEmployee(employee, id);
