@@ -8,7 +8,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
-import com.rms.restaurant_management_system_backend.dao.CustomerDao;
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
 import com.rms.restaurant_management_system_backend.dao.implementation.CustomerDaoImpl;
@@ -56,7 +55,7 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void updateStatus(int id, OrderStatus status) {
+	public void updateStatus(int id, String status) {
 		Orders order = ordersDao.getOrderById(id);
 		if (order == null) {
 			throw new InvalidDataException("Order with ID " + order.getOrderId() + " does not exist");
@@ -65,7 +64,8 @@ public class OrdersServiceImpl implements OrdersService {
 			throw new InvalidDataException(
 					"Cannot update status. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
 		}
-		int rows = ordersDao.updateStatus(order, status.getStatus());
+		ordersDao.insertLog(order);
+		int rows = ordersDao.updateStatus(order, status);
 		if (rows != 1) {
 			throw new DatabaseOperationException("Failed to update status with ID " + order.getOrderId());
 		}
@@ -104,9 +104,9 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public List<Orders> getAllOrders() {
 		List<Orders> orders = ordersDao.getAllOrders();
-		if (orders.isEmpty()) {
-			throw new ResourceNotFoundException("No orders found");
-		}
+//		if (orders.isEmpty()) {
+//			throw new ResourceNotFoundException("No orders found");
+//		}
 		return orders;
 	}
 
