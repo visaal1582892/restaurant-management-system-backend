@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.constant.ItemCategory;
 import com.rms.restaurant_management_system_backend.domain.Items;
-import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 import com.rms.restaurant_management_system_backend.service.ItemsService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
@@ -51,7 +51,7 @@ public class ItemsController {
 				Files.write(filePath, file.getBytes());
 				fileUrl = "http://localhost:8080/uploads/" + fileName;
 			} catch (IOException e) {
-				throw new InvalidDataException("image storing error");
+				throw new RestaurantOperationException("image storing error");
 			}
 
 		} else {
@@ -138,10 +138,11 @@ public class ItemsController {
 				availabilities);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@GetMapping("/availableItems")
 	public ResponseEntity<CustomResponse> getAvailableItems() {
-		List<Items> items = itemsService.getAllItems().stream().filter(item -> item.getAvailable().equals(ItemAvailability.AVAILABLE)).toList();
+		List<Items> items = itemsService.getAllItems().stream()
+				.filter(item -> item.getAvailable().equals(ItemAvailability.AVAILABLE)).toList();
 		CustomResponse response = new CustomResponse(true, "Items Retrived Successufully", items);
 		return ResponseEntity.ok(response);
 	}

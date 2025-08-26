@@ -48,7 +48,7 @@ public class SqlQueries {
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 
-	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available'";
+	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available' and e.status='Active' and e.designation='Waiter'";
 
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
@@ -58,22 +58,21 @@ public class SqlQueries {
 
 	public static final String WAITER_SELECT_BY_EMP_ID = "select * from waiters where emp_id=?";
 
-	// Orders Table
+	public static final String ITEM_INSERT = "INSERT INTO items (name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?)";
 
-	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
+	public static final String ITEM_COUNT_SELECT_BY_NAME = "SELECT COUNT(*) FROM items WHERE  name = ? AND status = 'Active' ";
 
-	public static final String UPDATE_ORDER_AMOUNT = "UPDATE orders SET amount = ? WHERE ord_id = ?";
+	public static final String ITEM_SELECT_BY_NAME = "SELECT * FROM items WHERE  name = ? AND status = 'Active' ";
 
-	public static final String UPDATE_ORDER_STATUS = "UPDATE orders SET status = ? WHERE ord_id = ?";
+	public static final String ITEM_SELECT_BY_ID = "SELECT * FROM items WHERE item_id = ? AND status = 'Active'";
 
-	public static final String ORDER_BY_ID = "SELECT * FROM orders WHERE ord_id = ?";
+	public static final String ITEM_UPDATE = "UPDATE items SET name = ?, image = ?, description = ?, category = ?,price = ?  WHERE item_id = ? AND status = 'Active'";
 
-	public static final String ALL_ORDERS = "SELECT * FROM orders"; 
+	public static final String UPDATE_AVAILABILITY = "UPDATE items SET availability = ? WHERE item_id = ? AND status = 'Active'";
 
-	public static final String GET_ORDERID = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ? and status='Pending'";
+	public static final String ITEM_SELECT_ALL = "SELECT * FROM items WHERE status = 'Active'";
 
-	public static final String ORDERS_BY_CATEGORY = "SELECT * FROM orders WHERE status = ?";
+	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
-	public static final String ORDER_LOG = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
 
 }

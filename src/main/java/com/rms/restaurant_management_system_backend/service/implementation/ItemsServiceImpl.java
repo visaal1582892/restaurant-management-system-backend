@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.dao.ItemsDao;
 import com.rms.restaurant_management_system_backend.domain.Items;
-import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
-import com.rms.restaurant_management_system_backend.exception.DuplicateException;
-import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
-import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 import com.rms.restaurant_management_system_backend.service.ItemsService;
 
 @Service
@@ -26,17 +23,17 @@ public class ItemsServiceImpl implements ItemsService {
 	public Items saveItem(Items item) {
 
 		if (item == null) {
-			throw new ResourceNotFoundException("Items details are wrong");
+			throw new RestaurantOperationException("Items details are wrong");
 		}
 
 		if (itemsDao.existsByName(item.getName())) {
-			throw new DuplicateException("Item already exists.");
+			throw new RestaurantOperationException("Item already exists.");
 		}
 
 		int itemSaved = itemsDao.addItem(item);
 
 		if (itemSaved <= 0) {
-			throw new DatabaseOperationException("Item Not Added Please try again");
+			throw new RestaurantOperationException("Item Not Added Please try again");
 		}
 		return itemsDao.getItemByName(item.getName());
 	}
@@ -52,16 +49,16 @@ public class ItemsServiceImpl implements ItemsService {
 
 		Items existingItem = itemsDao.getItemById(id);
 		if (updatedItem == null || existingItem == null) {
-			throw new ResourceNotFoundException("Item not found");
+			throw new RestaurantOperationException("Item not found");
 		}
 
 		if (!(updatedItem.getName().equals(existingItem.getName())) && itemsDao.existsByName(updatedItem.getName())) {
 			System.out.println(updatedItem + "" + existingItem);
-			throw new DuplicateException("Item already exists.");
+			throw new RestaurantOperationException("Item already exists.");
 		}
 
 		if (updatedItem.equals(existingItem)) {
-			throw new InvalidDataException("Please edit at least one field");
+			throw new RestaurantOperationException("Please edit at least one field");
 		}
 
 		existingItem.setName(updatedItem.getName());
@@ -75,7 +72,7 @@ public class ItemsServiceImpl implements ItemsService {
 
 		int updated = itemsDao.updateItem(existingItem);
 		if (updated <= 0) {
-			throw new DatabaseOperationException("Item Not Updated, Please try again");
+			throw new RestaurantOperationException("Item Not Updated, Please try again");
 		}
 		return existingItem;
 	}
@@ -85,7 +82,7 @@ public class ItemsServiceImpl implements ItemsService {
 
 		Items existingItem = itemsDao.getItemById(id);
 		if (existingItem == null) {
-			throw new ResourceNotFoundException("Item not found");
+			throw new RestaurantOperationException("Item not found");
 		}
 		if (existingItem.getAvailable().equals(ItemAvailability.AVAILABLE)) {
 			existingItem.setAvailable(ItemAvailability.UNAVAILABLE);
@@ -96,7 +93,7 @@ public class ItemsServiceImpl implements ItemsService {
 		int updated = itemsDao.changeAvailability(id, existingItem.getAvailable());
 
 		if (updated <= 0) {
-			throw new DatabaseOperationException("Availability Not Updated, Please try again");
+			throw new RestaurantOperationException("Availability Not Updated, Please try again");
 		}
 
 		return existingItem;
@@ -114,12 +111,12 @@ public class ItemsServiceImpl implements ItemsService {
 		Items existingItem = itemsDao.getItemById(id);
 
 		if (existingItem == null) {
-			throw new ResourceNotFoundException("Item not found");
+			throw new RestaurantOperationException("Item not found");
 		}
 		int rowEffected = itemsDao.deleteItem(id);
 
 		if (rowEffected <= 0) {
-			throw new DatabaseOperationException("Item Not Delected, Please try again");
+			throw new RestaurantOperationException("Item Not Delected, Please try again");
 		}
 		return existingItem;
 	}
