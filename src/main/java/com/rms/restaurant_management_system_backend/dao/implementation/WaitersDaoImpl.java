@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -98,13 +99,13 @@ public class WaitersDaoImpl implements WaitersDao {
 	}
 
 	private List<Waiters> getWaiters(Integer waiterId, Integer employeeId, String availability) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("hasWaiterId", waiterId != null);
-		params.put("hasEmployeeId", employeeId != null);
-		params.put("hasAvailability", availability != null && availability.isEmpty());
-		params.put("waiterId", waiterId);
-		params.put("employeeId", employeeId);
-		params.put("availability", availability);
+		MapSqlParameterSource params = new MapSqlParameterSource()
+	            .addValue("hasWaiterId", waiterId != null)
+	            .addValue("hasEmployeeId", employeeId != null)
+	            .addValue("hasAvailability", availability != null && !availability.isEmpty())
+	            .addValue("waiterId", waiterId)
+	            .addValue("employeeId", employeeId)
+	            .addValue("availability", availability);
 		return namedParameterJdbcTemplate.query(SqlQueries.WAITERS, params, new WaiterRowMapper());
 	}
 
