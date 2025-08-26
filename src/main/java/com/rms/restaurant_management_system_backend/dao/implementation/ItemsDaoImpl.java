@@ -10,7 +10,7 @@ import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.constant.ItemStatus;
 import com.rms.restaurant_management_system_backend.dao.ItemsDao;
 import com.rms.restaurant_management_system_backend.domain.Items;
-import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 import com.rms.restaurant_management_system_backend.rowmappers.ItemRowMapper;
 import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
@@ -47,7 +47,7 @@ public class ItemsDaoImpl implements ItemsDao {
 		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_ID, itemRowMapper, id);
 
 		if (items.isEmpty()) {
-			throw new ResourceNotFoundException("Item with id " + id + " not found");
+			throw new RestaurantOperationException("Item with id " + id + " not found");
 		}
 		return items.get(0);
 	}
@@ -57,7 +57,7 @@ public class ItemsDaoImpl implements ItemsDao {
 		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_NAME, itemRowMapper, name);
 
 		if (items.isEmpty()) {
-			throw new ResourceNotFoundException("Item with name " + name + " not found");
+			throw new RestaurantOperationException("Item with name " + name + " not found");
 		}
 		return items.get(0);
 	}
