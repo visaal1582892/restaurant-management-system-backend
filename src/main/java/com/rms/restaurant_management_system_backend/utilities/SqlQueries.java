@@ -12,9 +12,9 @@ public class SqlQueries {
 
 	public static final String GET_EMPID_BY_EMAIL = "select emp_id from employees where email = ?";
 
-	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=? and status='Active'";
+	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=:emp_id and status='Active'";
 
-	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
+	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (:name,:email,:phone,:status,:designation,:join_date,:leaving_date)";
 
 	public static final String GET_ALL_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees";
 
