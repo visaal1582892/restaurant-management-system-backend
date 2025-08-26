@@ -74,5 +74,22 @@ public class SqlQueries {
 
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
+	// Orders Table
+
+	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
+
+	public static final String UPDATE_ORDER_AMOUNT = "UPDATE orders SET amount = ? WHERE ord_id = ?";
+
+	public static final String UPDATE_ORDER_STATUS = "UPDATE orders SET status = ? WHERE ord_id = ?";
+
+	public static final String ORDER_BY_ID = "SELECT * FROM orders WHERE ord_id = ?";
+
+	public static final String ALL_ORDERS = "SELECT * FROM orders";
+
+	public static final String GET_ORDERID = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ? and status='Pending'";
+
+	public static final String ORDERS_BY_CATEGORY = "SELECT * FROM orders WHERE status = ?";
+
+	public static final String ORDER_LOG = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
 
 }

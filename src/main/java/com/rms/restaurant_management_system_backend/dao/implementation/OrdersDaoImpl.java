@@ -109,10 +109,10 @@ public class OrdersDaoImpl implements OrdersDao {
 			LocalDate endDate, Double amount, List<String> statuses) {
 
 		String ALL_ORDERS = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE "
-				+ "(:hasOrderId = false OR ord_id = :orderId) "
+				+ "(:hasOrderId = false OR ord_id = :orderId)"
 				+ "AND (:hasCustomerId = false OR cust_id = :customerId)"
 				+ "AND (:hasWaiterId = false OR wtr_id = :waiterId)"
-				+ "AND (:hasStartDate = false OR ord_date >= :startDate) "
+				+ "AND (:hasStartDate = false OR ord_date >= :startDate)"
 				+ "AND (:hasEndDate = false OR ord_date <= :endDate)" + "AND (:hasAmount = false OR amount = :amount)"
 				+ "AND (:hasStatuses = false OR status IN (:statuses))";
 
@@ -132,7 +132,7 @@ public class OrdersDaoImpl implements OrdersDao {
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		params.put("amount", amount);
-		params.put("statuses", (statuses != null && !statuses.isEmpty()) ? statuses : Collections.emptyList());
+		params.put("statuses", (statuses != null && !statuses.isEmpty()) ? statuses : List.of("__NO_STATUS__"));
 
 		return namedParameterJdbcTemplate.query(ALL_ORDERS, params, new OrdersRowMapper());
 	}
