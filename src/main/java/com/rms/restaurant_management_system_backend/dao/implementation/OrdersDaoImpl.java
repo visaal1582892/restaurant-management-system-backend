@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,16 +104,8 @@ public class OrdersDaoImpl implements OrdersDao {
 	}
 
 	
-	public List<Orders> getOrders(Integer orderId, Integer customerId, Integer waiterId, LocalDate startDate,
+	private List<Orders> getOrders(Integer orderId, Integer customerId, Integer waiterId, LocalDate startDate,
 			LocalDate endDate, Double amount, List<String> statuses) {
-
-		String ALL_ORDERS = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE "
-				+ "(:hasOrderId = false OR ord_id = :orderId)"
-				+ "AND (:hasCustomerId = false OR cust_id = :customerId)"
-				+ "AND (:hasWaiterId = false OR wtr_id = :waiterId)"
-				+ "AND (:hasStartDate = false OR ord_date >= :startDate)"
-				+ "AND (:hasEndDate = false OR ord_date <= :endDate)" + "AND (:hasAmount = false OR amount = :amount)"
-				+ "AND (:hasStatuses = false OR status IN (:statuses))";
 
 		Map<String, Object> params = new HashMap<>();
 
@@ -132,9 +123,9 @@ public class OrdersDaoImpl implements OrdersDao {
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		params.put("amount", amount);
-		params.put("statuses", (statuses != null && !statuses.isEmpty()) ? statuses : List.of("__NO_STATUS__"));
+		params.put("statuses", statuses);
 
-		return namedParameterJdbcTemplate.query(ALL_ORDERS, params, new OrdersRowMapper());
+		return namedParameterJdbcTemplate.query(SqlQueries.ORDERS, params, new OrdersRowMapper());
 	}
 
 	

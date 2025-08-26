@@ -6,6 +6,8 @@ public class SqlQueries {
 
 	}
 
+	// Employee
+
 	public static final String EMPLOYEE_SELECT_BY_EMAIL = "select count(*) from employees where  email = ? and status = 'Active' ";
 
 	public static final String EMPLOYEE_SELECT_BY_MOBILE = "select count(*) from employees where  phone = ? and status = 'Active' ";
@@ -28,6 +30,8 @@ public class SqlQueries {
 
 	public static final String EMPLOYEE_LOG = "insert into employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=?";
 
+	// Customer
+
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
 
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
@@ -35,8 +39,10 @@ public class SqlQueries {
 	public static final String GET_ALL_CUSTOMERS = "SELECT * FROM customers";
 
 	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
+	
+	public static final String CUSTOMERS = "SELECT cust_id, name, phone FROM customers WHERE (:hasCustId = false OR cust_id = :custId) AND (:hasName = false OR name = :name) AND (:hasPhone = false OR phone = :phone)";
 
-	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
+	// Waiters
 
 	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
 
@@ -52,11 +58,24 @@ public class SqlQueries {
 
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
+	public static final String WAITER_SELECT_BY_EMP_ID = "select * from waiters where emp_id=?";
+	
+	public static final String WAITERS = "SELECT wtr_id, emp_id, availability FROM waiters WHERE (:hasWaiterId = false OR wtr_id = :waiterId) AND (:hasEmployeeId = false OR emp_id = :employeeId) AND (:hasAvailability = false OR availability = :availability)";
+	
+	public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE waiter_id = :waiterId";
+	
+
+	// Order Details
+
+	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
+
 	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
 
 	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
 
-	public static final String WAITER_SELECT_BY_EMP_ID = "select * from waiters where emp_id=?";
+	public static final String ORDER_DETAILS = "SELECT ord_details_id, ord_id, item_id, quantity, price FROM order_details WHERE (:hasOrderDetailsId = false OR ord_details_id = :orderDetailsId) AND (:hasOrderId = false OR ord_id = :orderId) AND (:hasItemId = false OR item_id = :itemId) AND (:hasQuantity = false OR quantity = :quantity) AND (:hasPrice = false OR price = :price)";
+
+	// Items
 
 	public static final String ITEM_INSERT = "INSERT INTO items (name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?)";
 
@@ -74,7 +93,9 @@ public class SqlQueries {
 
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
-	// Orders Table
+	public static final String Items = "SELECT item_id, name, image, description, price, category, availability, status FROM items WHERE (:hasItemId = false OR item_id = :id) AND (:hasName = false OR name LIKE :name) AND (:hasImage = false OR image = :imageUrl) AND (:hasDescription = false OR description LIKE :description) AND (:hasPrice = false OR price = :price) AND (:hasStatuses = false OR status IN (:statuses)) AND (:hasAvailability = false OR availability IN (:availability)) AND (:hasCategories = false OR category IN (:categories))";
+
+	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
 
@@ -91,5 +112,7 @@ public class SqlQueries {
 	public static final String ORDERS_BY_CATEGORY = "SELECT * FROM orders WHERE status = ?";
 
 	public static final String ORDER_LOG = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
+
+	public static final String ORDERS = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE (:hasOrderId = false OR ord_id = :orderId) AND (:hasCustomerId = false OR cust_id = :customerId) AND (:hasWaiterId = false OR wtr_id = :waiterId) AND (:hasStartDate = false OR ord_date >= :startDate) AND (:hasEndDate = false OR ord_date <= :endDate) AND (:hasAmount = false OR amount = :amount) AND (:hasStatuses = false OR status IN (:statuses))";
 
 }
