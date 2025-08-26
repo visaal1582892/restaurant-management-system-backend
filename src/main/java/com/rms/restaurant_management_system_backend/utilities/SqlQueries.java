@@ -20,11 +20,11 @@ public class SqlQueries {
 
 	public static final String GET_ACTIVE_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where status='Active' ";
 
-	public static final String UPDATE_EMPLOYEE = "update employees set name=?,email=?,phone=?,status=?,designation=?,join_date=?,leaving_date=? where emp_id=?";
+	public static final String UPDATE_EMPLOYEE = "update employees set name=:name,email=:email,phone=:phone,status=:status,designation=:designation,join_date=:join_date,leaving_date=:leaving_date where emp_id=:emp_id ";
 
-	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive',leaving_date=CURRENT_DATE where emp_id=?";
+	public static final String DELETE_EMPLOYEE = "update employees set status='Inactive',leaving_date=CURRENT_DATE where emp_id=:emp_id ";
 
-	public static final String UPDATE_EMP_STATUS = "update employees set status=? where emp_id=?";
+	public static final String UPDATE_EMP_STATUS = "update employees set status=:status where emp_id=:emp_id ";
 
 	public static final String EMPLOYEE_LOG = "insert into employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=?";
 
