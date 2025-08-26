@@ -58,4 +58,20 @@ public class SqlQueries {
 
 	public static final String WAITER_SELECT_BY_EMP_ID = "select * from waiters where emp_id=?";
 
+	public static final String ITEM_INSERT = "INSERT INTO items (name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?)";
+
+	public static final String ITEM_COUNT_SELECT_BY_NAME = "SELECT COUNT(*) FROM items WHERE  name = ? AND status = 'Active' ";
+
+	public static final String ITEM_SELECT_BY_NAME = "SELECT * FROM items WHERE  name = ? AND status = 'Active' ";
+
+	public static final String ITEM_SELECT_BY_ID = "SELECT * FROM items WHERE item_id = ? AND status = 'Active'";
+
+	public static final String ITEM_UPDATE = "UPDATE items SET name = ?, image = ?, description = ?, category = ?,price = ?  WHERE item_id = ? AND status = 'Active'";
+
+	public static final String UPDATE_AVAILABILITY = "UPDATE items SET availability = ? WHERE item_id = ? AND status = 'Active'";
+
+	public static final String ITEM_SELECT_ALL = "SELECT * FROM items WHERE status = 'Active'";
+
+	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
+
 }
