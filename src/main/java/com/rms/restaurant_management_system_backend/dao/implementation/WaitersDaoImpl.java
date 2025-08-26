@@ -38,6 +38,7 @@ public class WaitersDaoImpl implements WaitersDao {
 	@Override
 	public int insertWaiterLog(Waiters oldWaiter) {
 		String insertQuery = SqlQueries.WAITER_LOG_INSERT;
+		System.out.print(oldWaiter);
 		int count = jdbcTemplate.update(insertQuery, oldWaiter.getWaiterId(), oldWaiter.getEmployeeId(),
 				oldWaiter.getAvailability().getDbName());
 		return count;

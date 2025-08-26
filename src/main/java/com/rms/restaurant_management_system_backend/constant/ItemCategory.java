@@ -2,7 +2,7 @@ package com.rms.restaurant_management_system_backend.constant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 
 public enum ItemCategory {
 	STARTER("Starter"), MAIN_COURSE("Main Course"), DESSERT("Dessert"), BEVERAGE("Beverage"), SNACK("Snack"),
@@ -28,6 +28,6 @@ public enum ItemCategory {
 				return category;
 			}
 		}
-		throw new InvalidDataException("Select Item Category from Options");
+		throw new RestaurantOperationException("Select Item Category from Options");
 	}
 }

@@ -10,8 +10,7 @@ import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.dao.WaitersDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.domain.Waiters;
-import com.rms.restaurant_management_system_backend.exception.DatabaseOperationException;
-import com.rms.restaurant_management_system_backend.exception.ResourceNotFoundException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 import com.rms.restaurant_management_system_backend.service.WaitersService;
 
 @Service
@@ -30,13 +29,13 @@ public class WaitersServiceImpl implements WaitersService {
 	public boolean insertWaiter(int employeeId) {
 		Employees employee = employeeDao.getEmpById(employeeId);
 		if (employee == null) {
-			throw new ResourceNotFoundException("Employee not found");
+			throw new RestaurantOperationException("Employee not found");
 		}
 
 		int count = waitersDao.insertWaiter(employeeId);
 
 		if (count != 1) {
-			throw new DatabaseOperationException("Waiter not inserted correctly");
+			throw new RestaurantOperationException("Waiter not inserted correctly");
 		}
 		return true;
 	}
@@ -45,12 +44,12 @@ public class WaitersServiceImpl implements WaitersService {
 	public boolean updateWaiterAvailability(int waiterId) {
 		Waiters oldWaiter = waitersDao.selectWaiterById(waiterId);
 		if (oldWaiter == null) {
-			throw new ResourceNotFoundException("Waiter with given id not found");
+			throw new RestaurantOperationException("Waiter with given id not found");
 		}
 
 		int logCount = waitersDao.insertWaiterLog(oldWaiter);
 		if (logCount != 1) {
-			throw new DatabaseOperationException("Waiter log not inserted correctly");
+			throw new RestaurantOperationException("Waiter log not inserted correctly");
 		}
 
 		int ordersCount = waitersDao.selectAssignedOrdersCount(oldWaiter.getWaiterId());
@@ -72,17 +71,17 @@ public class WaitersServiceImpl implements WaitersService {
 	public boolean deleteWaiterByEmpId(int employeeId) {
 		Employees employee = employeeDao.getEmpById(employeeId);
 		if (employee == null) {
-			throw new ResourceNotFoundException("Employee not found");
+			throw new RestaurantOperationException("Employee not found");
 		}
-		Waiters oldWaiter=selectWaiterByEmpId(employeeId);
+		Waiters oldWaiter = selectWaiterByEmpId(employeeId);
 		waitersDao.insertWaiterLog(oldWaiter);
 		int count = waitersDao.deleteWaiterByEmpId(employeeId);
 		if (count != 1) {
-			throw new DatabaseOperationException("Failed to delete waiter by employee id");
+			throw new RestaurantOperationException("Failed to delete waiter by employee id");
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Waiters selectWaiterByEmpId(int employeeId) {
 		return waitersDao.selectWaiterByEmpId(employeeId);
