@@ -18,4 +18,6 @@ public interface ItemsService {
 
 	List<Items> getAllItems();
 
+	List<Items> getSearchItems(String name, String category);
+
 }

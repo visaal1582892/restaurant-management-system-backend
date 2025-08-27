@@ -1,6 +1,5 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +118,15 @@ public class ItemsDaoImpl implements ItemsDao {
 		params.put("categories", categories);
 
 		return namedParameterJdbcTemplate.query(SqlQueries.Items, params, itemRowMapper);
+	}
+
+	@Override
+	public List<Items> getSearchItems(String search, String category) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("search", search);
+		params.put("category", category);
+		return namedParameterJdbcTemplate.query(SqlQueries.SEARCH_ITEMS, params, itemRowMapper);
+
 	}
 
 }
