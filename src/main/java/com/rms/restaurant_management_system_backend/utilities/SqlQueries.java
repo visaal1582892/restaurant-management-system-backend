@@ -51,15 +51,15 @@ public class SqlQueries {
 
 	public static final String COUNT_WAITER_ASSIGNED_ORDERS = "select count(*) from orders where wtr_id=? and status='Pending'";
 
-	public static final String WAITER_SELECT_BY_ID = "select * from waiters where wtr_id=?";
+	public static final String WAITER_SELECT_BY_ID = "select wtr_id,emp_id,availability from waiters where wtr_id=?";
 
 	public static final String WAITER_INSERT = "insert into waiters(emp_id,availability) values(?,'Available')";
 
-	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.* from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available' and e.status='Active' and e.designation='Waiter'";
+	public static final String WAITER_SELECT_AVAILABLE = "select e.name,w.wtr_id,w.emp_id,w.availability from waiters w join employees e on w.emp_id=e.emp_id where w.availability='Available' and e.status='Active' and e.designation='Waiter'";
 
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
-	public static final String WAITER_SELECT_BY_EMP_ID = "select * from waiters where emp_id=?";
+	public static final String WAITER_SELECT_BY_EMP_ID = "select wtr_id,emp_id,availability from waiters where emp_id=?";
 
 	public static final String WAITERS = "SELECT wtr_id, emp_id, availability FROM waiters WHERE (:hasWaiterId = false OR wtr_id = :waiterId) AND (:hasEmployeeId = false OR emp_id = :employeeId) AND (:hasAvailability = false OR availability = :availability)";
 
@@ -67,11 +67,11 @@ public class SqlQueries {
 
 	// Order Details
 
-	public static final String GET_ALL_ORDERDETAILS = "SELECT * FROM order_details";
+	public static final String GET_ALL_ORDERDETAILS = "SELECT ord_details_id,ord_id,item_id quantity,price FROM order_details";
 
 	public static final String ORDER_DETAILS_INSERT = "insert into order_details(ord_id,item_id,quantity,price) values(?,?,?,?)";
 
-	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
+	public static final String ORDER_DETAILS_SELECT = "select ord_details_id,ord_id,item_id quantity,price from order_details";
 
 	// Items
 
@@ -79,15 +79,15 @@ public class SqlQueries {
 
 	public static final String ITEM_COUNT_SELECT_BY_NAME = "SELECT COUNT(*) FROM items WHERE  name = ? AND status = 'Active' ";
 
-	public static final String ITEM_SELECT_BY_NAME = "SELECT * FROM items WHERE  name = ? AND status = 'Active' ";
+	public static final String ITEM_SELECT_BY_NAME = "SELECT item_id,name,image,description,price,category,availability,status FROM items WHERE  name = ? AND status = 'Active' ";
 
-	public static final String ITEM_SELECT_BY_ID = "SELECT * FROM items WHERE item_id = ? AND status = 'Active'";
+	public static final String ITEM_SELECT_BY_ID = "SELECT item_id,name,image,description,price,category,availability,status FROM items WHERE item_id = ? AND status = 'Active'";
 
 	public static final String ITEM_UPDATE = "UPDATE items SET name = ?, image = ?, description = ?, category = ?,price = ?  WHERE item_id = ? AND status = 'Active'";
 
 	public static final String UPDATE_AVAILABILITY = "UPDATE items SET availability = ? WHERE item_id = ? AND status = 'Active'";
 
-	public static final String ITEM_SELECT_ALL = "SELECT * FROM items WHERE status = 'Active'";
+	public static final String ITEM_SELECT_ALL = "SELECT item_id,name,image,description,price,category,availability,status FROM items WHERE status = 'Active'";
 
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 

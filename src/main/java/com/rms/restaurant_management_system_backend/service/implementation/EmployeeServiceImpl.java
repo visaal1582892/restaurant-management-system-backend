@@ -48,6 +48,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		Employees employeeObj = employeeDao.addEmployee(employee);
+		if(employeeObj.getDesignation()==Designation.WAITER) {
+			waiterService.insertWaiter(employeeObj.getEmpId());
+		}
 		return employeeObj;
 	}
 
