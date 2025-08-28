@@ -25,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	WaitersServiceImpl waiterService;
 
 	@Override
-	public int addEmployee(Employees employee) {
+	public Employees addEmployee(Employees employee) {
 
 		if (employee == null) {
 			throw new InvalidDataException("Please enter all employees details");
@@ -48,14 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setLeaving_date(null);
 		}
 
-		int rows = employeeDao.addEmployee(employee);
-		if (rows > 0) {
-			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
-			if (employee.getDesignation() == Designation.WAITER) {
-				waiterService.insertWaiter(empId);
-			}
-		}
-		return rows;
+		Employees employeeObj = employeeDao.addEmployee(employee);
+		return employeeObj;
 	}
 
 	@Override

@@ -6,8 +6,8 @@ emp_id int primary key auto_increment,
 name varchar(255) not null,
 email varchar(155) unique not null,
 phone varchar(10) check(length(phone)=10) unique not null,
-status varchar(10) check(status in ('Active','Inactive','Waiter')) not null,
-designation varchar(20) check(designation in ('Admin','Staff')) not null,
+status varchar(10) check(status in ('Active','Inactive')) not null,
+designation varchar(20) check(designation in ('Admin','Staff','Waiter')) not null,
 join_date date not null,
 leaving_date date);
 
@@ -30,7 +30,7 @@ ord_date date not null,
 amount decimal(10,2) not null check(amount>0),
 status varchar(20) check(status in ('Pending','Cancelled','Completed')) not null,
 constraint fk_customers_orders foreign key(cust_id) references customers(cust_id),
-constraint fk_staff_orders foreign key(wtr_id) references waiters(wtr_id));
+constraint fk_waiters_orders foreign key(wtr_id) references waiters(wtr_id));
 
 create table items(
 item_id int primary key auto_increment,
@@ -61,6 +61,25 @@ create table waiters_log(
 wtr_id int,
 emp_id int,
 availability varchar(20));
+
+create table employee_log(
+log_id int auto_increment primary key,
+emp_id int ,
+name varchar(255) not null,
+email varchar(155) not null,
+phone varchar(10) check(length(phone)=10)  not null,
+status varchar(10) check(status in ('Active','Inactive')) not null,
+designation varchar(20) check(designation in ('Admin','Staff','Waiter')) not null,
+join_date date not null,
+leaving_date date);
+
+create table orders_log(
+ord_id int,
+cust_id int,
+wtr_id int,
+ord_date date,
+amount decimal(10,2),
+status varchar(20));
 
 
 
@@ -94,6 +113,7 @@ alter table order_details add constraint fk_orders_order_details foreign key(ord
 alter table order_details add constraint fk_items_order_details foreign key(item_id) references items(item_id);
 
 alter table employees modify designation varchar(20) check(designation in ('Admin','Staff','Waiter')) not null;
+alter table employees drop constraint employees_chk_3;
 
 select * from order_details;
 
@@ -104,3 +124,17 @@ insert into credentials values('staff','staff','Staff',true);
 
 select * from employees;
 delete from credentials;
+
+select * from waiters;
+select * from waiters_log;
+
+delete from waiters where wtr_id=13;
+
+delete from employees;
+delete from waiters;
+delete from orders;
+delete from items;
+delete from order_details;
+
+select * from customers;
+alter table orders drop constraint orders_chk_1;

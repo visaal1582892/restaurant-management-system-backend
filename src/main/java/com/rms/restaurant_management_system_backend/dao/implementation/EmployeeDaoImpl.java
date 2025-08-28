@@ -1,9 +1,15 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
@@ -20,10 +26,27 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	private EmployeeRowMapper employeeRowMapper;
 
 	@Override
-	public int addEmployee(Employees employee) {
-		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
-				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
-				employee.getJoin_date(), employee.getLeaving_date());
+	public Employees addEmployee(Employees employee) {
+	    KeyHolder keyHolder = new GeneratedKeyHolder();
+//		jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
+//				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
+//				employee.getJoin_date(), employee.getLeaving_date(), keyHolder);
+	    jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(SqlQueries.EMPLOYEE_INSERT, new String[]{"id"});
+                ps.setString(1, employee.getName());
+                ps.setString(2, employee.getEmail());
+                ps.setString(3, employee.getPhone());
+                ps.setString(4, employee.getStatus().getName());
+                ps.setString(5, employee.getDesignation().getName());
+                ps.setDate(6, employee.getJoin_date());
+                ps.setDate(7, employee.getLeaving_date());
+                return ps;
+            }
+        }, keyHolder);
+	    employee.setEmpId(keyHolder.getKey().intValue());
+	    return employee;
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import com.rms.restaurant_management_system_backend.domain.Employees;
 
 public interface EmployeeService {
 
-	public int addEmployee(Employees employee);
+	public Employees addEmployee(Employees employee);
 
 	public List<Employees> getAllEmployees();
 
