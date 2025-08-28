@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.CONFLICT, false, e.getMessage());
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CustomResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream()
 				.map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())

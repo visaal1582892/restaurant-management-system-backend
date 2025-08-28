@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -62,14 +61,8 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public Waiters selectWaiterById(int waiterId) {
-//		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
-//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
-		List<Waiters> waiters = getWaiters(waiterId, null, null);
-		if (waiters.size() == 1) {
-			return waiters.get(0);
-		} else {
-			return null;
-		}
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
 	}
 
 	@Override
@@ -88,25 +81,8 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public Waiters selectWaiterByEmpId(int employeeId) {
-//		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
-//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream().findFirst().orElse(null);
-		List<Waiters> waiters = getWaiters(null, employeeId, null);
-		if (waiters.size() == 1) {
-			return waiters.get(0);
-		} else {
-			return null;
-		}
-	}
-
-	private List<Waiters> getWaiters(Integer waiterId, Integer employeeId, String availability) {
-		MapSqlParameterSource params = new MapSqlParameterSource()
-	            .addValue("hasWaiterId", waiterId != null)
-	            .addValue("hasEmployeeId", employeeId != null)
-	            .addValue("hasAvailability", availability != null && !availability.isEmpty())
-	            .addValue("waiterId", waiterId)
-	            .addValue("employeeId", employeeId)
-	            .addValue("availability", availability);
-		return namedParameterJdbcTemplate.query(SqlQueries.WAITERS, params, new WaiterRowMapper());
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream().findFirst().orElse(null);
 	}
 
 }

@@ -1,11 +1,18 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.rowmappers.EmployeeRowMapper;
@@ -13,53 +20,173 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
+	private static final Logger log = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	NamedParameterJdbcTemplate template;
+
 	@Autowired
 	private EmployeeRowMapper employeeRowMapper;
 
+//	@Override
+//	public int addEmployee(Employees employee) {
+//		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
+//				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
+//				employee.getJoin_date(), employee.getLeaving_date());
+//	}
+
 	@Override
 	public int addEmployee(Employees employee) {
-		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
-				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
-				employee.getJoin_date(), employee.getLeaving_date());
+
+//		 Using Map
+		log.info("Adding new employee");
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", employee.getName());
+		map.put("email", employee.getEmail());
+		map.put("phone", employee.getPhone());
+		map.put("status", employee.getStatus().getName());
+		map.put("designation", employee.getDesignation().getName());
+		map.put("join_date", employee.getJoin_date());
+		map.put("leaving_date", employee.getLeaving_date());
+		int rows = template.update(SqlQueries.EMPLOYEE_INSERT, map);
+		if (rows > 0) {
+			log.info("New employee added");
+		} else {
+			log.error("error while adding new employee");
+		}
+		return rows;
+
+		// MapSqlParameterSource
+//		MapSqlParameterSource params = new MapSqlParameterSource();
+//		params.addValue("name", employee.getName()).addValue("email", employee.getEmail())
+//				.addValue("phone", employee.getPhone()).addValue("status", employee.getStatus().getName())
+//				.addValue("designation", employee.getDesignation().getName())
+//				.addValue("join_date", employee.getJoin_date()).addValue("leaving_date", employee.getLeaving_date());
+//		return template.update(SqlQueries.EMPLOYEE_INSERT, params);
+
+		// Using BeanPropertySqlParameterSource
+
+//		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(employee);
+//		return template.update(SqlQueries.EMPLOYEE_INSERT, params);
+	}
+
+	@Override
+	public List<Employees> getAllEmployeesss(Integer empId, String name, String email, String phone, Date startDate,
+			Date endDate, List<EmployeeStatus> statuses) {
+		String sql = "select emp_id, name, email, phone, status, designation, join_date, leaving_date "
+				+ "from employees where " + "(:hasEmpId = 0 or emp_id = :empId) "
+				+ "and (:hasEmpName = 0 or name = :name) " + "and (:hasEmail = 0 or email = :email) "
+				+ "and (:hasPhone = 0 or phone = :phone) " + "and (:hasStartDate = 0  join_date >= :startDate) "
+				+ "and (:hasEndDate = 0 or leaving_date <= :endDate) "
+				+ "and (:hasStatuses = 0 or status in (:statuses))";
+
+		Map<String, Object> params = new HashMap<>();
+
+		params.put("hasEmpId", empId != null ? 1 : 0);
+		params.put("hasEmpName", name != null && !name.isBlank() ? 1 : 0);
+		params.put("hasEmail", email != null && !email.isBlank() ? 1 : 0);
+		params.put("hasPhone", phone != null && !phone.isBlank() ? 1 : 0);
+		params.put("hasStartDate", startDate != null ? 1 : 0);
+		params.put("hasEndDate", endDate != null ? 1 : 0);
+		params.put("hasStatuses", statuses != null && !statuses.isEmpty() ? 1 : 0);
+
+		params.put("empId", empId);
+		params.put("name", name);
+		params.put("email", email);
+		params.put("phone", phone);
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		params.put("statuses",
+				(statuses != null && !statuses.isEmpty()) ? statuses.stream().map(EmployeeStatus::getName).toList()
+						: List.of("NO_STATUS"));
+
+		return template.query(sql, params, employeeRowMapper);
 	}
 
 	@Override
 	public List<Employees> getAllEmployees() {
-		return jdbcTemplate.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
+		log.info("fetching all employees");
+		return template.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
 	}
 
 	@Override
 	public Employees getEmpById(int id) {
-		return jdbcTemplate.query(SqlQueries.EMPLOYEE_BY_ID, employeeRowMapper, id).stream().findFirst().orElse(null);
+		Map<String, Object> params = new HashMap<>();
+		log.info("employee found with id", id);
+		params.put("emp_id", id);
+		Employees rows = template.query(SqlQueries.EMPLOYEE_BY_ID, params, employeeRowMapper).stream().findFirst()
+				.orElse(null);
+		if (rows == null) {
+			log.warn("No employee found with this id");
+		}
+		return rows;
 	}
 
 	@Override
 	public List<Employees> getActiveEmployees() {
-		return jdbcTemplate.query(SqlQueries.GET_ACTIVE_EMPLOYEES, employeeRowMapper);
+		log.info("Fetching active employees");
+		return template.query(SqlQueries.GET_ACTIVE_EMPLOYEES, employeeRowMapper);
 	}
 
 	@Override
 	public int updateEmployee(Employees employee, int id) {
+		log.info("employee updating");
 		employeeLog(id);
-		return jdbcTemplate.update(SqlQueries.UPDATE_EMPLOYEE, employee.getName(), employee.getEmail(),
-				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
-				employee.getJoin_date(), employee.getLeaving_date(), id);
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", employee.getName());
+		map.put("email", employee.getEmail());
+		map.put("phone", employee.getPhone());
+		map.put("status", employee.getStatus().getName());
+		map.put("designation", employee.getDesignation().getName());
+		map.put("join_date", employee.getJoin_date());
+		map.put("leaving_date", employee.getLeaving_date());
+		map.put("emp_id", id);
+		int rows = template.update(SqlQueries.UPDATE_EMPLOYEE, map);
+		if (rows > 0) {
+			log.info("employee updated with id " + id);
+		} else {
+			log.warn("no employee found with this id" + id);
+		}
+		return rows;
+
 	}
 
 	@Override
 	public int updateStatus(Employees employee, int id) {
+		log.info("updating employee status");
 		employeeLog(id);
-		return jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, employee.getStatus().getName(), id);
+		int rows = jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, employee.getStatus().getName(), id);
+		if (rows > 0) {
+			log.info("employee status updated successfully with id: " + id);
+		} else {
+			log.warn("No employee found with this id " + id);
+		}
+		return rows;
+
+//		HashMap<String, Object> params = new HashMap<>();
+//		params.put("emp_id", id);
+//		params.put("status", employee.getStatus().getName());
+//		return jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, params);
 
 	}
 
 	@Override
 	public int deleteEmployee(int id) {
+		log.info("deleting employee");
 		employeeLog(id);
-		return jdbcTemplate.update(SqlQueries.DELETE_EMPLOYEE, id);
+		Map<String, Object> params = new HashMap<>();
+		params.put("emp_id", id);
+
+		int rows = template.update(SqlQueries.DELETE_EMPLOYEE, params);
+		if (rows > 0) {
+			log.info("employee deleted successfully " + id);
+		} else {
+			log.warn("No employee found with this id" + id);
+		}
+		return rows;
 	}
 
 	@Override
@@ -84,4 +211,5 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		return jdbcTemplate.update(SqlQueries.EMPLOYEE_LOG, empId);
 	}
+
 }

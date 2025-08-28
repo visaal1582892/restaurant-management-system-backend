@@ -65,10 +65,7 @@ public class ItemsServiceImpl implements ItemsService {
 		existingItem.setDescription(updatedItem.getDescription());
 		existingItem.setPrice(updatedItem.getPrice());
 		existingItem.setCategory(updatedItem.getCategory());
-
-		if (updatedItem.getImageUrl() != null) {
-			existingItem.setImageUrl(updatedItem.getImageUrl());
-		}
+		existingItem.setImageUrl(updatedItem.getImageUrl());
 
 		int updated = itemsDao.updateItem(existingItem);
 		if (updated <= 0) {
@@ -103,6 +100,11 @@ public class ItemsServiceImpl implements ItemsService {
 	public List<Items> getAllItems() {
 
 		return itemsDao.getAllItems();
+	}
+
+	@Override
+	public List<Items> getSearchItems(String search, String category) {
+		return itemsDao.getSearchItems(search, category);
 	}
 
 	@Override

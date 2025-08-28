@@ -2,16 +2,12 @@ package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.rms.restaurant_management_system_backend.custom_classes.OrderDetailsSearch;
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
 import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 import com.rms.restaurant_management_system_backend.rowmappers.OrderDetailsRowMapper;
@@ -21,11 +17,9 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	private final JdbcTemplate jdbcTemplate;
-	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
 	@Override
@@ -50,10 +44,8 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public List<OrderDetails> selectAllOrderDetails() {
-//		String selectQuery = SqlQueries.ORDER_DETAILS_SELECT;
-//		return jdbcTemplate.query(selectQuery, new OrderDetailsRowMapper());
-		OrderDetailsSearch orderDetails = new OrderDetailsSearch();
-		return getOrderDetails(orderDetails);
+		String selectQuery = SqlQueries.ORDER_DETAILS_SELECT;
+		return jdbcTemplate.query(selectQuery, new OrderDetailsRowMapper());
 	}
 
 //	@Override
@@ -70,22 +62,5 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 //	        });
 //	}
 
-	private List<OrderDetails> getOrderDetails(OrderDetailsSearch orderDetails) {
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("hasOrderDetailsId", orderDetails.getOrderDetailsId() != null);
-		params.put("hasOrderId", orderDetails.getOrderId() != null);
-		params.put("hasItemId", orderDetails.getItemId() != null);
-		params.put("hasQuantity", orderDetails.getQuantity() != null);
-		params.put("hasPrice", orderDetails.getPrice() != null);
-
-		params.put("orderDetailsId", orderDetails.getOrderDetailsId());
-		params.put("orderId", orderDetails.getOrderId());
-		params.put("itemId", orderDetails.getItemId());
-		params.put("quantity", orderDetails.getQuantity());
-		params.put("price", orderDetails.getPrice());
-
-		return namedParameterJdbcTemplate.query(SqlQueries.ORDER_DETAILS, params, new OrderDetailsRowMapper());
-	}
 
 }
