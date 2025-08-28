@@ -30,6 +30,13 @@ public class SqlQueries {
 
 	public static final String EMPLOYEE_LOG = "insert into employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=?";
 
+	public static final String EMPLOYEES = "select emp_id, name, email, phone, status, designation, join_date, leaving_date "
+			+ "from employees where " + "(:hasEmpId = false or emp_id = :empId) "
+			+ "and (:hasEmpName = false or name = :name) " + "and (:hasEmail = false or email = :email) "
+			+ "and (:hasPhone = false or phone = :phone) " + "and (:hasStartDate = false or join_date >= :startDate) "
+			+ "and (:hasEndDate = false or leaving_date <= :endDate) "
+			+ "and (:hasStatuses = false or status in (:statuses))";
+
 	// Customer
 
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";

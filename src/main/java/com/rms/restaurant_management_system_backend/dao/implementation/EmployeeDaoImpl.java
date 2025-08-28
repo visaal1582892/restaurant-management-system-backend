@@ -41,8 +41,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public int addEmployee(Employees employee) {
 
-//		 Using Map
-		log.info("Adding new employee");
 		Map<String, Object> map = new HashMap<>();
 		map.put("name", employee.getName());
 		map.put("email", employee.getEmail());
@@ -52,11 +50,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		map.put("join_date", employee.getJoin_date());
 		map.put("leaving_date", employee.getLeaving_date());
 		int rows = template.update(SqlQueries.EMPLOYEE_INSERT, map);
-		if (rows > 0) {
-			log.info("New employee added");
-		} else {
-			log.error("error while adding new employee");
-		}
 		return rows;
 
 		// MapSqlParameterSource
@@ -76,22 +69,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public List<Employees> getAllEmployeesss(Integer empId, String name, String email, String phone, Date startDate,
 			Date endDate, List<EmployeeStatus> statuses) {
-		String sql = "select emp_id, name, email, phone, status, designation, join_date, leaving_date "
-				+ "from employees where " + "(:hasEmpId = 0 or emp_id = :empId) "
-				+ "and (:hasEmpName = 0 or name = :name) " + "and (:hasEmail = 0 or email = :email) "
-				+ "and (:hasPhone = 0 or phone = :phone) " + "and (:hasStartDate = 0  join_date >= :startDate) "
-				+ "and (:hasEndDate = 0 or leaving_date <= :endDate) "
-				+ "and (:hasStatuses = 0 or status in (:statuses))";
-
 		Map<String, Object> params = new HashMap<>();
 
-		params.put("hasEmpId", empId != null ? 1 : 0);
-		params.put("hasEmpName", name != null && !name.isBlank() ? 1 : 0);
-		params.put("hasEmail", email != null && !email.isBlank() ? 1 : 0);
-		params.put("hasPhone", phone != null && !phone.isBlank() ? 1 : 0);
-		params.put("hasStartDate", startDate != null ? 1 : 0);
-		params.put("hasEndDate", endDate != null ? 1 : 0);
-		params.put("hasStatuses", statuses != null && !statuses.isEmpty() ? 1 : 0);
+		params.put("hasEmpId", empId != null);
+		params.put("hasEmpName", name != null && !name.isBlank());
+		params.put("hasEmail", email != null && !email.isBlank());
+		params.put("hasPhone", phone != null && !phone.isBlank());
+		params.put("hasStartDate", startDate != null);
+		params.put("hasEndDate", endDate != null);
+		params.put("hasStatuses", statuses != null && !statuses.isEmpty());
 
 		params.put("empId", empId);
 		params.put("name", name);
@@ -103,37 +89,32 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				(statuses != null && !statuses.isEmpty()) ? statuses.stream().map(EmployeeStatus::getName).toList()
 						: List.of("NO_STATUS"));
 
-		return template.query(sql, params, employeeRowMapper);
+		return template.query(SqlQueries.EMPLOYEES, params, employeeRowMapper);
 	}
 
 	@Override
 	public List<Employees> getAllEmployees() {
-		log.info("fetching all employees");
-		return template.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
+//		return template.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
+		return getAllEmployeesss(null, null, null, null, null, null, null);
 	}
 
 	@Override
 	public Employees getEmpById(int id) {
 		Map<String, Object> params = new HashMap<>();
-		log.info("employee found with id", id);
 		params.put("emp_id", id);
 		Employees rows = template.query(SqlQueries.EMPLOYEE_BY_ID, params, employeeRowMapper).stream().findFirst()
 				.orElse(null);
-		if (rows == null) {
-			log.warn("No employee found with this id");
-		}
 		return rows;
 	}
 
 	@Override
 	public List<Employees> getActiveEmployees() {
-		log.info("Fetching active employees");
 		return template.query(SqlQueries.GET_ACTIVE_EMPLOYEES, employeeRowMapper);
+
 	}
 
 	@Override
 	public int updateEmployee(Employees employee, int id) {
-		log.info("employee updating");
 		employeeLog(id);
 		Map<String, Object> map = new HashMap<>();
 		map.put("name", employee.getName());
@@ -145,25 +126,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		map.put("leaving_date", employee.getLeaving_date());
 		map.put("emp_id", id);
 		int rows = template.update(SqlQueries.UPDATE_EMPLOYEE, map);
-		if (rows > 0) {
-			log.info("employee updated with id " + id);
-		} else {
-			log.warn("no employee found with this id" + id);
-		}
+
 		return rows;
 
 	}
 
 	@Override
 	public int updateStatus(Employees employee, int id) {
-		log.info("updating employee status");
 		employeeLog(id);
 		int rows = jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, employee.getStatus().getName(), id);
-		if (rows > 0) {
-			log.info("employee status updated successfully with id: " + id);
-		} else {
-			log.warn("No employee found with this id " + id);
-		}
+
 		return rows;
 
 //		HashMap<String, Object> params = new HashMap<>();
@@ -175,17 +147,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public int deleteEmployee(int id) {
-		log.info("deleting employee");
 		employeeLog(id);
 		Map<String, Object> params = new HashMap<>();
 		params.put("emp_id", id);
 
 		int rows = template.update(SqlQueries.DELETE_EMPLOYEE, params);
-		if (rows > 0) {
-			log.info("employee deleted successfully " + id);
-		} else {
-			log.warn("No employee found with this id" + id);
-		}
+
 		return rows;
 	}
 

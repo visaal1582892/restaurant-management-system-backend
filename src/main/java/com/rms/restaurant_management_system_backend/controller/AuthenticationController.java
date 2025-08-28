@@ -24,50 +24,38 @@ import com.rms.restaurant_management_system_backend.utilities.JwtUtil;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @PostMapping("/login")
-    public ResponseEntity<CustomResponse> login(@RequestBody LoginRequest request) {
-        try {
-        	System.out.println(request.getUsername());
-        	System.out.println(request.getPassword());
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
+	@PostMapping("/login")
+	public ResponseEntity<CustomResponse> login(@RequestBody LoginRequest request) {
+		try {
+			System.out.println(request.getUsername());
+			System.out.println(request.getPassword());
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-            String roles = authentication.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(","));
+			String roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+					.collect(Collectors.joining(","));
 
-            String token = jwtUtil.generateToken(request.getUsername(), roles);
-            System.out.println("Token: "+token);
+			String token = jwtUtil.generateToken(request.getUsername(), roles);
+			System.out.println("Token: " + token);
 
-            CustomResponse response = new CustomResponse(
-                    true,
-                    "Login successful",
-                    new AuthResponse(token, roles)
-            );
-            return ResponseEntity.ok(response);
+			CustomResponse response = new CustomResponse(true, "Login successful", new AuthResponse(token, roles));
+			return ResponseEntity.ok(response);
 
-        } catch (BadCredentialsException ex) {
-            CustomResponse response = new CustomResponse(
-                    false,
-                    "Invalid username or password",
-                    null
-            );
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
-    }
+		} catch (BadCredentialsException ex) {
+			CustomResponse response = new CustomResponse(false, "Invalid username or password", null);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+		}
+	}
 
-    @PostMapping("/logout")
-    public ResponseEntity<CustomResponse> logout() {
-        CustomResponse response = new CustomResponse(true, "Logged out successfully! (client must discard JWT)", null);
-        return ResponseEntity.ok(response);
-    }
+	@PostMapping("/logout")
+	public ResponseEntity<CustomResponse> logout() {
+		CustomResponse response = new CustomResponse(true, "Logged out successfully! (client must discard JWT)", null);
+		return ResponseEntity.ok(response);
+	}
 }
-
