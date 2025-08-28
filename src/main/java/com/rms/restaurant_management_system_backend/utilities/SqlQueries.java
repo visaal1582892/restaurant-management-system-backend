@@ -42,9 +42,7 @@ public class SqlQueries {
 	public static final String GET_ALL_CUSTOMERS = "SELECT * FROM customers";
 
 	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
-
-	public static final String CUSTOMERS = "SELECT cust_id, name, phone FROM customers WHERE (:hasCustId = false OR cust_id = :custId) AND (:hasName = false OR name = :name) AND (:hasPhone = false OR phone = :phone)";
-
+	
 	// Waiters
 
 	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
@@ -75,8 +73,6 @@ public class SqlQueries {
 
 	public static final String ORDER_DETAILS_SELECT = "select * from order_details";
 
-	public static final String ORDER_DETAILS = "SELECT ord_details_id, ord_id, item_id, quantity, price FROM order_details WHERE (:hasOrderDetailsId = false OR ord_details_id = :orderDetailsId) AND (:hasOrderId = false OR ord_id = :orderId) AND (:hasItemId = false OR item_id = :itemId) AND (:hasQuantity = false OR quantity = :quantity) AND (:hasPrice = false OR price = :price)";
-
 	// Items
 
 	public static final String ITEM_INSERT = "INSERT INTO items (name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?)";
@@ -98,6 +94,7 @@ public class SqlQueries {
 	public static final String Items = "SELECT item_id, name, image, description, price, category, availability, status FROM items WHERE (:hasItemId = false OR item_id = :id) AND (:hasName = false OR name LIKE :name) AND (:hasImage = false OR image = :imageUrl) AND (:hasDescription = false OR description LIKE :description) AND (:hasPrice = false OR price = :price) AND (:hasStatuses = false OR status IN (:statuses)) AND (:hasAvailability = false OR availability IN (:availability)) AND (:hasCategories = false OR category IN (:categories))";
 
 	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
+	
 	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
