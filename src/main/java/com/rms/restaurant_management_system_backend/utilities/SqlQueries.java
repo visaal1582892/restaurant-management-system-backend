@@ -94,6 +94,7 @@ public class SqlQueries {
 
 	public static final String Items = "SELECT item_id, name, image, description, price, category, availability, status FROM items WHERE (:hasItemId = false OR item_id = :id) AND (:hasName = false OR name LIKE :name) AND (:hasImage = false OR image = :imageUrl) AND (:hasDescription = false OR description LIKE :description) AND (:hasPrice = false OR price = :price) AND (:hasStatuses = false OR status IN (:statuses)) AND (:hasAvailability = false OR availability IN (:availability)) AND (:hasCategories = false OR category IN (:categories))";
 
+	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
 	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";

@@ -22,4 +22,6 @@ public interface ItemsDao {
 
 	List<Items> getAllItems();
 
+	List<Items> getSearchItems(String name, String description);
+
 }
