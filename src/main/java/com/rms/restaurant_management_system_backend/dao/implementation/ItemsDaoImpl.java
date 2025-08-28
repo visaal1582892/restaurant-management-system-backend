@@ -43,17 +43,13 @@ public class ItemsDaoImpl implements ItemsDao {
 	@Override
 	public boolean existsByName(String name) {
 
-//		Integer count = jdbcTemplate.queryForObject(SqlQueries.ITEM_COUNT_SELECT_BY_NAME, Integer.class, name);
-		List<Items> items = getItems(null, name, null, null, null, "Active", null, null);
-		Integer count = items.size();
+		Integer count = jdbcTemplate.queryForObject(SqlQueries.ITEM_COUNT_SELECT_BY_NAME, Integer.class, name);
 		return count != null && count > 0;
 	}
 
 	@Override
 	public Items getItemById(int id) {
-//		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_ID, itemRowMapper, id);
-		List<Items> items = getItems(id, null, null, null, null, "Active", null, null);
-
+		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_ID, itemRowMapper, id);
 		if (items.isEmpty()) {
 			throw new RestaurantOperationException("Item with id " + id + " not found");
 		}
@@ -62,9 +58,7 @@ public class ItemsDaoImpl implements ItemsDao {
 
 	@Override
 	public Items getItemByName(String name) {
-//		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_NAME, itemRowMapper, name);
-		List<Items> items = getItems(null, name, null, null, null, "Active", null, null);
-
+		List<Items> items = jdbcTemplate.query(SqlQueries.ITEM_SELECT_BY_NAME, itemRowMapper, name);
 		if (items.isEmpty()) {
 			throw new RestaurantOperationException("Item with name " + name + " not found");
 		}
@@ -86,38 +80,12 @@ public class ItemsDaoImpl implements ItemsDao {
 
 	@Override
 	public List<Items> getAllItems() {
-//		return jdbcTemplate.query(SqlQueries.ITEM_SELECT_ALL, itemRowMapper);
-		return getItems(null, null, null, null, null, "Active", null, null);
+		return jdbcTemplate.query(SqlQueries.ITEM_SELECT_ALL, itemRowMapper);
 	}
 
 	@Override
 	public int deleteItem(int id) {
 		return jdbcTemplate.update(SqlQueries.ITEM_DELETE, id);
-	}
-
-	private List<Items> getItems(Integer id, String name, String imageUrl, String description, Double price,
-			String statuses, String availability, List<String> categories) {
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("hasItemId", id != null);
-		params.put("hasName", name != null && !name.isEmpty());
-		params.put("hasImage", imageUrl != null && !imageUrl.isEmpty());
-		params.put("hasDescription", description != null && !description.isEmpty());
-		params.put("hasPrice", price != null);
-		params.put("hasStatuses", statuses != null && !statuses.isEmpty());
-		params.put("hasAvailability", availability != null && !availability.isEmpty());
-		params.put("hasCategories", categories != null && !categories.isEmpty());
-
-		params.put("id", id);
-		params.put("name", name);
-		params.put("imageUrl", imageUrl);
-		params.put("description", description);
-		params.put("price", price);
-		params.put("statuses", statuses);
-		params.put("availability", availability);
-		params.put("categories", categories);
-
-		return namedParameterJdbcTemplate.query(SqlQueries.Items, params, itemRowMapper);
 	}
 
 	@Override
