@@ -41,7 +41,7 @@ public class SqlQueries {
 	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
 	
 	public static final String CUSTOMERS = "SELECT cust_id, name, phone FROM customers WHERE (:hasCustId = false OR cust_id = :custId) AND (:hasName = false OR name = :name) AND (:hasPhone = false OR phone = :phone)";
-
+	
 	// Waiters
 
 	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
@@ -62,7 +62,7 @@ public class SqlQueries {
 	
 	public static final String WAITERS = "SELECT wtr_id, emp_id, availability FROM waiters WHERE (:hasWaiterId = false OR wtr_id = :waiterId) AND (:hasEmployeeId = false OR emp_id = :employeeId) AND (:hasAvailability = false OR availability = :availability)";
 	
-	public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE waiter_id = :waiterId";
+	public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE wtr_id = :waiterId";
 	
 
 	// Order Details

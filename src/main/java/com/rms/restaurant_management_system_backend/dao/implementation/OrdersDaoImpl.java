@@ -15,6 +15,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.rms.restaurant_management_system_backend.custom_classes.OrdersSearch;
 import com.rms.restaurant_management_system_backend.dao.OrdersDao;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.rowmappers.OrdersRowMapper;
@@ -40,7 +41,7 @@ public class OrdersDaoImpl implements OrdersDao {
 			ps.setInt(1, order.getCustomerId());
 			ps.setInt(2, order.getWaiterId());
 			ps.setDate(3, Date.valueOf(order.getOrderDate()));
-			ps.setDouble(4, 0);
+			ps.setDouble(4, order.getAmount());
 			ps.setString(5, order.getStatus().getStatus());
 			return ps;
 		}, keyHolder);
@@ -65,11 +66,12 @@ public class OrdersDaoImpl implements OrdersDao {
 //		} catch (EmptyResultDataAccessException ex) {
 //			return null;
 //		}
-		List<Orders> orders = getOrders(id, null, null, null, null, null, null);
-		if(orders.size() == 1) {
+		OrdersSearch order = new OrdersSearch();
+		order.setOrderId(id);
+		List<Orders> orders = getOrders(order);
+		if (orders.size() == 1) {
 			return orders.get(0);
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -77,7 +79,8 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public List<Orders> getAllOrders() {
 		// return jdbcTemplate.query(SqlQueries.ALL_ORDERS, new OrdersRowMapper());
-		return getOrders(null, null, null, null, null, null, null);
+		OrdersSearch order = new OrdersSearch();
+		return getOrders(order);
 	}
 
 	@Override
@@ -88,11 +91,14 @@ public class OrdersDaoImpl implements OrdersDao {
 //		} catch (EmptyResultDataAccessException ex) {
 //			return 0;
 //		}
-		List<Orders> orders = getOrders(null, order.getCustomerId(), order.getWaiterId(), null, null, null, Arrays.asList("Pending"));
-		if(orders.size() == 1) {
+		OrdersSearch orderS = new OrdersSearch();
+		orderS.setCustomerId(order.getCustomerId());
+		orderS.setWaiterId(order.getWaiterId());
+		orderS.setStatuses(List.of("Pending"));
+		List<Orders> orders = getOrders(orderS);
+		if (orders.size() == 1) {
 			return orders.get(0).getOrderId();
-		}
-		else {
+		} else {
 			return 0;
 		}
 	}
@@ -100,35 +106,34 @@ public class OrdersDaoImpl implements OrdersDao {
 	@Override
 	public List<Orders> getOrdersByCategory(String category) {
 //		return jdbcTemplate.query(SqlQueries.ORDERS_BY_CATEGORY, new OrdersRowMapper(), category);
-		return getOrders(null, null, null, null, null, null, Arrays.asList(category));
+		OrdersSearch order = new OrdersSearch();
+		order.setStatuses(List.of(category));
+		return getOrders(order);
 	}
 
-	
-	private List<Orders> getOrders(Integer orderId, Integer customerId, Integer waiterId, LocalDate startDate,
-			LocalDate endDate, Double amount, List<String> statuses) {
+	private List<Orders> getOrders(OrdersSearch order) {
 
 		Map<String, Object> params = new HashMap<>();
 
-		params.put("hasOrderId", orderId != null);
-		params.put("hasCustomerId", customerId != null);
-		params.put("hasWaiterId", waiterId != null);
-		params.put("hasStartDate", startDate != null);
-		params.put("hasEndDate", endDate != null);
-		params.put("hasAmount", amount != null);
-		params.put("hasStatuses", (statuses != null && !statuses.isEmpty()));
+		params.put("hasOrderId", order.getOrderId() != null);
+		params.put("hasCustomerId", order.getCustomerId() != null);
+		params.put("hasWaiterId", order.getWaiterId() != null);
+		params.put("hasStartDate", order.getStartDate() != null);
+		params.put("hasEndDate", order.getEndDate() != null);
+		params.put("hasAmount", order.getAmount() != null);
+		params.put("hasStatuses", (order.getStatuses() != null && !order.getStatuses().isEmpty()));
 
-		params.put("orderId", orderId);
-		params.put("customerId", customerId);
-		params.put("waiterId", waiterId);
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
-		params.put("amount", amount);
-		params.put("statuses", statuses);
+		params.put("orderId", order.getOrderId());
+		params.put("customerId", order.getCustomerId());
+		params.put("waiterId", order.getWaiterId());
+		params.put("startDate", order.getStartDate());
+		params.put("endDate", order.getEndDate());
+		params.put("amount", order.getAmount());
+		params.put("statuses", order.getStatuses());
 
 		return namedParameterJdbcTemplate.query(SqlQueries.ORDERS, params, new OrdersRowMapper());
 	}
 
-	
 	@Override
 	public void insertLog(Orders order) {
 		jdbcTemplate.update(SqlQueries.ORDER_LOG, order.getOrderId(), order.getCustomerId(), order.getWaiterId(),
