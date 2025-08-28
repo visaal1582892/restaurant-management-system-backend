@@ -1,10 +1,9 @@
 package com.rms.restaurant_management_system_backend.exception;
 
-public class InvalidDataException extends RuntimeException {
-
+public class RestaurantOperationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public InvalidDataException(String message) {
+	public RestaurantOperationException(String message) {
 		super(message);
 	}
 

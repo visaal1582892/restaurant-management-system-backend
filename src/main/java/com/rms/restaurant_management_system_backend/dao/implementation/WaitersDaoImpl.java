@@ -1,8 +1,11 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.custom_classes.WaiterDetailsSelector;
@@ -16,9 +19,11 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 public class WaitersDaoImpl implements WaitersDao {
 
 	private final JdbcTemplate jdbcTemplate;
+	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public WaitersDaoImpl(JdbcTemplate jdbcTemplate) {
+	public WaitersDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
 	@Override
@@ -38,6 +43,7 @@ public class WaitersDaoImpl implements WaitersDao {
 	@Override
 	public int insertWaiterLog(Waiters oldWaiter) {
 		String insertQuery = SqlQueries.WAITER_LOG_INSERT;
+		System.out.print(oldWaiter);
 		int count = jdbcTemplate.update(insertQuery, oldWaiter.getWaiterId(), oldWaiter.getEmployeeId(),
 				oldWaiter.getAvailability().getDbName());
 		return count;
@@ -45,15 +51,24 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public int selectAssignedOrdersCount(int waiterId) {
-		String selectQuery = SqlQueries.COUNT_WAITER_ASSIGNED_ORDERS;
-		int count = jdbcTemplate.queryForObject(selectQuery, Integer.class, waiterId);
-		return count;
+//		String selectQuery = SqlQueries.COUNT_WAITER_ASSIGNED_ORDERS;
+//		int count = jdbcTemplate.queryForObject(selectQuery, Integer.class, waiterId);
+//		return count;
+		Map<String, Object> params = new HashMap<>();
+		params.put("waiterId", waiterId);
+		return namedParameterJdbcTemplate.queryForObject(SqlQueries.COUNT_ORDERS, params, Integer.class);
 	}
 
 	@Override
 	public Waiters selectWaiterById(int waiterId) {
-		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
-		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
+//		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
+//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
+		List<Waiters> waiters = getWaiters(waiterId, null, null);
+		if (waiters.size() == 1) {
+			return waiters.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -69,13 +84,28 @@ public class WaitersDaoImpl implements WaitersDao {
 		int count = jdbcTemplate.update(deleteQuery, employeeId);
 		return count;
 	}
-	
+
 	@Override
 	public Waiters selectWaiterByEmpId(int employeeId) {
-		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
-		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream()
-				.findFirst()
-				.orElse(null);
+//		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream().findFirst().orElse(null);
+		List<Waiters> waiters = getWaiters(null, employeeId, null);
+		if (waiters.size() == 1) {
+			return waiters.get(0);
+		} else {
+			return null;
+		}
 	}
-	
+
+	private List<Waiters> getWaiters(Integer waiterId, Integer employeeId, String availability) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("hasWaiterId", waiterId != null);
+		params.put("hasEmployeeId", employeeId != null);
+		params.put("hasAvailability", availability != null && availability.isEmpty());
+		params.put("waiterId", waiterId);
+		params.put("employeeId", employeeId);
+		params.put("availability", availability);
+		return namedParameterJdbcTemplate.query(SqlQueries.WAITERS, params, new WaiterRowMapper());
+	}
+
 }

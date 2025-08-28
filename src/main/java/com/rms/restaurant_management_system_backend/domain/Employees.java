@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Employees {
 
-	private int empId;
+	private Integer empId;
 
 	@NotBlank(message = "please enter your name")
 	@Size(min = 3, max = 60, message = "Name length is must be greater than 3 and lessthan 60")
@@ -30,7 +30,7 @@ public class Employees {
 	private String email;
 
 	@NotBlank(message = "please enter your mobile number")
-	@Size(min = 10, max = 10, message = "mmobile number must be 10 digits")
+	@Size(min = 10, max = 10, message = "mobile number must be 10 digits")
 	@Pattern(regexp = "^\\d+$", message = "Mobile Number not conatins alphabeticals")
 	private String phone;
 

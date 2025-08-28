@@ -1,7 +1,6 @@
 package com.rms.restaurant_management_system_backend.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rms.restaurant_management_system_backend.domain.AddOrderRequest;
+import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
@@ -28,13 +29,17 @@ public class OrdersController {
 	}
 
 	@PostMapping("/addOrder")
-	public ResponseEntity<CustomResponse> addOrder(@RequestBody Map<String, Object> payload) {
+	public ResponseEntity<CustomResponse> addOrder(@RequestBody AddOrderRequest payload) {
 		try {
-			String name = (String) payload.get("name");
-			String phone = (String) payload.get("phone");
-			int waiterId = Integer.valueOf(payload.get("waiterId").toString());
-			int id = ordersService.addOrder(name, phone, waiterId);
-			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", id));
+			String name = payload.getName();
+			String phone = payload.getPhone();
+			int waiterId = payload.getWaiterId();
+			double totalPrice=payload.getTotalPrice();
+//			int id = ordersService.addOrder(name, phone, waiterId);
+			List<OrderDetails> orderDetailsList=payload.getOrderDetailsList();
+//			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", id));
+			Orders newOrder=ordersService.addOrder(name, phone, waiterId, totalPrice, orderDetailsList);
+			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", newOrder));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new CustomResponse(false, e.getMessage(), null));
 		}

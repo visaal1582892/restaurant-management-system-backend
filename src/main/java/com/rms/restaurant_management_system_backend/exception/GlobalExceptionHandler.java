@@ -15,27 +15,12 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 @ControllerAdvice
 @Order(1)
 public class GlobalExceptionHandler {
-	@ExceptionHandler(DatabaseOperationException.class)
-	public ResponseEntity<CustomResponse> handleDatabaseOperationException(DatabaseOperationException e) {
+	@ExceptionHandler(RestaurantOperationException.class)
+	public ResponseEntity<CustomResponse> handleDatabaseOperationException(RestaurantOperationException e) {
 		return buildResponse(HttpStatus.CONFLICT, false, e.getMessage());
 	}
 
-	@ExceptionHandler(DuplicateException.class)
-	public ResponseEntity<CustomResponse> handleDuplicateException(DuplicateException e) {
-		return buildResponse(HttpStatus.CONFLICT, false, e.getMessage());
-	}
-
-	@ExceptionHandler(InvalidDataException.class)
-	public ResponseEntity<CustomResponse> handleInvalidDataException(InvalidDataException e) {
-		return buildResponse(HttpStatus.BAD_REQUEST, false, e.getMessage());
-	}
-
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<CustomResponse> handleResourceNotFoundException(ResourceNotFoundException e) {
-		return buildResponse(HttpStatus.NOT_FOUND, false, e.getMessage());
-	}
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CustomResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream()
 				.map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())

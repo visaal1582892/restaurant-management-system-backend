@@ -2,7 +2,7 @@ package com.rms.restaurant_management_system_backend.constant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.rms.restaurant_management_system_backend.exception.InvalidDataException;
+import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 
 public enum ItemStatus {
 	ACTIVE("Active"), INACTIVE("Inactive");
@@ -26,6 +26,6 @@ public enum ItemStatus {
 				return status;
 			}
 		}
-		throw new InvalidDataException("Select Item Status from Options");
+		throw new RestaurantOperationException("Select Item Status from Options");
 	}
 }

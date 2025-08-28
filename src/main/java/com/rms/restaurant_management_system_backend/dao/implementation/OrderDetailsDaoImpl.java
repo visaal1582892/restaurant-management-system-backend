@@ -2,10 +2,13 @@ package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
@@ -16,24 +19,26 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 @Repository
 public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
+	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate) {
+	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
 	@Override
 	public int[] insertOrderDetails(List<OrderDetails> orderDetailsList) {
-		String insertQuery=SqlQueries.ORDER_DETAILS_INSERT;
+		String insertQuery = SqlQueries.ORDER_DETAILS_INSERT;
 		return jdbcTemplate.batchUpdate(insertQuery, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                OrderDetails orderDetails = orderDetailsList.get(i);
-                ps.setInt(1,orderDetails.getOrderId());
-                ps.setInt(2,orderDetails.getItemId());
-                ps.setInt(3,orderDetails.getQuantity());
-                ps.setDouble(4, orderDetails.getPrice());
-            }
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				OrderDetails orderDetails = orderDetailsList.get(i);
+				ps.setInt(1, orderDetails.getOrderId());
+				ps.setInt(2, orderDetails.getItemId());
+				ps.setInt(3, orderDetails.getQuantity());
+				ps.setDouble(4, orderDetails.getPrice());
+			}
 
 			@Override
 			public int getBatchSize() {
@@ -44,8 +49,9 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public List<OrderDetails> selectAllOrderDetails() {
-		String selectQuery=SqlQueries.ORDER_DETAILS_SELECT;
-		return jdbcTemplate.query(selectQuery,new OrderDetailsRowMapper());
+//		String selectQuery = SqlQueries.ORDER_DETAILS_SELECT;
+//		return jdbcTemplate.query(selectQuery, new OrderDetailsRowMapper());
+		return getOrderDetails(null, null, null, null, null);
 	}
 
 //	@Override
@@ -61,5 +67,24 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 //	            return od;
 //	        });
 //	}
+
+	private List<OrderDetails> getOrderDetails(Integer orderDetailsId, Integer orderId, Integer itemId, Integer quantity,
+			Double price) {
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("hasOrderDetailsId", orderDetailsId != null);
+		params.put("hasOrderId", orderId != null);
+		params.put("hasItemId", itemId != null);
+		params.put("hasQuantity", quantity != null);
+		params.put("hasPrice", price != null);
+		
+		params.put("orderDetailsId", orderDetailsId);
+		params.put("orderId", orderId);
+		params.put("itemId", itemId);
+		params.put("quantity", quantity);
+		params.put("price", price);
+		
+		return namedParameterJdbcTemplate.query(SqlQueries.ORDER_DETAILS, params, new OrderDetailsRowMapper());
+	}
 
 }
