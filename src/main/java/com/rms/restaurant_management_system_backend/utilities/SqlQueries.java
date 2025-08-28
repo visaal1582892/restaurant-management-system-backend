@@ -20,7 +20,6 @@ public class SqlQueries {
 	
 	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
-
 	public static final String GET_ALL_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees";
 
 	public static final String GET_ACTIVE_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where status='Active' ";
@@ -33,15 +32,22 @@ public class SqlQueries {
 
 	public static final String EMPLOYEE_LOG = "insert into employee_log(emp_id,name,email,phone,status,designation,join_date,leaving_date) select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=?";
 
+	public static final String EMPLOYEES = "select emp_id, name, email, phone, status, designation, join_date, leaving_date "
+			+ "from employees where " + "(:hasEmpId = false or emp_id = :empId) "
+			+ "and (:hasEmpName = false or name = :name) " + "and (:hasEmail = false or email = :email) "
+			+ "and (:hasPhone = false or phone = :phone) " + "and (:hasStartDate = false or join_date >= :startDate) "
+			+ "and (:hasEndDate = false or leaving_date <= :endDate) "
+			+ "and (:hasStatuses = false or status in (:statuses))";
+
 	// Customer
 
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
 
 	public static final String CUSTOMER_INSERT = "INSERT into customers(name,phone) VALUES(?,?)";
 
-	public static final String GET_ALL_CUSTOMERS = "SELECT * FROM customers";
+	public static final String GET_ALL_CUSTOMERS = "SELECT cust_id,name,phone FROM customers";
 
-	public static final String GET_CUST_BY_ID = "SELECT * FROM customers WHERE cust_id = ?";
+	public static final String GET_CUST_BY_ID = "SELECT cust_id,name,phone FROM customers WHERE cust_id = ?";
 	
 	// Waiters
 
@@ -60,8 +66,6 @@ public class SqlQueries {
 	public static final String WAITER_DELETE_BY_EMP_ID = "delete from waiters where emp_id=?";
 
 	public static final String WAITER_SELECT_BY_EMP_ID = "select wtr_id,emp_id,availability from waiters where emp_id=?";
-
-	public static final String WAITERS = "SELECT wtr_id, emp_id, availability FROM waiters WHERE (:hasWaiterId = false OR wtr_id = :waiterId) AND (:hasEmployeeId = false OR emp_id = :employeeId) AND (:hasAvailability = false OR availability = :availability)";
 
 	public static final String COUNT_ORDERS = "SELECT COUNT(*) FROM orders WHERE wtr_id = :waiterId and status='Pending'";
 
@@ -91,8 +95,6 @@ public class SqlQueries {
 
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
-	public static final String Items = "SELECT item_id, name, image, description, price, category, availability, status FROM items WHERE (:hasItemId = false OR item_id = :id) AND (:hasName = false OR name LIKE :name) AND (:hasImage = false OR image = :imageUrl) AND (:hasDescription = false OR description LIKE :description) AND (:hasPrice = false OR price = :price) AND (:hasStatuses = false OR status IN (:statuses)) AND (:hasAvailability = false OR availability IN (:availability)) AND (:hasCategories = false OR category IN (:categories))";
-
 	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
 	
 	// Orders
@@ -103,13 +105,13 @@ public class SqlQueries {
 
 	public static final String UPDATE_ORDER_STATUS = "UPDATE orders SET status = ? WHERE ord_id = ?";
 
-	public static final String ORDER_BY_ID = "SELECT * FROM orders WHERE ord_id = ?";
+	public static final String ORDER_BY_ID = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE ord_id = ?";
 
-	public static final String ALL_ORDERS = "SELECT * FROM orders";
+	public static final String ALL_ORDERS = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders";
 
 	public static final String GET_ORDERID = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ? and status='Pending'";
 
-	public static final String ORDERS_BY_CATEGORY = "SELECT * FROM orders WHERE status = ?";
+	public static final String ORDERS_BY_CATEGORY = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE status = ?";
 
 	public static final String ORDER_LOG = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
 

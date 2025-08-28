@@ -49,18 +49,6 @@ public class EmployeeController {
 
 	}
 
-//	@GetMapping
-//	public ResponseEntity<List<Employees>> searchEmployees(@RequestParam(required = false) Integer empId,
-//			@RequestParam(required = false) String name, @RequestParam(required = false) String email,
-//			@RequestParam(required = false) String phone,
-//			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-//			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
-//			@RequestParam(required = false) List<EmployeeStatus> statuses) {
-//
-//		List<Employees> employees = empDao.getAllEmployeesss(empId, name, email, phone, startDate, endDate, statuses);
-//		return new ResponseEntity<>(employees, HttpStatus.OK);
-//	}
-
 	@GetMapping("/active")
 	public ResponseEntity<?> viewActiveEmployees() {
 		List<Employees> emp = employeeService.getActiveEmployees();
