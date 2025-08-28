@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rms.restaurant_management_system_backend.constant.OrderStatus;
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
@@ -16,6 +17,7 @@ import com.rms.restaurant_management_system_backend.domain.OrderDetails;
 import com.rms.restaurant_management_system_backend.domain.Orders;
 import com.rms.restaurant_management_system_backend.exception.RestaurantOperationException;
 import com.rms.restaurant_management_system_backend.service.CustomerService;
+import com.rms.restaurant_management_system_backend.service.OrderDetailsService;
 import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.service.WaitersService;
 
@@ -25,31 +27,38 @@ public class OrdersServiceImpl implements OrdersService {
 	private final OrdersDao ordersDao;
 	private final CustomerService customerService;
 	private final OrderDetailsDao orderDetailsDao;
+	private final OrderDetailsService orderDetailsService;
 	private final WaitersService waitersService;
 	private final CustomerDaoImpl customerDao;
 
-	public OrdersServiceImpl(OrdersDao ordersDao, OrderDetailsDao orderDetailsDao, WaitersService waitersService,
+	public OrdersServiceImpl(OrdersDao ordersDao, OrderDetailsDao orderDetailsDao, OrderDetailsService orderDetailsService ,WaitersService waitersService,
 			CustomerService customerService, CustomerDaoImpl customerDao) {
 		this.ordersDao = ordersDao;
 		this.customerService = customerService;
 		this.orderDetailsDao = orderDetailsDao;
+		this.orderDetailsService=orderDetailsService;
 		this.waitersService = waitersService;
 		this.customerDao = customerDao;
 	}
 
 	@Override
-	public int addOrder(String name, String phone, int waiterId) {
+	@Transactional
+	public Orders addOrder(String name, String phone, int waiterId, double totalPrice, List<OrderDetails> orderDetailsList) {
 		int customerId = 0;
 		try {
 			customerId = customerDao.getCustomerIdByNumber(phone);
 		} catch (EmptyResultDataAccessException ex) {
 			customerId = customerService.addCustomer(new Customer(name, phone));
 		}
-		waitersService.updateWaiterAvailability(waiterId);
-		Orders order = new Orders(customerId, waiterId);
+		Orders order = new Orders(customerId, waiterId, totalPrice);
 		order.setOrderDate(LocalDate.now());
 		order.setStatus(OrderStatus.PENDING);
-		return ordersDao.addOrder(order);
+		int orderId=ordersDao.addOrder(order);
+		orderDetailsList.stream().forEach(item -> item.setOrderId(orderId));
+		orderDetailsService.insertOrderDetails(orderDetailsList);
+		order.setOrderId(orderId);
+		waitersService.updateWaiterAvailability(waiterId);
+		return order;
 	}
 
 	@Override
@@ -60,7 +69,7 @@ public class OrdersServiceImpl implements OrdersService {
 		}
 		if (!order.getStatus().equals(OrderStatus.PENDING)) {
 			throw new RestaurantOperationException(
-					"Cannot update status. Order with ID " + order.getOrderId() + " is already " + order.getStatus());
+					"Cannot update status. Order with ID " + order.getOrderId() + " is already " + order.getStatus().getStatus());
 		}
 		ordersDao.insertLog(order);
 		int rows = ordersDao.updateStatus(order, status);

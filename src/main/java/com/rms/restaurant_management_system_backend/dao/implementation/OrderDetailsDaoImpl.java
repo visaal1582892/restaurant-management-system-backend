@@ -2,13 +2,10 @@ package com.rms.restaurant_management_system_backend.dao.implementation;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.dao.OrderDetailsDao;
@@ -20,11 +17,9 @@ import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
 public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	private final JdbcTemplate jdbcTemplate;
-	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
 	@Override
@@ -49,9 +44,8 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public List<OrderDetails> selectAllOrderDetails() {
-//		String selectQuery = SqlQueries.ORDER_DETAILS_SELECT;
-//		return jdbcTemplate.query(selectQuery, new OrderDetailsRowMapper());
-		return getOrderDetails(null, null, null, null, null);
+		String selectQuery = SqlQueries.ORDER_DETAILS_SELECT;
+		return jdbcTemplate.query(selectQuery, new OrderDetailsRowMapper());
 	}
 
 //	@Override
@@ -68,23 +62,5 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 //	        });
 //	}
 
-	private List<OrderDetails> getOrderDetails(Integer orderDetailsId, Integer orderId, Integer itemId, Integer quantity,
-			Double price) {
-		
-		Map<String, Object> params = new HashMap<>();
-		params.put("hasOrderDetailsId", orderDetailsId != null);
-		params.put("hasOrderId", orderId != null);
-		params.put("hasItemId", itemId != null);
-		params.put("hasQuantity", quantity != null);
-		params.put("hasPrice", price != null);
-		
-		params.put("orderDetailsId", orderDetailsId);
-		params.put("orderId", orderId);
-		params.put("itemId", itemId);
-		params.put("quantity", quantity);
-		params.put("price", price);
-		
-		return namedParameterJdbcTemplate.query(SqlQueries.ORDER_DETAILS, params, new OrderDetailsRowMapper());
-	}
 
 }

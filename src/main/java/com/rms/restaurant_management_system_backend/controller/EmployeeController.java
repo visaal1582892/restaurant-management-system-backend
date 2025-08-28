@@ -35,8 +35,8 @@ public class EmployeeController {
 
 	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@Valid @RequestBody Employees employee) {
-		employeeService.addEmployee(employee);
-		CustomResponse body = new CustomResponse(true, "member added successfully", null);
+		Employees newEmployee=employeeService.addEmployee(employee);
+		CustomResponse body = new CustomResponse(true, "member added successfully", newEmployee);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}

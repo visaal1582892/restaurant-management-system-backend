@@ -53,6 +53,7 @@ public class WaitersServiceImpl implements WaitersService {
 		}
 
 		int ordersCount = waitersDao.selectAssignedOrdersCount(oldWaiter.getWaiterId());
+		System.out.println(ordersCount);
 		if (ordersCount >= 3) {
 			waitersDao.updateWaiterAvailability(waiterId, WaiterAvailability.BUSY.getDbName());
 		} else if (ordersCount < 3) {

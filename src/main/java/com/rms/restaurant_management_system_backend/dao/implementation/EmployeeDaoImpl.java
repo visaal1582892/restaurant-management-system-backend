@@ -1,6 +1,9 @@
 package com.rms.restaurant_management_system_backend.dao.implementation;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
@@ -31,28 +37,50 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Autowired
 	private EmployeeRowMapper employeeRowMapper;
 
-//	@Override
-//	public int addEmployee(Employees employee) {
-//		return jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
-//				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
-//				employee.getJoin_date(), employee.getLeaving_date());
-//	}
-
 	@Override
-	public int addEmployee(Employees employee) {
+	public Employees addEmployee(Employees employee) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+//		jdbcTemplate.update(SqlQueries.EMPLOYEE_INSERT, employee.getName(), employee.getEmail(),
+//				employee.getPhone(), employee.getStatus().getName(), employee.getDesignation().getName(),
+//				employee.getJoin_date(), employee.getLeaving_date(), keyHolder);
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SqlQueries.EMPLOYEE_INSERT, new String[] { "id" });
+				ps.setString(1, employee.getName());
+				ps.setString(2, employee.getEmail());
+				ps.setString(3, employee.getPhone());
+				ps.setString(4, employee.getStatus().getName());
+				ps.setString(5, employee.getDesignation().getName());
+				ps.setDate(6, employee.getJoin_date());
+				ps.setDate(7, employee.getLeaving_date());
+				return ps;
+			}
+		}, keyHolder);
+		employee.setEmpId(keyHolder.getKey().intValue());
+		return employee;
+	}
+//=======
+//	public int addEmployee(Employees employee) {
+//
+//		log.info("Adding new employee");
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("name", employee.getName());
+//		map.put("email", employee.getEmail());
+//		map.put("phone", employee.getPhone());
+//		map.put("status", employee.getStatus().getName());
+//		map.put("designation", employee.getDesignation().getName());
+//		map.put("join_date", employee.getJoin_date());
+//		map.put("leaving_date", employee.getLeaving_date());
+//		int rows = template.update(SqlQueries.EMPLOYEE_INSERT, map);
+//		if (rows > 0) {
+//			log.info("New employee added");
+//		} else {
+//			log.error("error while adding new employee");
+//		}
+//		return rows;
 
-		Map<String, Object> map = new HashMap<>();
-		map.put("name", employee.getName());
-		map.put("email", employee.getEmail());
-		map.put("phone", employee.getPhone());
-		map.put("status", employee.getStatus().getName());
-		map.put("designation", employee.getDesignation().getName());
-		map.put("join_date", employee.getJoin_date());
-		map.put("leaving_date", employee.getLeaving_date());
-		int rows = template.update(SqlQueries.EMPLOYEE_INSERT, map);
-		return rows;
-
-		// MapSqlParameterSource
+	// MapSqlParameterSource
 //		MapSqlParameterSource params = new MapSqlParameterSource();
 //		params.addValue("name", employee.getName()).addValue("email", employee.getEmail())
 //				.addValue("phone", employee.getPhone()).addValue("status", employee.getStatus().getName())
@@ -60,11 +88,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 //				.addValue("join_date", employee.getJoin_date()).addValue("leaving_date", employee.getLeaving_date());
 //		return template.update(SqlQueries.EMPLOYEE_INSERT, params);
 
-		// Using BeanPropertySqlParameterSource
+	// Using BeanPropertySqlParameterSource
 
 //		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(employee);
 //		return template.update(SqlQueries.EMPLOYEE_INSERT, params);
-	}
+//	}
 
 	@Override
 	public List<Employees> getAllEmployeesss(Integer empId, String name, String email, String phone, Date startDate,

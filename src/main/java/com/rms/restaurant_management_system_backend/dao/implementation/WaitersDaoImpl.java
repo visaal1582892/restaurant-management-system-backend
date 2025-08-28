@@ -61,14 +61,8 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public Waiters selectWaiterById(int waiterId) {
-//		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
-//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
-		List<Waiters> waiters = getWaiters(waiterId, null, null);
-		if (waiters.size() == 1) {
-			return waiters.get(0);
-		} else {
-			return null;
-		}
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), waiterId).stream().findFirst().orElse(null);
 	}
 
 	@Override
@@ -87,25 +81,8 @@ public class WaitersDaoImpl implements WaitersDao {
 
 	@Override
 	public Waiters selectWaiterByEmpId(int employeeId) {
-//		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
-//		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream().findFirst().orElse(null);
-		List<Waiters> waiters = getWaiters(null, employeeId, null);
-		if (waiters.size() == 1) {
-			return waiters.get(0);
-		} else {
-			return null;
-		}
-	}
-
-	private List<Waiters> getWaiters(Integer waiterId, Integer employeeId, String availability) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("hasWaiterId", waiterId != null);
-		params.put("hasEmployeeId", employeeId != null);
-		params.put("hasAvailability", availability != null && availability.isEmpty());
-		params.put("waiterId", waiterId);
-		params.put("employeeId", employeeId);
-		params.put("availability", availability);
-		return namedParameterJdbcTemplate.query(SqlQueries.WAITERS, params, new WaiterRowMapper());
+		String selectQuery = SqlQueries.WAITER_SELECT_BY_EMP_ID;
+		return jdbcTemplate.query(selectQuery, new WaiterRowMapper(), employeeId).stream().findFirst().orElse(null);
 	}
 
 }

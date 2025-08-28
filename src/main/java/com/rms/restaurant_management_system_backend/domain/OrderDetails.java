@@ -13,7 +13,7 @@ public class OrderDetails {
 
 	private int orderDetailsId;
 
-	@NotNull(message = "Order id cannot be null")
+//	@NotNull(message = "Order id cannot be null")
 	private int orderId;
 
 	@NotNull(message = "Item id cannot be null")
