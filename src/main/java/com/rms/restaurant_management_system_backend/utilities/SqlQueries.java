@@ -103,13 +103,13 @@ public class SqlQueries {
 
 	public static final String UPDATE_ORDER_STATUS = "UPDATE orders SET status = ? WHERE ord_id = ?";
 
-	public static final String ORDER_BY_ID = "SELECT * FROM orders WHERE ord_id = ?";
+	public static final String ORDER_BY_ID = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE ord_id = ?";
 
-	public static final String ALL_ORDERS = "SELECT * FROM orders";
+	public static final String ALL_ORDERS = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders";
 
 	public static final String GET_ORDERID = "SELECT ord_id FROM orders WHERE cust_id = ? AND wtr_id = ? and status='Pending'";
 
-	public static final String ORDERS_BY_CATEGORY = "SELECT * FROM orders WHERE status = ?";
+	public static final String ORDERS_BY_CATEGORY = "SELECT ord_id, cust_id, wtr_id, ord_date, amount, status FROM orders WHERE status = ?";
 
 	public static final String ORDER_LOG = "INSERT INTO orders_log (ord_id, cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?, ?)";
 
