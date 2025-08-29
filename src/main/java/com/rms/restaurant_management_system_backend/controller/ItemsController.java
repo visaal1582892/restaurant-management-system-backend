@@ -142,7 +142,6 @@ public class ItemsController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/availableItems")
 	public ResponseEntity<CustomResponse> getAvailableItems() {
 		List<Items> items = itemsService.getAllItems().stream()
