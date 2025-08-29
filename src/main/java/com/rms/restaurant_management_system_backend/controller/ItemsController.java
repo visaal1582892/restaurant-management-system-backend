@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/staff/items")
+@RequestMapping("/api/items")
 public class ItemsController {
 
 	private static final String UPLOAD_DIR = "uploads/";
