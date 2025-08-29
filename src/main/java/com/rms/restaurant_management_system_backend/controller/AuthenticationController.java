@@ -42,7 +42,6 @@ public class AuthenticationController {
 					.collect(Collectors.joining(","));
 
 			String token = jwtUtil.generateToken(request.getUsername(), roles);
-			System.out.println("Token: " + token);
 
 			CustomResponse response = new CustomResponse(true, "Login successful", new AuthResponse(token, roles));
 			return ResponseEntity.ok(response);

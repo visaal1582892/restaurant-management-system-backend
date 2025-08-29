@@ -18,7 +18,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String sql = "SELECT * FROM credentials WHERE username=?";
+        String sql = "SELECT username,password,authority FROM credentials WHERE username=?";
 
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{username},
