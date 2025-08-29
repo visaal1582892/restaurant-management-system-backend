@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-/restaurant-management-system-backend/uploads/dynamic/**
+dynamic/
 
 ### STS ###
 .apt_generated
