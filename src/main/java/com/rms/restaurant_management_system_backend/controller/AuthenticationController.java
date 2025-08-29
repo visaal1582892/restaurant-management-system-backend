@@ -54,7 +54,7 @@ public class AuthenticationController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<CustomResponse> logout() {
-		CustomResponse response = new CustomResponse(true, "Logged out successfully! (client must discard JWT)", null);
+		CustomResponse response = new CustomResponse(true, "Logged out successfully!", null);
 		return ResponseEntity.ok(response);
 	}
 }
