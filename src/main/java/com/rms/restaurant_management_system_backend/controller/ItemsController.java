@@ -50,7 +50,7 @@ public class ItemsController {
 
 			try {
 				Files.write(filePath, file.getBytes());
-				fileUrl = "http://localhost:8080/uploads/" + fileName;
+				fileUrl = "http://localhost:8080/uploads/dynamic" + fileName;
 			} catch (IOException e) {
 				throw new RestaurantOperationException("image storing error");
 			}
