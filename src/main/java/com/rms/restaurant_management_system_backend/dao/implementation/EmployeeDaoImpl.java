@@ -60,7 +60,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		employee.setEmpId(keyHolder.getKey().intValue());
 		return employee;
 	}
-//=======
+
 //	public int addEmployee(Employees employee) {
 //
 //		log.info("Adding new employee");
