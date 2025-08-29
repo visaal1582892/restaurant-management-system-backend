@@ -18,7 +18,7 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/staff/customers")
+@RequestMapping("api/customers")
 public class CustomerController {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class CustomerController {
 
 	@PostMapping()
 	public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer customer) {
-	
+
 		return ResponseEntity.ok(Map.of("status", "success", "message", "customer added successfully"));
 	}
 
