@@ -16,7 +16,7 @@ import com.rms.restaurant_management_system_backend.service.implementation.Order
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/staff/order-details")
+@RequestMapping("/api/order-details")
 public class OrderDetailsController {
 
 	@Autowired

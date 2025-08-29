@@ -12,7 +12,7 @@ import com.rms.restaurant_management_system_backend.service.WaitersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
 @RestController
-@RequestMapping("/api/staff/waiters")
+@RequestMapping("/api/waiters")
 public class WaitersController {
 
 	private WaitersService waitersService;
@@ -22,9 +22,10 @@ public class WaitersController {
 	}
 
 	@GetMapping("/available")
-	public ResponseEntity<CustomResponse> getAllAvailableWaiters(){
-		List<WaiterDetailsSelector> availableWaiters=waitersService.selectAvailableWaiters();
-		CustomResponse responseBody=new CustomResponse(true, "Available waiters fetched succesfully", availableWaiters);
+	public ResponseEntity<CustomResponse> getAllAvailableWaiters() {
+		List<WaiterDetailsSelector> availableWaiters = waitersService.selectAvailableWaiters();
+		CustomResponse responseBody = new CustomResponse(true, "Available waiters fetched succesfully",
+				availableWaiters);
 		return ResponseEntity.ok(responseBody);
 	}
 }

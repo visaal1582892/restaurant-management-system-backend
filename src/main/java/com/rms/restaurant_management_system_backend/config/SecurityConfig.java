@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +19,7 @@ import com.rms.restaurant_management_system_backend.service.implementation.Custo
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
 	private final CustomUserDetailsServiceImpl userDetailsService;
@@ -33,8 +35,9 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/uploads/**").permitAll().requestMatchers("/admin/**").hasRole("ADMIN")
-						.requestMatchers("/staff/**").hasRole("STAFF").anyRequest().authenticated())
+						.requestMatchers("/uploads/**").permitAll()/*.requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/staff/**").hasRole("STAFF")
+		*/
+						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -19,7 +19,7 @@ import com.rms.restaurant_management_system_backend.service.OrdersService;
 import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
 @RestController
-@RequestMapping("api/staff/orders")
+@RequestMapping("api/orders")
 public class OrdersController {
 
 	private final OrdersService ordersService;
@@ -34,11 +34,11 @@ public class OrdersController {
 			String name = payload.getName();
 			String phone = payload.getPhone();
 			int waiterId = payload.getWaiterId();
-			double totalPrice=payload.getTotalPrice();
+			double totalPrice = payload.getTotalPrice();
 //			int id = ordersService.addOrder(name, phone, waiterId);
-			List<OrderDetails> orderDetailsList=payload.getOrderDetailsList();
+			List<OrderDetails> orderDetailsList = payload.getOrderDetailsList();
 //			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", id));
-			Orders newOrder=ordersService.addOrder(name, phone, waiterId, totalPrice, orderDetailsList);
+			Orders newOrder = ordersService.addOrder(name, phone, waiterId, totalPrice, orderDetailsList);
 			return ResponseEntity.ok(new CustomResponse(true, "Order created successfully", newOrder));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new CustomResponse(false, e.getMessage(), null));
@@ -60,7 +60,7 @@ public class OrdersController {
 	@GetMapping("/allOrders")
 	public ResponseEntity<CustomResponse> getAllOrders() {
 		List<Orders> orders = ordersService.getAllOrders();
-		if(orders.size()==0) {
+		if (orders.size() == 0) {
 			return ResponseEntity.ok(new CustomResponse(true, "No orders found", orders));
 		}
 		return ResponseEntity.ok(new CustomResponse(true, "Orders fetched successfully", orders));

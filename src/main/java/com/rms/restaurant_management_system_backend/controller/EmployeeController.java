@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,8 @@ import jakarta.validation.Valid;
 
 @CrossOrigin("http://localhost:5173")
 @RestController
-@RequestMapping("/api/admin/employees")
+@RequestMapping("/api/employees")
+
 public class EmployeeController {
 
 	@Autowired
@@ -33,14 +35,16 @@ public class EmployeeController {
 	@Autowired
 	EmployeeDao empDao;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add")
 	public ResponseEntity<?> addEmployee(@Valid @RequestBody Employees employee) {
-		Employees newEmployee=employeeService.addEmployee(employee);
+		Employees newEmployee = employeeService.addEmployee(employee);
 		CustomResponse body = new CustomResponse(true, "member added successfully", newEmployee);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping
 	public ResponseEntity<?> viewAllEmployees() {
 		List<Employees> emp = employeeService.getAllEmployees();
@@ -49,6 +53,7 @@ public class EmployeeController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/active")
 	public ResponseEntity<?> viewActiveEmployees() {
 		List<Employees> emp = employeeService.getActiveEmployees();
@@ -57,6 +62,7 @@ public class EmployeeController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getEmployeeById(@PathVariable int id) {
 		Employees emp = empDao.getEmpById(id);
@@ -65,6 +71,7 @@ public class EmployeeController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateEmployee(@Valid @RequestBody Employees employee, @PathVariable int id) {
 		employeeService.updateEmployee(employee, id);
@@ -73,6 +80,7 @@ public class EmployeeController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update-status/{id}")
 	public ResponseEntity<?> updateEmployeeStatus(@RequestBody Employees employee, @PathVariable int id) {
 		employeeService.updateEmpStatus(employee, id);
@@ -81,6 +89,7 @@ public class EmployeeController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteEmployee(@PathVariable int id) {
 		employeeService.deleteEmployee(id);

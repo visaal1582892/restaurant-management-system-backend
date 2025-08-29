@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/staff/items")
+@RequestMapping("/api/items")
 public class ItemsController {
 
 	private static final String UPLOAD_DIR = "uploads/";
@@ -60,6 +61,7 @@ public class ItemsController {
 		return fileUrl;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/addItem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<CustomResponse> addItem(@RequestPart(value = "file", required = false) MultipartFile file,
 			@Valid @RequestPart("item") Items items) {
@@ -83,6 +85,7 @@ public class ItemsController {
 		return ResponseEntity.ok(response);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/updateItem/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<CustomResponse> updateItem(@PathVariable int id,
 			@RequestPart(value = "file", required = false) MultipartFile file,
@@ -114,6 +117,7 @@ public class ItemsController {
 		return ResponseEntity.ok(response);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<CustomResponse> deleteItem(@PathVariable int id) {
 
