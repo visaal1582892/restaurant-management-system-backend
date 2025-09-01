@@ -26,7 +26,6 @@ import jakarta.validation.Valid;
 @CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/employees")
-
 public class EmployeeController {
 
 	@Autowired
