@@ -38,6 +38,7 @@ public class SecurityConfig {
 						.requestMatchers("/uploads/**").permitAll()/*.requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/staff/**").hasRole("STAFF")
 		*/
 						.anyRequest().authenticated())
+//						.anyRequest().permitAll())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
