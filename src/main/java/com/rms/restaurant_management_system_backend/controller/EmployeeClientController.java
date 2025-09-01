@@ -17,7 +17,7 @@
 //import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
 //import com.rms.restaurant_management_system_backend.domain.Employees;
 //import com.rms.restaurant_management_system_backend.service.EmployeeService;
-//import com.rms.restaurant_management_system_backend.service.implementation.EmployeesClientServiceImpl;
+//import com.rms.restaurant_management_system_backend.service.EmployeesClientService;
 //import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 //
 //import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@
 //	EmployeeDao empDao;
 //
 //	@Autowired
-//	EmployeesClientServiceImpl employeesClientServiceImpl;
+//	EmployeesClientService employeesClientService;
 //
 //	EmployeeClientController(CustomResponse customResponse) {
 //		this.customResponse = customResponse;
@@ -48,7 +48,7 @@
 //	@PostMapping("/add")
 //	public ResponseEntity<?> addEmployee(@Valid @RequestBody Employees employee, HttpServletRequest request) {
 //		String tokString = request.getHeader("Authorization").substring(7);
-//		CustomResponse body = employeesClientServiceImpl.addEmployee(tokString, employee);
+//		CustomResponse body = employeesClientService.addEmployee(tokString, employee);
 //		return new ResponseEntity<>(body, HttpStatus.OK);
 //
 //	}
@@ -58,7 +58,7 @@
 //	public ResponseEntity<?> viewAllEmployees(HttpServletRequest request) {
 //
 //		String tokenString = request.getHeader("Authorization").substring(7);
-//		CustomResponse body = employeesClientServiceImpl.getEmployees(tokenString);
+//		CustomResponse body = employeesClientService.getEmployees(tokenString);
 //		return new ResponseEntity<>(body, HttpStatus.OK);
 //
 //	}
@@ -68,7 +68,7 @@
 //	public ResponseEntity<?> updateEmployee(@Valid @RequestBody Employees employee, @PathVariable int id,
 //			HttpServletRequest request) {
 //		String tokenString = request.getHeader("Authorization").substring(7);
-//		CustomResponse body = employeesClientServiceImpl.updateEmployee(tokenString, id, employee);
+//		CustomResponse body = employeesClientService.updateEmployee(tokenString, id, employee);
 //		return new ResponseEntity<>(body, HttpStatus.OK);
 //
 //	}
@@ -77,7 +77,7 @@
 //	@DeleteMapping("/delete/{id}")
 //	public ResponseEntity<?> deleteEmployee(@PathVariable int id, HttpServletRequest request) {
 //		String tokenString = request.getHeader("Authorization").substring(7);
-//		CustomResponse body = employeesClientServiceImpl.deleteEmployee(tokenString, id);
+//		CustomResponse body = employeesClientService.deleteEmployee(tokenString, id);
 //		return new ResponseEntity<>(body, HttpStatus.OK);
 //	}
 //
