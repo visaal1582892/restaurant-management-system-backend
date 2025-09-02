@@ -17,7 +17,7 @@ public class SqlQueries {
 	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=:emp_id and status='Active'";
 
 	public static final String EMPLOYEE_INSERTION = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (:name,:email,:phone,:status,:designation,:join_date,:leaving_date)";
-	
+
 	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
 	public static final String GET_ALL_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees";
@@ -48,7 +48,7 @@ public class SqlQueries {
 	public static final String GET_ALL_CUSTOMERS = "SELECT cust_id,name,phone FROM customers";
 
 	public static final String GET_CUST_BY_ID = "SELECT cust_id,name,phone FROM customers WHERE cust_id = ?";
-	
+
 	// Waiters
 
 	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
@@ -96,7 +96,9 @@ public class SqlQueries {
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
 	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
-	
+
+	public static final String ITEM_INSERT_LOG = "INSERT INTO items_log (item_id, name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?,?)";
+
 	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";

@@ -24,4 +24,6 @@ public interface ItemsDao {
 
 	List<Items> getSearchItems(String name, String description);
 
+	void inserLog(Items item);
+
 }
