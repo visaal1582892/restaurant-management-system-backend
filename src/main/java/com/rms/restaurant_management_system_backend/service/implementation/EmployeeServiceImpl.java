@@ -76,6 +76,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	@Transactional
 	public int updateEmployee(Employees employee, int id) {
+		if (employeeDao.selectByEmail(employee.getEmail())) {
+			throw new RestaurantOperationException("Employee Already Exists with this email.");
+		}
+
+		if (employeeDao.selectByMobile(employee.getPhone())) {
+			throw new RestaurantOperationException("Employee Already exists with this mobile Number");
+		}
 
 		employeeDao.employeeLog(id);
 		int rows = employeeDao.updateEmployee(employee, id);
