@@ -3,6 +3,7 @@ package com.rms.restaurant_management_system_backend.service.implementation;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rms.restaurant_management_system_backend.constant.ItemAvailability;
 import com.rms.restaurant_management_system_backend.dao.ItemsDao;
@@ -45,6 +46,7 @@ public class ItemsServiceImpl implements ItemsService {
 	}
 
 	@Override
+	@Transactional
 	public Items updateItem(int id, Items updatedItem) {
 
 		Items existingItem = itemsDao.getItemById(id);
@@ -61,6 +63,8 @@ public class ItemsServiceImpl implements ItemsService {
 			throw new RestaurantOperationException("Please edit at least one field");
 		}
 
+		itemsDao.inserLog(existingItem);
+
 		existingItem.setName(updatedItem.getName());
 		existingItem.setDescription(updatedItem.getDescription());
 		existingItem.setPrice(updatedItem.getPrice());
@@ -75,12 +79,16 @@ public class ItemsServiceImpl implements ItemsService {
 	}
 
 	@Override
+	@Transactional
 	public Items changeAvailability(int id) {
 
 		Items existingItem = itemsDao.getItemById(id);
 		if (existingItem == null) {
 			throw new RestaurantOperationException("Item not found");
 		}
+
+		itemsDao.inserLog(existingItem);
+
 		if (existingItem.getAvailable().equals(ItemAvailability.AVAILABLE)) {
 			existingItem.setAvailable(ItemAvailability.UNAVAILABLE);
 		} else {
@@ -108,6 +116,7 @@ public class ItemsServiceImpl implements ItemsService {
 	}
 
 	@Override
+	@Transactional
 	public Items deleteItem(int id) {
 
 		Items existingItem = itemsDao.getItemById(id);
@@ -115,6 +124,9 @@ public class ItemsServiceImpl implements ItemsService {
 		if (existingItem == null) {
 			throw new RestaurantOperationException("Item not found");
 		}
+
+		itemsDao.inserLog(existingItem);
+
 		int rowEffected = itemsDao.deleteItem(id);
 
 		if (rowEffected <= 0) {

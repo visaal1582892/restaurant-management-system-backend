@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import com.rms.restaurant_management_system_backend.utilities.CustomResponse;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -95,5 +93,13 @@ public class EmployeeController {
 		CustomResponse body = new CustomResponse(true, "member deleted successfully", null);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
+
+//	@PostMapping("/super")
+//	public ResponseEntity<?> superEmployees(@RequestBody EmployeeSearchCriteria empSearchCriteria) {
+//		List<Employees> emp = empDao.getSuperEmployees(empSearchCriteria);
+//		CustomResponse body = new CustomResponse(true, "members fetched successfully", emp);
+//		return new ResponseEntity<>(body, HttpStatus.OK);
+//
+//	}
 
 }

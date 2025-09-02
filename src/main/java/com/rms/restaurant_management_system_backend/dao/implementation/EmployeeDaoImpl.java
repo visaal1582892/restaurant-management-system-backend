@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
 import com.rms.restaurant_management_system_backend.dao.EmployeeDao;
+import com.rms.restaurant_management_system_backend.domain.EmployeeSearchCriteria;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 import com.rms.restaurant_management_system_backend.rowmappers.EmployeeRowMapper;
 import com.rms.restaurant_management_system_backend.utilities.SqlQueries;
@@ -95,7 +97,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 //	}
 
 	@Override
-	public List<Employees> getAllEmployeesss(Integer empId, String name, String email, String phone, Date startDate,
+	public List<Employees> getEmployees(Integer empId, String name, String email, String phone, Date startDate,
 			Date endDate, List<EmployeeStatus> statuses) {
 		Map<String, Object> params = new HashMap<>();
 
@@ -123,7 +125,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public List<Employees> getAllEmployees() {
 //		return template.query(SqlQueries.GET_ALL_EMPLOYEES, employeeRowMapper);
-		return getAllEmployeesss(null, null, null, null, null, null, null);
+		return getEmployees(null, null, null, null, null, null, null);
 	}
 
 	@Override
@@ -160,8 +162,32 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
+	public List<Employees> getSuperEmployees(EmployeeSearchCriteria employeeSearchCriteria) {
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("hasEmpId", employeeSearchCriteria.getEmpId() != null)
+				.addValue("empId", employeeSearchCriteria.getEmpId())
+				.addValue("hasName", employeeSearchCriteria.getName() != null)
+				.addValue("name", employeeSearchCriteria.getName())
+				.addValue("hasEmail", employeeSearchCriteria.getEmail() != null)
+				.addValue("email", employeeSearchCriteria.getEmail())
+				.addValue("hasPhone", employeeSearchCriteria.getPhone() != null)
+				.addValue("phone", employeeSearchCriteria.getPhone())
+				.addValue("hasStatuses", employeeSearchCriteria.getStatuses() != null)
+				.addValue("statuses", employeeSearchCriteria.getStatuses())
+				.addValue("hasStartDate", employeeSearchCriteria.getJoin_date() != null)
+				.addValue("join_date", employeeSearchCriteria.getJoin_date())
+				.addValue("hasEndDate", employeeSearchCriteria.getLeaving_date() != null)
+				.addValue("leaving_date", employeeSearchCriteria.getLeaving_date())
+				.addValue("sortColumn", employeeSearchCriteria.getSortColumn())
+				.addValue("sortOrder", employeeSearchCriteria.getSortOrder())
+				.addValue("offset", (employeeSearchCriteria.getPage() - 1) * 5);
+
+		return template.query(SqlQueries.SUPER_EMPLOYEES, parameterSource, employeeRowMapper);
+	}
+
+	@Override
 	public int updateStatus(Employees employee, int id) {
-		employeeLog(id);
+
 		int rows = jdbcTemplate.update(SqlQueries.UPDATE_EMP_STATUS, employee.getStatus().getName(), id);
 
 		return rows;
@@ -175,7 +201,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public int deleteEmployee(int id) {
-		employeeLog(id);
+
 		Map<String, Object> params = new HashMap<>();
 		params.put("emp_id", id);
 

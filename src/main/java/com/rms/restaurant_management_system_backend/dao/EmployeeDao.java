@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.rms.restaurant_management_system_backend.constant.EmployeeStatus;
+import com.rms.restaurant_management_system_backend.domain.EmployeeSearchCriteria;
 import com.rms.restaurant_management_system_backend.domain.Employees;
 
 public interface EmployeeDao {
@@ -29,6 +30,8 @@ public interface EmployeeDao {
 
 	int deleteEmployee(int id);
 
-	List<Employees> getAllEmployeesss(Integer empId, String name, String email, String phone, Date startDate,
-			Date endDate, List<EmployeeStatus> statuses);
+	List<Employees> getEmployees(Integer empId, String name, String email, String phone, Date startDate, Date endDate,
+			List<EmployeeStatus> statuses);
+
+	List<Employees> getSuperEmployees(EmployeeSearchCriteria employeeSearchCriteria);
 }

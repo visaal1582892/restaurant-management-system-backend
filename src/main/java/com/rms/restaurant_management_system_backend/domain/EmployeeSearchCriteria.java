@@ -26,4 +26,12 @@ public class EmployeeSearchCriteria {
 	private Date join_date;
 
 	private Date leaving_date;
+
+	private String sortColumn;
+
+	private String sortOrder;
+
+	private int limit;
+
+	private int page;
 }

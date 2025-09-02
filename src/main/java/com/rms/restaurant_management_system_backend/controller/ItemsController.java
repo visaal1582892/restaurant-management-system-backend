@@ -63,7 +63,7 @@ public class ItemsController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/addItem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<CustomResponse> addItem(@RequestPart(value = "file", required = false) MultipartFile file,
+	public ResponseEntity<CustomResponse> addItem(@RequestPart(value = "file", required = false) MultipartFile file,   
 			@Valid @RequestPart("item") Items items) {
 
 		String fileUrl = uploadImage(file);
