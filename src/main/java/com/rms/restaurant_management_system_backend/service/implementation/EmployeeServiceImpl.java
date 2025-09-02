@@ -77,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	public int updateEmployee(Employees employee, int id) {
 
+		employeeDao.employeeLog(id);
 		int rows = employeeDao.updateEmployee(employee, id);
 		if (rows > 0) {
 			int empId = employeeDao.getEmployeeIdByEmail(employee.getEmail());
@@ -100,8 +101,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public int deleteEmployee(int id) {
 
+		employeeDao.employeeLog(id);
 		Employees employee = employeeDao.getEmpById(id);
 
 		int rows = employeeDao.deleteEmployee(id);

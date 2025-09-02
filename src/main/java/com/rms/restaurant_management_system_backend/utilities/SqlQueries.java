@@ -17,7 +17,7 @@ public class SqlQueries {
 	public static final String EMPLOYEE_BY_ID = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees where emp_id=:emp_id and status='Active'";
 
 	public static final String EMPLOYEE_INSERTION = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (:name,:email,:phone,:status,:designation,:join_date,:leaving_date)";
-	
+
 	public static final String EMPLOYEE_INSERT = "insert into employees(name,email,phone,status,designation,join_date,leaving_date) values (?,?,?,?,?,?,?)";
 
 	public static final String GET_ALL_EMPLOYEES = "select emp_id,name,email,phone,status,designation,join_date,leaving_date from employees";
@@ -39,6 +39,14 @@ public class SqlQueries {
 			+ "and (:hasEndDate = false or leaving_date <= :endDate) "
 			+ "and (:hasStatuses = false or status in (:statuses))";
 
+	public static final String SUPER_EMPLOYEES = "select emp_id,name,emial,phone,status,designation,join_date,leaving_date from employees where"
+			+ " ((:hasEmpId=false or empId=:empId)" + " or (:hasName=false or name=:name)"
+			+ " or (:hasEmail=false or email=:email))" + " and (:hasPhone=false or phone=:phone)"
+			+ " and (:hasStatuses=false or status in (:statuses)"
+			+ " and (:hasStartDate=false or join_date>=:join_date) "
+			+ " and (:hasEndDate=false or leaving_date<=:leaving_date) " + " order by :sortColumn :sortOrder"
+			+ " limit 5 offset :offset";
+
 	// Customer
 
 	public static final String GET_ID_BY_PHONE = "select cust_id from customers where phone=?";
@@ -48,7 +56,7 @@ public class SqlQueries {
 	public static final String GET_ALL_CUSTOMERS = "SELECT cust_id,name,phone FROM customers";
 
 	public static final String GET_CUST_BY_ID = "SELECT cust_id,name,phone FROM customers WHERE cust_id = ?";
-	
+
 	// Waiters
 
 	public static final String WAITER_UPDATE_AVAILABILITY = "update waiters set availability=? where wtr_id=?";
@@ -96,7 +104,7 @@ public class SqlQueries {
 	public static final String ITEM_DELETE = "UPDATE items SET status = 'Inactive' WHERE item_id = ?";
 
 	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
-	
+
 	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";
