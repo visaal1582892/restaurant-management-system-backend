@@ -36,10 +36,8 @@ public class SecurityConfig {
 		http.cors().and().csrf(AbstractHttpConfigurer::disable)
 
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/uploads/**").permitAll()/*
-																	 * .requestMatchers("/admin/**").hasRole("ADMIN").
-																	 * requestMatchers("/staff/**").hasRole("STAFF")
-																	 */
+						.requestMatchers("/uploads/**").permitAll()/*.requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/staff/**").hasRole("STAFF")
+		*/
 						.anyRequest().authenticated())
 
 //						.anyRequest().permitAll())
