@@ -97,4 +97,12 @@ public class ItemsDaoImpl implements ItemsDao {
 
 	}
 
+	@Override
+	public void inserLog(Items item) {
+
+		jdbcTemplate.update(SqlQueries.ITEM_INSERT_LOG, item.getId(), item.getName(), item.getImageUrl(),
+				item.getDescription(), item.getPrice(), item.getCategory().getName(),
+				ItemAvailability.AVAILABLE.getName(), ItemStatus.ACTIVE.getName());
+	}
+
 }

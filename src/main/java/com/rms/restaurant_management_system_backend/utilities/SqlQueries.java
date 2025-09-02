@@ -105,6 +105,8 @@ public class SqlQueries {
 
 	public static final String SEARCH_ITEMS = "SELECT item_id, name, image, description,price , category, availability, status FROM items WHERE ((:search IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))) OR (:search IS NULL OR LOWER(description) LIKE LOWER(CONCAT('%', :search, '%')) )) AND (:category IS NULL OR :category = 'All' OR category = :category) AND ( status = 'Active')";
 
+	public static final String ITEM_INSERT_LOG = "INSERT INTO items_log (item_id, name, image, description,price, category, availability,status) VALUES (?, ?,?, ?, ?, ?,?,?)";
+
 	// Orders
 
 	public static final String ORDER_INSERT = "INSERT INTO orders (cust_id, wtr_id, ord_date, amount, status) VALUES (?, ?, ?, ?, ?)";

@@ -81,6 +81,17 @@ ord_date date,
 amount decimal(10,2),
 status varchar(20));
 
+create table items_log(
+item_id int,
+name varchar(255),
+image varchar(155),
+description varchar(255),
+price decimal(10,2),
+category varchar(55),
+availability varchar(20),
+status varchar(20));
+
+
 
 
 alter table items modify image varchar(155);
